@@ -14,14 +14,10 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @Column(nullable = false)
-    protected int course_type_id;
-
     protected String title;
 
     @Column(columnDefinition = "TEXT")
     protected String description;
-
 
     @Column(columnDefinition = "DATETIME")
     protected String start_datetime;
@@ -33,12 +29,14 @@ public class Course {
     protected int reserved_capacity;
 
     @Column(columnDefinition = "CURRENCY(EUR)")
-    protected double price;
+    protected float price;
 
     @ManyToOne
     protected Club club_id;
 
     @ManyToOne
-    protected Coach coach_id;
+    protected Coach user_id;
 
+    @ManyToOne
+    protected CourseType course_type_id;
 }
