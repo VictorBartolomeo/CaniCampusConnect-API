@@ -25,4 +25,8 @@ public class VeterinaryVisit {
     protected String treatment;
 
     protected String veterinarian;
+
+    @ManyToOne
+    protected Dog dog;
+
 }
