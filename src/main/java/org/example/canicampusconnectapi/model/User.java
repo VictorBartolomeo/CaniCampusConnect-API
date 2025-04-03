@@ -6,8 +6,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@MappedSuperclass
-public abstract class User {
+@Inheritance(strategy = InheritanceType.JOINED)
+@Entity
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +22,6 @@ public abstract class User {
     protected String email;
     @Column(nullable = false)
     protected String password;
-    @Column(nullable = false)
-    protected String role;
 
     @Column(nullable = true)
     protected String phone;
