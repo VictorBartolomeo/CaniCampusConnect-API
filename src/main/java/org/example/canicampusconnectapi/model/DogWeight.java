@@ -21,4 +21,8 @@ public class DogWeight {
     @DecimalMin(value = "0.1")
     protected float weight;
     protected MassUnit mass_unit;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Dog dog;
 }

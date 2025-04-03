@@ -18,10 +18,14 @@ public class Vaccination {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    protected Date vaccination_date;
-    protected Date reminder_date;
-    protected String batch_number;
+    protected Date vaccinationDate;
+    protected Date reminderDate;
+    protected String batchNumber;
     protected String veterinarian;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Dog dog;
 
     @ManyToMany
     @JoinTable(
