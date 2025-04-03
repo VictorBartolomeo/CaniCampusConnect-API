@@ -12,8 +12,8 @@ import java.util.Date;
 @Entity
 public class Owner extends User {
 
-    protected Date registration_date;
+    protected Date registrationDate;
     protected boolean isActive;
-    protected String Address;
+    protected String address;
 
 }

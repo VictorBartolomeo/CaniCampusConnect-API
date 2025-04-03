@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Time;
 import java.util.Date;
 
 @Getter
@@ -16,10 +15,10 @@ public class VeterinaryVisit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    protected Date visit_date;
+    protected Date visitDate;
     @Column(columnDefinition = "TEXT")
     protected String diagnosis;
-    protected String reason_for_visit;
+    protected String reasonForVisit;
 
     @Column(columnDefinition = "TEXT")
     protected String treatment;
@@ -27,6 +26,7 @@ public class VeterinaryVisit {
     protected String veterinarian;
 
     @ManyToOne
-    protected Dog dog;
+    @JoinColumn(nullable = false)
+    private Dog dog;
 
 }

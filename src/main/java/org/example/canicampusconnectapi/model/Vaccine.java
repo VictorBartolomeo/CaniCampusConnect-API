@@ -18,7 +18,7 @@ public class Vaccine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    protected String vaccine_name;
-    protected Date renew_delay;
+    protected String vaccineName;
+    protected Date renewDelay;
 
 }
