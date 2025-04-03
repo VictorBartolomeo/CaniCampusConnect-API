@@ -15,9 +15,9 @@ public class AgeRange {
     protected Long id;
 
     // En mois
-    protected int min_age;
+    protected int minAge;
 
     //En mois
-    protected int max_age;
+    protected int maxAge;
 
 }

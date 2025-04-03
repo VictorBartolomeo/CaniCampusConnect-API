@@ -20,23 +20,23 @@ public class Course {
     protected String description;
 
     @Column(columnDefinition = "DATETIME")
-    protected String start_datetime;
+    protected String startDatetime;
     @Column(columnDefinition = "DATETIME")
-    protected String end_datetime;
+    protected String endDatetime;
 
     @Column(nullable = false)
-    protected int max_capacity;
-    protected int reserved_capacity;
+    protected int maxCapacity;
+    protected int reservedCapacity;
 
-    @Column(columnDefinition = "CURRENCY(EUR)")
+    @Column
     protected float price;
 
     @ManyToOne
-    protected Club club_id;
+    protected Club clubId;
 
     @ManyToOne
-    protected Coach user_id;
+    protected Coach userId;
 
     @ManyToOne
-    protected CourseType course_type_id;
+    protected CourseType courseTypeId;
 }

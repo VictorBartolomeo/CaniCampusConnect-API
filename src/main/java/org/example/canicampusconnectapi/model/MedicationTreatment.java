@@ -16,13 +16,17 @@ public class MedicationTreatment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    protected String medication_name;
+    protected String medicationName;
     protected String dosage;
     protected Time frequency;
-    protected Date start_date;
-    protected Date end_date;
+    protected Date startDate;
+    protected Date endDate;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Dog dog;
 
     @Column(columnDefinition = "TEXT")
-    protected String treatment_reason;
+    protected String treatmentReason;
 
 }

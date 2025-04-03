@@ -14,16 +14,16 @@ public class CourseType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    protected String course_name;
+    protected String courseName;
 
     @Column(columnDefinition = "TEXT")
     protected String description;
 
     @ManyToOne
-    protected Course course_id;
+    protected Course courseId;
 
     @ManyToOne
-    protected AgeRange age_range_id;
+    protected AgeRange ageRangeId;
 
 
 }

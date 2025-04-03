@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -22,13 +21,13 @@ public class Dog {
     protected boolean isMale;
 
     //TODO Demander à Franck si c'est pertinent
-    protected boolean is_sociable;
-    protected boolean is_in_heat;
+    protected boolean isSociable;
+    protected boolean isInHeat;
 
     //TODO Demander à Franck comment activer la seconde cardinalité
-    protected boolean isCrossbreeded;
+    protected boolean isCrossbreed;
 
-    protected String chip_number;
+    protected String chipNumber;
 
     @ManyToOne
     @JoinColumn(nullable = false)
