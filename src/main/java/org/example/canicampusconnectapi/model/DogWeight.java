@@ -16,11 +16,11 @@ public class DogWeight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    protected Date measurement_date;
+    protected Date measurementDate;
 
     @DecimalMin(value = "0.1")
     protected float weight;
-    protected MassUnit mass_unit;
+    protected MassUnit massUnit;
 
     @ManyToOne
     @JoinColumn(nullable = false)
