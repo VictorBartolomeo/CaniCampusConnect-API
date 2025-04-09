@@ -13,10 +13,13 @@ public class Club {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    protected String clubName;
-    protected String clubAddress;
+    protected String name;
+    protected String address;
+    protected String phone;
+    protected String email;
+
 
     @ManyToOne
-    protected Department departmentId;
+    protected Department department;
 
 }

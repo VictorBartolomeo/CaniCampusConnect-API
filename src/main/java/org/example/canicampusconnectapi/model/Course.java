@@ -28,15 +28,24 @@ public class Course {
     protected int maxCapacity;
     protected int reservedCapacity;
 
-    @Column
+    @Column(nullable = false)
     protected float price;
 
     @ManyToOne
-    protected Club clubId;
+    @JoinColumn(name = "club_id"
+//            nullable = false
+    )
+    protected Club club;
 
     @ManyToOne
-    protected Coach userId;
+    @JoinColumn(name = "coach_id"
+//            nullable = false
+    )
+    protected Coach coach;
 
     @ManyToOne
-    protected CourseType courseTypeId;
+    @JoinColumn(name = "course_type_id"
+//            nullable = false
+            )
+    protected CourseType courseType;
 }

@@ -16,13 +16,10 @@ public class Breed {
     private Long id;
 
     @Column( unique = true, nullable = false)
-    private String breedName;
+    private String name;
 
-//    @OneToMany(mappedBy = "breed")
-//    private List<Dog> dogs;
+    @OneToMany(mappedBy = "breed")
+    private List<Dog> dogs;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Dog dog;
 
 }
