@@ -1,6 +1,8 @@
 package org.example.canicampusconnectapi.model;
 
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,16 +16,16 @@ public class CourseType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    protected String courseName;
+    protected String name;
 
     @Column(columnDefinition = "TEXT")
     protected String description;
 
-    @ManyToOne
-    protected Course courseId;
+    @OneToMany
+    protected List<Course> courses;
 
     @ManyToOne
-    protected AgeRange ageRangeId;
+    protected AgeRange ageRange;
 
 
 }
