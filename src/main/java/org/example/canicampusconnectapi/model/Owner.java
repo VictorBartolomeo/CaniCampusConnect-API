@@ -27,6 +27,7 @@ public class Owner extends User {
     @Column(nullable = false)
     protected boolean isActive;
 
+    @Column(nullable = false, length = 255)
     protected String address;
 
 }
