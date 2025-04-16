@@ -34,7 +34,6 @@ public class OwnerController {
 
     }
 
-
     @GetMapping("/owners")
     public List<Owner> getAll() {
         return ownerDao.findAll();
