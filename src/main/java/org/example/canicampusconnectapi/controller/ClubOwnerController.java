@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
-public class ClubClubOwnerController {
+public class ClubOwnerController {
 
     protected ClubOwnerDao clubOwnerDao;
 
