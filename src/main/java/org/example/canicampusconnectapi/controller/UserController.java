@@ -31,7 +31,6 @@ public class UserController {
         }
 
         return new ResponseEntity<>(optionalUser.get(), HttpStatus.OK);
-
     }
 
 
@@ -53,7 +52,6 @@ public class UserController {
         if (optionalUser.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         userDao.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

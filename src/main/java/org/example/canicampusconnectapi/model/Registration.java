@@ -4,6 +4,7 @@ package org.example.canicampusconnectapi.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +15,8 @@ public class Registration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer registrationId;
+    @Column(name = "registration_id")
+    private Long id;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -24,9 +26,12 @@ public class Registration {
     @JoinColumn(nullable = false)
     private Dog dog;
 
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
     private LocalDateTime registrationDate;
 
     @Enumerated(EnumType.STRING)
     private RegistrationStatus status;
 
 }
+

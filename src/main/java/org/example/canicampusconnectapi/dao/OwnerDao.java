@@ -9,5 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface OwnerDao extends JpaRepository<Owner, Long> {
+
     Optional<Owner> findByEmail(String email);
+
 }

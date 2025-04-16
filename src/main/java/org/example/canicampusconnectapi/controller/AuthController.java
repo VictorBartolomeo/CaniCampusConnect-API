@@ -34,7 +34,7 @@ public class AuthController {
         this.jwtUtils = jwtUtils;
     }
 
-
+//TODO Demander à Franck comment faire pour ajouter les informations d'un Owner directement par exemple, ou d'un coach
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody @Valid User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
