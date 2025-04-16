@@ -18,8 +18,7 @@ public class Coach extends User {
     @Column(nullable = true, length = 100)
     protected String acacedNumber;
 
-    @Column(nullable = false)
-    @ColumnDefault("TRUE")
+    @Column(nullable = false, columnDefinition = "boolean default true")
     protected boolean isActive;
 
     @CreatedDate
