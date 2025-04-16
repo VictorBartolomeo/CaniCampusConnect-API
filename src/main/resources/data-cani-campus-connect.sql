@@ -5,12 +5,12 @@ VALUES ('Alice', 'Smith', 'alice.smith@email.com', 'password123', '0611111111'),
        ('Diana', 'Miller', 'diana.miller@email.com', 'dianapass', '0644444444'),
        ('Ethan', 'Davis', 'ethan.davis@email.com', 'ethanpass', '0655555555');
 
-INSERT INTO owner (id, is_active, registration_date, address)
-VALUES (1, true, '2023-01-15', '123 Main St'),
-       (2, true, '2023-02-20', '456 Oak Ave'),
-       (3, false, '2023-03-25', '789 Pine Ln'),
-       (4, true, '2023-04-30', '101 Elm Rd'),
-       (5, true, '2023-05-05', '202 Maple Dr');
+INSERT INTO owner (user_id, is_active, address, registration_date)
+VALUES (1, true,  '123 Main St','2023-01-01'),
+       (2, true,  '456 Oak Ave','2023-02-15'),
+       (3, false,  '789 Pine Ln','2023-03-10'),
+       (4, true,  '101 Elm Rd','2023-04-20'),
+       (5, true,  '202 Maple Dr','2023-05-05');
 
 INSERT INTO breed (name)
 VALUES ('Golden Retriever'),
@@ -32,10 +32,10 @@ VALUES ('Buddy', '2020-05-10', true, true, false, false, '123456789012345', 1),
        ('Daisy', '2022-01-05', false, true, false, true, '887766554433221', 4),
        ('Rocky', '2020-08-25', true, false, false, false, '135792468013579', 5);
 
-INSERT INTO coach (id, acaced_number, is_active, registration_date)
-VALUES (1, '123456', true, '2023-01-10'),
-       (2, '789012', true, '2023-02-15'),
-       (3, '345678', false, '2023-03-20');
+INSERT INTO coach (user_id, acaced_number, is_active, registration_date)
+VALUES (1, '123456', true, '2023-01-01'),
+       (2, '789012', true,'2023-02-15'),
+       (3, '345678', false,'2023-04-05');
 
 INSERT INTO age_range (min_age, max_age)
 VALUES (0, 6),
