@@ -1,10 +1,10 @@
 package org.example.canicampusconnectapi.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -13,6 +13,6 @@ public class Coach extends User{
 
 protected String acacedNumber;
 protected boolean isActive;
-protected Date registrationDate;
+protected LocalDate registrationDate;
 
 }
