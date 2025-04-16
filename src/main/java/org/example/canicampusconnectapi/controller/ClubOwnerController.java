@@ -17,7 +17,7 @@ public class ClubOwnerController {
     protected ClubOwnerDao clubOwnerDao;
 
     @Autowired
-    public ClubClubOwnerController(ClubOwnerDao clubOwnerDao) {
+    public ClubOwnerController(ClubOwnerDao clubOwnerDao) {
         this.clubOwnerDao = clubOwnerDao;
     }
 
