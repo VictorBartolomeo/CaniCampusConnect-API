@@ -16,6 +16,41 @@ VALUES (1);
 INSERT INTO coach (user_id, acaced_number, is_active, registration_date)
 VALUES (2, 'OEACHK90', true, '2025-04-16');
 
+create view Owners as
+select `o`.`is_active`         AS `is_active`,
+       `o`.`registration_date` AS `registration_date`,
+       `o`.`user_id`           AS `user_id`,
+       `o`.`address`           AS `address`,
+       `u`.`email`             AS `email`,
+       `u`.`firstname`         AS `firstname`,
+       `u`.`lastname`          AS `lastname`,
+       `u`.`phone`             AS `phone`
+from (`CaniCampusConnect`.`owner` `o` left join `CaniCampusConnect`.`user` `u` on ((`u`.`user_id` = `o`.`user_id`)));
+
+
+CREATE VIEW Coaches AS
+SELECT
+    c.acaced_number AS acaced_number,
+    c.is_active AS is_active,
+    c.registration_date AS registration_date,
+    c.user_id AS user_id,
+    u.email AS email,
+    u.firstname AS firstname,
+    u.lastname AS lastname,
+    u.phone AS phone
+FROM coach c
+         LEFT JOIN CaniCampusConnect.user u ON u.user_id = c.user_id;
+
+CREATE VIEW ClubOwners AS
+SELECT
+    co.user_id AS user_id,
+    u.email AS email,
+    u.firstname AS firstname,
+    u.lastname AS lastname,
+    u.phone AS phone
+FROM club_owner co
+         LEFT JOIN CaniCampusConnect.user u ON u.user_id = co.user_id;
+
 -- TODO Demander à Franck pourquoi le register avec les infos du coach me crée juste un user et non pas un coach, comment valider cela
 
 
