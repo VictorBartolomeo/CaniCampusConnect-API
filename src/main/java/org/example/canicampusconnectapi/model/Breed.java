@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,13 +13,14 @@ public class Breed {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Short id;
 
-    @Column( unique = true, nullable = false)
+    @Column(length = 100, unique = true, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "breed")
-    private List<Dog> dogs;
+    @ManyToMany(mappedBy = "breeds", fetch = FetchType.LAZY) // mappedBy fait référence au champ "breeds" dans Dog
+    private Set<Dog> dogs; // Utilisation de Set
+
 
 
 }
