@@ -3,6 +3,10 @@ package org.example.canicampusconnectapi.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.canicampusconnectapi.model.healthRecord.DogWeight;
+import org.example.canicampusconnectapi.model.healthRecord.MedicationTreatment;
+import org.example.canicampusconnectapi.model.healthRecord.Vaccination;
+import org.example.canicampusconnectapi.model.healthRecord.VeterinaryVisit;
 
 import java.time.LocalDate;
 import java.util.List;

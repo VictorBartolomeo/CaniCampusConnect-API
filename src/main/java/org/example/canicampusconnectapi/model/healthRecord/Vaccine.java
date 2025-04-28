@@ -1,4 +1,4 @@
-package org.example.canicampusconnectapi.model;
+package org.example.canicampusconnectapi.model.healthRecord;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

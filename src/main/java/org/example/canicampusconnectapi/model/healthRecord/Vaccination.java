@@ -1,13 +1,11 @@
-package org.example.canicampusconnectapi.model;
+package org.example.canicampusconnectapi.model.healthRecord;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.canicampusconnectapi.model.Dog;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter

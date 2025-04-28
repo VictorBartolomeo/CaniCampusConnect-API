@@ -1,9 +1,10 @@
-package org.example.canicampusconnectapi.model;
+package org.example.canicampusconnectapi.model.healthRecord;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.canicampusconnectapi.model.Dog;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -20,10 +21,11 @@ public class DogWeight {
     @Column(nullable = false)
     protected Date measurementDate;
 
-    @Column(precision = 3, scale = 2, nullable = false)
+    @Column(precision = 5, scale = 2, nullable = false)
     @DecimalMin(value = "0.1")
     protected BigDecimal weightValue;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 25, nullable = false)
     protected MassUnit unit;
 
