@@ -17,18 +17,22 @@ public class Dog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
+    @Column(nullable = false, length = 255)
     protected String name;
+
+    @Column(nullable = false)
     private LocalDate birthDate;
-    protected boolean isMale;
 
-    //TODO Demander à Franck si c'est pertinent
-    protected boolean isSociable;
-    protected boolean isInHeat;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    protected Gender gender;
 
-    //TODO Demander à Franck comment activer la seconde cardinalité
-    protected boolean isCrossbreed;
-
+    @Column(unique = true, length = 50)
     protected String chipNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private Owner owner;
 
     @ManyToMany(fetch = FetchType.LAZY) // LAZY est généralement préférable pour les performances
     @JoinTable(
