@@ -53,4 +53,25 @@ FROM club_owner co
 
 -- TODO Demander à Franck pourquoi le register avec les infos du coach me crée juste un user et non pas un coach, comment valider cela
 
-
+-- Insert common dog breeds
+INSERT INTO breed (name)
+VALUES ('Labrador Retriever'),
+       ('German Shepherd'),
+       ('Golden Retriever'),
+       ('French Bulldog'),
+       ('Bulldog'),
+       ('Poodle'),
+       ('Beagle'),
+       ('Rottweiler'),
+       ('Yorkshire Terrier'),
+       ('Boxer'),
+       ('Dachshund'),
+       ('Siberian Husky'),
+       ('Great Dane'),
+       ('Doberman Pinscher'),
+       ('Shih Tzu'),
+       ('Chihuahua'),
+       ('Border Collie'),
+       ('Cavalier King Charles Spaniel'),
+       ('Australian Shepherd'),
+       ('Bernese Mountain Dog');
