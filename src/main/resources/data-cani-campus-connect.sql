@@ -13,6 +13,10 @@ VALUES (3, false,  '789 Pine Ln','2023-03-10'),
 INSERT INTO club_owner (user_id)
 VALUES (1);
 
+-- Insert clubs (linked to club_owner with user_id 1)
+INSERT INTO club (name, address, user_id)
+VALUES ('Les moustaches Messines', '123 Dog Street, Paris', 1);
+
 INSERT INTO coach (user_id, acaced_number, is_active, registration_date)
 VALUES (2, 'OEACHK90', true, '2025-04-16');
 
