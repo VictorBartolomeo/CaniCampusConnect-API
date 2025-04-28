@@ -145,3 +145,34 @@ VALUES ('2023-01-15', '2026-01-15', 'RAB123456', 'Dr. Smith', 1, 1), -- Max's ra
        ('2023-01-30', '2026-01-30', 'RAB678901', 'Dr. Wilson', 6, 1), -- Lucy's rabies vaccination
        ('2023-02-25', '2024-02-25', 'DHPP678901', 'Dr. Wilson', 6, 2), -- Lucy's DHPP vaccination
        ('2023-03-20', '2023-09-20', 'BOR789012', 'Dr. Wilson', 6, 3); -- Lucy's Bordetella vaccination
+
+-- Insert medication treatments for dogs
+INSERT INTO medication_treatment (medication_name, dosage, frequency, start_date, end_date, treatment_reason, dog_id)
+VALUES 
+    -- Max's treatments
+    ('Amoxicillin', '250mg', '08:00:00', '2023-02-15', '2023-02-25', 'Ear infection', 1),
+    ('Prednisone', '10mg', '12:00:00', '2023-05-10', '2023-05-20', 'Allergic reaction', 1),
+    ('Heartworm preventative', '1 tablet', '09:00:00', '2023-06-01', NULL, 'Monthly heartworm prevention', 1),
+
+    -- Bella's treatments
+    ('Carprofen', '75mg', '08:00:00', '2023-03-20', '2023-04-03', 'Joint pain', 2),
+    ('Insulin', '10 units', '07:00:00', '2023-07-15', NULL, 'Diabetes management', 2),
+
+    -- Charlie's treatments
+    ('Metronidazole', '500mg', '12:00:00', '2023-01-10', '2023-01-20', 'Digestive issues', 3),
+    ('Apoquel', '5.4mg', '18:00:00', '2023-04-05', NULL, 'Chronic skin allergy', 3),
+    ('Eye drops', '2 drops', '08:00:00', '2023-08-10', '2023-08-24', 'Conjunctivitis', 3),
+
+    -- Luna's treatments
+    ('Cephalexin', '300mg', '08:00:00', '2023-02-05', '2023-02-19', 'Skin infection', 4),
+    ('Tramadol', '50mg', '12:00:00', '2023-05-15', '2023-05-22', 'Post-surgery pain management', 4),
+
+    -- Cooper's treatments
+    ('Fluconazole', '100mg', '08:00:00', '2023-03-10', '2023-03-24', 'Fungal infection', 5),
+    ('Phenobarbital', '30mg', '08:00:00', '2023-06-20', NULL, 'Seizure management', 5),
+    ('Furosemide', '20mg', '12:00:00', '2023-09-05', NULL, 'Heart condition', 5),
+
+    -- Lucy's treatments
+    ('Doxycycline', '100mg', '08:00:00', '2023-01-05', '2023-01-19', 'Tick-borne disease', 6),
+    ('Thyroid medication', '0.5mg', '08:00:00', '2023-04-10', NULL, 'Hypothyroidism', 6),
+    ('Antihistamine', '10mg', '12:00:00', '2023-07-15', '2023-08-15', 'Seasonal allergies', 6);
