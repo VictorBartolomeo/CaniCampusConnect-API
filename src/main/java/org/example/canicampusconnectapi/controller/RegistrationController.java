@@ -1,101 +1,81 @@
 package org.example.canicampusconnectapi.controller;
 
-import org.example.canicampusconnectapi.dao.CourseDao;
-import org.example.canicampusconnectapi.dao.CourseTypeDao;
-import org.example.canicampusconnectapi.dao.DogDao;
-import org.example.canicampusconnectapi.dao.RegistrationDao;
-import org.example.canicampusconnectapi.model.courseRelated.Course;
-import org.example.canicampusconnectapi.model.courseRelated.CourseType;
-import org.example.canicampusconnectapi.model.dogRelated.Dog;
+// Imports inchangés sauf pour les DAOs qui ne sont plus directement utilisés ici
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
 import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
+import org.example.canicampusconnectapi.service.RegistrationService; // Importer le service
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException; // Pour gérer les Optional vides
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
 public class RegistrationController {
 
-    protected RegistrationDao registrationDao;
-    protected DogDao dogDao;
-    protected CourseDao courseDao;
-    protected CourseTypeDao courseTypeDao;
+    // Injecter le service au lieu des DAOs
+    private final RegistrationService registrationService;
 
     @Autowired
-    public RegistrationController(RegistrationDao registrationDao, DogDao dogDao, CourseDao courseDao, CourseTypeDao courseTypeDao) {
-        this.registrationDao = registrationDao;
-        this.dogDao = dogDao;
-        this.courseDao = courseDao;
-        this.courseTypeDao = courseTypeDao;
+    public RegistrationController(RegistrationService registrationService) {
+        this.registrationService = registrationService;
+        // Les injections des DAOs sont supprimées
     }
 
     // Get a registration by ID
     @GetMapping("/registration/{id}")
     public ResponseEntity<Registration> getRegistration(@PathVariable Long id) {
-        Optional<Registration> optionalRegistration = registrationDao.findById(id);
-        if (optionalRegistration.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(optionalRegistration.get(), HttpStatus.OK);
+        return registrationService.findById(id)
+                .map(ResponseEntity::ok) // Si trouvé, retourne 200 OK avec l'objet
+                .orElse(ResponseEntity.notFound().build()); // Sinon, retourne 404 Not Found
     }
 
     // Get all registrations
     @GetMapping("/registrations")
     public List<Registration> getAllRegistrations() {
-        return registrationDao.findAll();
+        // Pas besoin de ResponseEntity ici si retourner une liste (vide ou non) est acceptable
+        return registrationService.findAll();
     }
 
     // Get registrations by dog
     @GetMapping("/dog/{dogId}/registrations")
     public ResponseEntity<List<Registration>> getRegistrationsByDog(@PathVariable Long dogId) {
-        Optional<Dog> optionalDog = dogDao.findById(dogId);
-        if (optionalDog.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        List<Registration> registrations = registrationDao.findByDog(optionalDog.get());
-        return new ResponseEntity<>(registrations, HttpStatus.OK);
+        List<Registration> registrations = registrationService.findByDogId(dogId);
+        // On pourrait vérifier si le chien existe avant, mais le service peut aussi le faire
+        // Retourne OK même si la liste est vide, c'est le comportement standard
+        return ResponseEntity.ok(registrations);
     }
 
     // Get registrations by course
     @GetMapping("/course/{courseId}/registrations")
     public ResponseEntity<List<Registration>> getRegistrationsByCourse(@PathVariable Long courseId) {
-        Optional<Course> optionalCourse = courseDao.findById(courseId);
-        if (optionalCourse.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        List<Registration> registrations = registrationDao.findByCourse(optionalCourse.get());
-        return new ResponseEntity<>(registrations, HttpStatus.OK);
+        List<Registration> registrations = registrationService.findByCourseId(courseId);
+        return ResponseEntity.ok(registrations);
     }
 
     // Get registrations by course type
     @GetMapping("/coursetype/{courseTypeId}/registrations")
     public ResponseEntity<List<Registration>> getRegistrationsByCourseType(@PathVariable Long courseTypeId) {
-        Optional<CourseType> optionalCourseType = courseTypeDao.findById(courseTypeId);
-        if (optionalCourseType.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        List<Registration> registrations = registrationDao.findByCourseCourseType(optionalCourseType.get());
-        return new ResponseEntity<>(registrations, HttpStatus.OK);
+        List<Registration> registrations = registrationService.findByCourseTypeId(courseTypeId);
+        return ResponseEntity.ok(registrations);
     }
 
     // Get registrations by status
     @GetMapping("/registrations/status/{status}")
     public List<Registration> getRegistrationsByStatus(@PathVariable RegistrationStatus status) {
-        return registrationDao.findByStatus(status);
+        return registrationService.findByStatus(status);
     }
 
     // Get registrations by date
     @GetMapping("/registrations/date")
     public List<Registration> getRegistrationsByDate(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
-        return registrationDao.findByRegistrationDate(date);
+        return registrationService.findByRegistrationDate(date);
     }
 
     // Get registrations by date range
@@ -103,166 +83,90 @@ public class RegistrationController {
     public List<Registration> getRegistrationsBetweenDates(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-        return registrationDao.findByRegistrationDateBetween(start, end);
+        return registrationService.findByRegistrationDateBetween(start, end);
     }
 
     // Get upcoming registrations
     @GetMapping("/registrations/upcoming")
     public List<Registration> getUpcomingRegistrations() {
-        return registrationDao.findUpcomingRegistrations();
+        return registrationService.findUpcoming();
     }
 
     // Get upcoming registrations for a specific dog
     @GetMapping("/dog/{dogId}/registrations/upcoming")
     public ResponseEntity<List<Registration>> getUpcomingRegistrationsByDog(@PathVariable Long dogId) {
-        if (!dogDao.existsById(dogId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        List<Registration> registrations = registrationDao.findUpcomingRegistrationsByDogId(dogId);
-        return new ResponseEntity<>(registrations, HttpStatus.OK);
+        List<Registration> registrations = registrationService.findUpcomingByDogId(dogId);
+        return ResponseEntity.ok(registrations);
     }
 
     // Get past registrations
     @GetMapping("/registrations/past")
     public List<Registration> getPastRegistrations() {
-        return registrationDao.findPastRegistrations();
+        return registrationService.findPast();
     }
 
     // Get past registrations for a specific dog
     @GetMapping("/dog/{dogId}/registrations/past")
     public ResponseEntity<List<Registration>> getPastRegistrationsByDog(@PathVariable Long dogId) {
-        if (!dogDao.existsById(dogId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        List<Registration> registrations = registrationDao.findPastRegistrationsByDogId(dogId);
-        return new ResponseEntity<>(registrations, HttpStatus.OK);
+        List<Registration> registrations = registrationService.findPastByDogId(dogId);
+        return ResponseEntity.ok(registrations);
     }
 
     // Get current registrations
     @GetMapping("/registrations/current")
     public List<Registration> getCurrentRegistrations() {
-        return registrationDao.findCurrentRegistrations();
+        return registrationService.findCurrent();
     }
 
     // Get current registrations for a specific dog
     @GetMapping("/dog/{dogId}/registrations/current")
     public ResponseEntity<List<Registration>> getCurrentRegistrationsByDog(@PathVariable Long dogId) {
-        if (!dogDao.existsById(dogId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        List<Registration> registrations = registrationDao.findCurrentRegistrationsByDogId(dogId);
-        return new ResponseEntity<>(registrations, HttpStatus.OK);
+        List<Registration> registrations = registrationService.findCurrentByDogId(dogId);
+        return ResponseEntity.ok(registrations);
     }
 
     // Count registrations for a course
     @GetMapping("/course/{courseId}/registrations/count")
     public ResponseEntity<Long> countRegistrationsByCourse(@PathVariable Long courseId) {
-        if (!courseDao.existsById(courseId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        Long count = registrationDao.countByCourseId(courseId);
-        return new ResponseEntity<>(count, HttpStatus.OK);
+        // On pourrait vérifier si le cours existe ici ou dans le service
+        long count = registrationService.countByCourseId(courseId);
+        return ResponseEntity.ok(count);
     }
 
     // Create a new registration
     @PostMapping("/registration")
     public ResponseEntity<Registration> createRegistration(@RequestBody Registration registration) {
-        // Verify that the dog exists
-        if (registration.getDog() == null || registration.getDog().getId() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            Registration createdRegistration = registrationService.create(registration);
+            // Retourne 201 Created avec l'objet créé
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdRegistration);
+        } catch (IllegalArgumentException e) {
+            // Erreur de validation simple (ex: ID manquant)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (RuntimeException e) {
+            // Autre erreur métier (ex: cours plein, déjà inscrit)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+            // Ou BAD_REQUEST selon la nature de l'erreur
         }
-        Optional<Dog> optionalDog = dogDao.findById(registration.getDog().getId());
-        if (optionalDog.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        // Verify that the course exists
-        if (registration.getCourse() == null || registration.getCourse().getId() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        Optional<Course> optionalCourse = courseDao.findById(registration.getCourse().getId());
-        if (optionalCourse.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        // Check if the course is full
-        Course course = optionalCourse.get();
-        Long currentRegistrations = registrationDao.countByCourseId(course.getId());
-        if (currentRegistrations >= course.getMaxCapacity()) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-
-        // Check if the dog is already registered for this course
-        List<Registration> existingRegistrations = registrationDao.findByDogIdAndCourseId(registration.getDog().getId(), course.getId());
-        if (!existingRegistrations.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-
-        // Set the entities with the full objects from the database
-        registration.setDog(optionalDog.get());
-        registration.setCourse(course);
-
-        // Set registration date to now if not provided
-        if (registration.getRegistrationDate() == null) {
-            registration.setRegistrationDate(LocalDateTime.now());
-        }
-
-        // Always set status to PENDING for new registrations
-        // This ensures that all registrations require validation by a club owner or coach
-        registration.setStatus(RegistrationStatus.PENDING);
-
-        registrationDao.save(registration);
-        return new ResponseEntity<>(registration, HttpStatus.CREATED);
     }
 
-    // Update an existing registration
+    // Update an existing registration (exemple: mise à jour du statut)
     @PutMapping("/registration/{id}")
-    public ResponseEntity<Void> updateRegistration(@PathVariable Long id, @RequestBody Registration registration) {
-        Optional<Registration> optionalRegistration = registrationDao.findById(id);
-        if (optionalRegistration.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        // Verify that the dog exists if it's being updated
-        if (registration.getDog() != null && registration.getDog().getId() != null) {
-            Optional<Dog> optionalDog = dogDao.findById(registration.getDog().getId());
-            if (optionalDog.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            registration.setDog(optionalDog.get());
-        } else {
-            // Keep the existing dog if not provided
-            registration.setDog(optionalRegistration.get().getDog());
-        }
-
-        // Verify that the course exists if it's being updated
-        if (registration.getCourse() != null && registration.getCourse().getId() != null) {
-            Optional<Course> optionalCourse = courseDao.findById(registration.getCourse().getId());
-            if (optionalCourse.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            registration.setCourse(optionalCourse.get());
-        } else {
-            // Keep the existing course if not provided
-            registration.setCourse(optionalRegistration.get().getCourse());
-        }
-
-        // Keep the original registration date
-        registration.setRegistrationDate(optionalRegistration.get().getRegistrationDate());
-
-        registration.setId(id);
-        registrationDao.save(registration);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Registration> updateRegistration(@PathVariable Long id, @RequestBody Registration registrationDetails) {
+        // Le corps de la requête contient les détails à mettre à jour (ex: juste le statut)
+        return registrationService.update(id, registrationDetails)
+                .map(ResponseEntity::ok) // Retourne 200 OK avec l'objet mis à jour
+                .orElse(ResponseEntity.notFound().build()); // Retourne 404 si non trouvé
     }
 
     // Delete a registration
     @DeleteMapping("/registration/{id}")
     public ResponseEntity<Void> deleteRegistration(@PathVariable Long id) {
-        Optional<Registration> optionalRegistration = registrationDao.findById(id);
-        if (optionalRegistration.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        boolean deleted = registrationService.deleteById(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build(); // Retourne 204 No Content si supprimé
+        } else {
+            return ResponseEntity.notFound().build(); // Retourne 404 si non trouvé
         }
-        registrationDao.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
