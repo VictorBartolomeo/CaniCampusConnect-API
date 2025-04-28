@@ -15,19 +15,27 @@ public class MedicationTreatment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "treatment_id")
     protected Long id;
 
-    protected String medicationName;
+    @Column(name = "medication_name", nullable = false, length = 255)
+    protected String name;
+
+    @Column(length = 255)
     protected String dosage;
+
     protected Time frequency;
+
+    @Column(nullable = false)
     protected Date startDate;
+
+    @Column(nullable = true)
     protected Date endDate;
 
+    @Column(name = "treatment_reason", length = 255)
+    protected String reason;
+
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "dog_id", nullable = false)
     private Dog dog;
-
-    @Column(columnDefinition = "TEXT")
-    protected String treatmentReason;
-
 }
