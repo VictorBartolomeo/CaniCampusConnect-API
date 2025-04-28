@@ -1,6 +1,7 @@
 package org.example.canicampusconnectapi.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,15 +12,18 @@ public class Club {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+    @Column(name = "club_id")
+    protected Integer id;
 
+    @Column(nullable = false, length = 150)
+    @NotBlank(message = "Le nom ne peut pas être vide")
     protected String name;
-    protected String address;
-    protected String phone;
-    protected String email;
 
+    @Column(nullable = false, length = 255)
+    @NotBlank(message = "L'adresse ne peut pas être vide")
+    protected String address;
 
     @ManyToOne
-    protected Department department;
-
+    @JoinColumn(name = "user_id", nullable = false)
+    protected ClubOwner clubOwner;
 }
