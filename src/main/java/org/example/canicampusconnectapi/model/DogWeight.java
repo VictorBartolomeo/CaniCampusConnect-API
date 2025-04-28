@@ -5,6 +5,7 @@ import jakarta.validation.constraints.DecimalMin;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Getter
@@ -16,11 +17,15 @@ public class DogWeight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
+    @Column(nullable = false)
     protected Date measurementDate;
 
+    @Column(precision = 3, scale = 2, nullable = false)
     @DecimalMin(value = "0.1")
-    protected float weight;
-    protected MassUnit massUnit;
+    protected BigDecimal weightValue;
+
+    @Column(length = 25, nullable = false)
+    protected MassUnit unit;
 
     @ManyToOne
     @JoinColumn(nullable = false)
