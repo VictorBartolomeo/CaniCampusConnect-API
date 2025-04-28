@@ -16,7 +16,7 @@ VALUES (1);
 INSERT INTO coach (user_id, acaced_number, is_active, registration_date)
 VALUES (2, 'OEACHK90', true, '2025-04-16');
 
-create view Owners as
+create view OwnersV as
 select `o`.`is_active`         AS `is_active`,
        `o`.`registration_date` AS `registration_date`,
        `o`.`user_id`           AS `user_id`,
@@ -28,7 +28,7 @@ select `o`.`is_active`         AS `is_active`,
 from (`CaniCampusConnect`.`owner` `o` left join `CaniCampusConnect`.`user` `u` on ((`u`.`user_id` = `o`.`user_id`)));
 
 
-CREATE VIEW Coaches AS
+CREATE VIEW CoachesV AS
 SELECT
     c.acaced_number AS acaced_number,
     c.is_active AS is_active,
@@ -41,7 +41,7 @@ SELECT
 FROM coach c
          LEFT JOIN CaniCampusConnect.user u ON u.user_id = c.user_id;
 
-CREATE VIEW ClubOwners AS
+CREATE VIEW ClubOwnersV AS
 SELECT
     co.user_id AS user_id,
     u.email AS email,
@@ -98,20 +98,20 @@ VALUES (1, 1),  -- Max is a Labrador Retriever
 
 -- Insert dog weights
 INSERT INTO dog_weight (measurement_date, weight_value, unit, dog_id)
-VALUES ('2023-01-10', 25.5, 'KILOGRAM', 1),  -- Max's weight on Jan 10, 2023
-       ('2023-03-15', 26.2, 'KILOGRAM', 1),  -- Max's weight on Mar 15, 2023
-       ('2023-06-20', 26.8, 'KILOGRAM', 1),  -- Max's weight on Jun 20, 2023
-       ('2023-09-25', 27.1, 'KILOGRAM', 1),  -- Max's weight on Sep 25, 2023
-       ('2023-01-12', 22.3, 'KILOGRAM', 2),  -- Bella's weight on Jan 12, 2023
-       ('2023-05-18', 22.8, 'KILOGRAM', 2),  -- Bella's weight on May 18, 2023
-       ('2023-09-22', 23.1, 'KILOGRAM', 2),  -- Bella's weight on Sep 22, 2023
-       ('2023-02-05', 30.5, 'KILOGRAM', 3),  -- Charlie's weight on Feb 5, 2023
-       ('2023-08-15', 32.0, 'KILOGRAM', 3),  -- Charlie's weight on Aug 15, 2023
-       ('2023-03-10', 8.2, 'KILOGRAM', 4),   -- Luna's weight on Mar 10, 2023
-       ('2023-07-20', 8.5, 'KILOGRAM', 4),   -- Luna's weight on Jul 20, 2023
-       ('2023-11-05', 8.7, 'KILOGRAM', 4),   -- Luna's weight on Nov 5, 2023
-       ('2023-04-15', 40.2, 'KILOGRAM', 5),  -- Cooper's weight on Apr 15, 2023
-       ('2023-10-25', 41.5, 'KILOGRAM', 5),  -- Cooper's weight on Oct 25, 2023
-       ('2023-01-30', 20.5, 'KILOGRAM', 6),  -- Lucy's weight on Jan 30, 2023
-       ('2023-06-10', 21.2, 'KILOGRAM', 6),  -- Lucy's weight on Jun 10, 2023
-       ('2023-12-05', 21.8, 'KILOGRAM', 6);  -- Lucy's weight on Dec 5, 2023
+VALUES ('2023-01-10', 25.55, 'KILOGRAM', 1),  -- Max's weight on Jan 10, 2023
+       ('2023-03-15', 26.25, 'KILOGRAM', 1),  -- Max's weight on Mar 15, 2023
+       ('2023-06-20', 26.85, 'KILOGRAM', 1),  -- Max's weight on Jun 20, 2023
+       ('2023-09-25', 27.15, 'KILOGRAM', 1),  -- Max's weight on Sep 25, 2023
+       ('2023-01-12', 22.30, 'KILOGRAM', 2),  -- Bella's weight on Jan 12, 2023
+       ('2023-05-18', 22.80, 'KILOGRAM', 2),  -- Bella's weight on May 18, 2023
+       ('2023-09-22', 23.10,  'KILOGRAM', 2),  -- Bella's weight on Sep 22, 2023
+       ('2023-02-05', 30.55, 'KILOGRAM', 3),  -- Charlie's weight on Feb 5, 2023
+       ('2023-08-15', 32.00, 'KILOGRAM', 3),  -- Charlie's weight on Aug 15, 2023
+       ('2023-03-10', 8.25,  'KILOGRAM', 4),   -- Luna's weight on Mar 10, 2023
+       ('2023-07-20', 8.50,  'KILOGRAM', 4),   -- Luna's weight on Jul 20, 2023
+       ('2023-11-05', 8.75, 'KILOGRAM', 4),   -- Luna's weight on Nov 5, 2023
+       ('2023-04-15', 40.25, 'KILOGRAM', 5),  -- Cooper's weight on Apr 15, 2023
+       ('2023-10-25', 41.55, 'KILOGRAM', 5),  -- Cooper's weight on Oct 25, 2023
+       ('2023-01-30', 20.50, 'KILOGRAM', 6),  -- Lucy's weight on Jan 30, 2023
+       ('2023-06-10', 21.20, 'KILOGRAM', 6),  -- Lucy's weight on Jun 10, 2023
+       ('2023-12-05', 21.80, 'KILOGRAM', 6);  -- Lucy's weight on Dec 5, 2023
