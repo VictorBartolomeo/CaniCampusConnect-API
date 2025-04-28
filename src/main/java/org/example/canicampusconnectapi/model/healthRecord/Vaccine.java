@@ -1,13 +1,11 @@
 package org.example.canicampusconnectapi.model.healthRecord;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,9 +14,16 @@ public class Vaccine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+    @Column(name = "vaccine_id")
+    protected Integer id;
 
-    protected String vaccineName;
+    @Column(name = "vaccine_name", nullable = false, length = 255)
+    protected String name;
+
+    @Column(nullable = false)
     protected Date renewDelay;
+
+    @OneToMany(mappedBy = "vaccine")
+    private List<Vaccination> vaccinations;
 
 }
