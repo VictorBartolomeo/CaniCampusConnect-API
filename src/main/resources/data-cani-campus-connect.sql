@@ -20,6 +20,32 @@ VALUES ('Les moustaches Messines', '123 Dog Street, Paris', 1);
 INSERT INTO coach (user_id, acaced_number, is_active, registration_date)
 VALUES (2, 'OEACHK90', true, '2025-04-16');
 
+-- Insert age ranges for course types
+INSERT INTO age_range (min_age, max_age)
+VALUES (0, 12),    -- 0-12 months (puppies)
+       (13, 36),   -- 13-36 months (young dogs)
+       (37, 84),   -- 37-84 months (adult dogs)
+       (85, 999);  -- 85+ months (senior dogs)
+
+-- Insert course types
+INSERT INTO course_type (name, description, age_range_id)
+VALUES ('Puppy Socialization', 'Basic socialization and introduction to training for puppies', 1),
+       ('Basic Obedience', 'Fundamental commands and behavior training for all dogs', 2),
+       ('Advanced Obedience', 'Complex commands and off-leash training for well-behaved dogs', 3),
+       ('Agility Training', 'Obstacle course training for athletic dogs', 2),
+       ('Therapy Dog Training', 'Training for dogs to become certified therapy animals', 3),
+       ('Senior Dog Wellness', 'Gentle exercise and mental stimulation for older dogs', 4);
+
+-- Insert courses
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, user_id, club_id, course_type_id)
+VALUES 
+    ('Puppy Basics - Spring Session', 'Introduction to basic commands and socialization for puppies', '2023-04-15 10:00:00', '2023-04-15 11:30:00', 8, 2, 1, 1),
+    ('Intermediate Obedience - Weekend', 'Follow-up training for dogs who have completed basic obedience', '2023-04-16 14:00:00', '2023-04-16 16:00:00', 10, 2, 1, 2),
+    ('Agility for Beginners', 'Introduction to agility equipment and basic techniques', '2023-04-22 09:00:00', '2023-04-22 11:00:00', 6, 2, 1, 4),
+    ('Advanced Commands Workshop', 'One-day intensive workshop for advanced commands and behaviors', '2023-05-06 13:00:00', '2023-05-06 17:00:00', 8, 2, 1, 3),
+    ('Therapy Dog Preparation', 'Preparation for therapy dog certification testing', '2023-05-13 10:00:00', '2023-05-13 12:00:00', 5, 2, 1, 5),
+    ('Senior Dog Enrichment', 'Mental stimulation and gentle exercise for senior dogs', '2023-05-20 11:00:00', '2023-05-20 12:00:00', 6, 2, 1, 6);
+
 create view OwnersV as
 select `o`.`is_active`         AS `is_active`,
        `o`.`registration_date` AS `registration_date`,
