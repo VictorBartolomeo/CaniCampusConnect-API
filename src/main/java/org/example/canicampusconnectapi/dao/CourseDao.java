@@ -19,4 +19,7 @@ public interface CourseDao extends JpaRepository<Course, Long> {
     List<Course> findByStartDatetimeBetween(LocalDateTime startDateTime, LocalDateTime endDateTime);
     List<Course> findByClubAndStartDatetimeAfter(Club club, LocalDateTime dateTime);
     List<Course> findByCoachAndStartDatetimeAfter(Coach coach, LocalDateTime dateTime);
+    List<Course> findByClubAndStartDatetimeBetween(Club club, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    List<Course> findByClubAndCoach(Club club, Coach coach);
+    List<Course> findByClubAndCourseType(Club club, CourseType courseType);
 }
