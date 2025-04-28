@@ -1,61 +1,57 @@
 package org.example.canicampusconnectapi.controller;
 
-import org.example.canicampusconnectapi.dao.DogDao;
-import org.example.canicampusconnectapi.dao.VeterinaryVisitDao;
-import org.example.canicampusconnectapi.model.dogRelated.Dog;
+import jakarta.persistence.EntityNotFoundException;
 import org.example.canicampusconnectapi.model.healthRecord.VeterinaryVisit;
+import org.example.canicampusconnectapi.service.VeterinaryVisitService; // Importer le service
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
 public class VeterinaryVisitController {
 
-    protected VeterinaryVisitDao veterinaryVisitDao;
-    protected DogDao dogDao;
+    private final VeterinaryVisitService veterinaryVisitService; // Injecter le service
 
     @Autowired
-    public VeterinaryVisitController(VeterinaryVisitDao veterinaryVisitDao, DogDao dogDao) {
-        this.veterinaryVisitDao = veterinaryVisitDao;
-        this.dogDao = dogDao;
+    public VeterinaryVisitController(VeterinaryVisitService veterinaryVisitService) {
+        this.veterinaryVisitService = veterinaryVisitService;
+        // Les injections de DAO sont supprimées
     }
 
     @GetMapping("/visit/{id}")
     public ResponseEntity<VeterinaryVisit> getVisit(@PathVariable Long id) {
-        Optional<VeterinaryVisit> optionalVisit = veterinaryVisitDao.findById(id);
-        if (optionalVisit.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(optionalVisit.get(), HttpStatus.OK);
+        return veterinaryVisitService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/visits")
     public List<VeterinaryVisit> getAllVisits() {
-        return veterinaryVisitDao.findAll();
+        return veterinaryVisitService.findAll();
     }
 
     @GetMapping("/dog/{dogId}/visits")
     public ResponseEntity<List<VeterinaryVisit>> getVisitsByDog(@PathVariable Long dogId) {
-        Optional<Dog> optionalDog = dogDao.findById(dogId);
-        if (optionalDog.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            List<VeterinaryVisit> visits = veterinaryVisitService.findByDogIdOrderedByDateDesc(dogId);
+            return ResponseEntity.ok(visits);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
-        List<VeterinaryVisit> visits = veterinaryVisitDao.findByDogOrderByVisitDateDesc(optionalDog.get());
-        return new ResponseEntity<>(visits, HttpStatus.OK);
     }
 
     @GetMapping("/visits/between")
     public List<VeterinaryVisit> getVisitsBetweenDates(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
-        return veterinaryVisitDao.findByVisitDateBetween(startDate, endDate);
+        return veterinaryVisitService.findByVisitDateBetween(startDate, endDate);
     }
 
     @GetMapping("/dog/{dogId}/visits/between")
@@ -63,84 +59,68 @@ public class VeterinaryVisitController {
             @PathVariable Long dogId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
-        Optional<Dog> optionalDog = dogDao.findById(dogId);
-        if (optionalDog.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            List<VeterinaryVisit> visits = veterinaryVisitService.findByDogIdAndVisitDateBetween(dogId, startDate, endDate);
+            return ResponseEntity.ok(visits);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
-        List<VeterinaryVisit> visits = veterinaryVisitDao.findByDogAndVisitDateBetween(optionalDog.get(), startDate, endDate);
-        return new ResponseEntity<>(visits, HttpStatus.OK);
     }
 
     @GetMapping("/visits/reason/{reason}")
     public List<VeterinaryVisit> getVisitsByReason(@PathVariable String reason) {
-        return veterinaryVisitDao.findByReasonForVisitContaining(reason);
+        return veterinaryVisitService.findByReasonContaining(reason);
     }
 
     @GetMapping("/visits/veterinarian/{veterinarian}")
     public List<VeterinaryVisit> getVisitsByVeterinarian(@PathVariable String veterinarian) {
-        return veterinaryVisitDao.findByVeterinarianContaining(veterinarian);
+        return veterinaryVisitService.findByVeterinarianContaining(veterinarian);
     }
 
     @GetMapping("/visits/diagnosis/{diagnosis}")
     public List<VeterinaryVisit> getVisitsByDiagnosis(@PathVariable String diagnosis) {
-        return veterinaryVisitDao.findByDiagnosisContaining(diagnosis);
+        return veterinaryVisitService.findByDiagnosisContaining(diagnosis);
     }
 
     @GetMapping("/visits/treatment/{treatment}")
     public List<VeterinaryVisit> getVisitsByTreatment(@PathVariable String treatment) {
-        return veterinaryVisitDao.findByTreatmentContaining(treatment);
+        return veterinaryVisitService.findByTreatmentContaining(treatment);
     }
 
     @PostMapping("/visit")
     public ResponseEntity<VeterinaryVisit> createVisit(@RequestBody VeterinaryVisit visit) {
-        // Verify that the dog exists
-        if (visit.getDog() == null || visit.getDog().getId() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            VeterinaryVisit createdVisit = veterinaryVisitService.create(visit);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdVisit);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e); // Ou BAD_REQUEST si l'ID chien fourni n'est pas trouvé
         }
-        
-        Optional<Dog> optionalDog = dogDao.findById(visit.getDog().getId());
-        if (optionalDog.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        
-        // Set the dog to ensure the relationship is properly established
-        visit.setDog(optionalDog.get());
-        
-        veterinaryVisitDao.save(visit);
-        return new ResponseEntity<>(visit, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/visit/{id}")
-    public ResponseEntity<VeterinaryVisit> deleteVisit(@PathVariable Long id) {
-        Optional<VeterinaryVisit> optionalVisit = veterinaryVisitDao.findById(id);
-        if (optionalVisit.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Void> deleteVisit(@PathVariable Long id) {
+        boolean deleted = veterinaryVisitService.deleteById(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build(); // 204 No Content
+        } else {
+            return ResponseEntity.notFound().build(); // 404 Not Found
         }
-        veterinaryVisitDao.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/visit/{id}")
-    public ResponseEntity<VeterinaryVisit> updateVisit(@PathVariable Long id, @RequestBody VeterinaryVisit visit) {
-        Optional<VeterinaryVisit> optionalVisit = veterinaryVisitDao.findById(id);
-        if (optionalVisit.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<VeterinaryVisit> updateVisit(@PathVariable Long id, @RequestBody VeterinaryVisit visitDetails) {
+        try {
+            return veterinaryVisitService.update(id, visitDetails)
+                    .map(ResponseEntity::ok) // 200 OK avec la visite mise à jour
+                    .orElse(ResponseEntity.notFound().build()); // 404 si la visite avec cet ID n'existe pas
+        } catch (EntityNotFoundException e) {
+            // Si on essaie de mettre à jour avec un ID de chien qui n'existe pas
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            // Autres erreurs de validation potentielles lors de la mise à jour
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
-        
-        // Verify that the dog exists if it's being updated
-        if (visit.getDog() != null && visit.getDog().getId() != null) {
-            Optional<Dog> optionalDog = dogDao.findById(visit.getDog().getId());
-            if (optionalDog.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            visit.setDog(optionalDog.get());
-        } else {
-            // Keep the existing dog if not provided in the update
-            visit.setDog(optionalVisit.get().getDog());
-        }
-        
-        visit.setId(id);
-        veterinaryVisitDao.save(visit);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
