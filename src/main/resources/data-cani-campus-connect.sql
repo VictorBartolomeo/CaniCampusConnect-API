@@ -1,21 +1,21 @@
 INSERT INTO user (firstname, lastname, email, password, phone)
-VALUES ('Alice', 'Smith', 'alice.smith@email.com', 'password123', '0611111111'),
-       ('Bob', 'Johnson', 'bob.johnson@email.com', 'securepass', '0622222222'),
-       ('Charlie', 'Brown', 'charlie.brown@email.com', 'charliepass', '0633333333'),
-       ('Diana', 'Miller', 'diana.miller@email.com', 'dianapass', '0644444444'),
-       ('Ethan', 'Davis', 'ethan.davis@email.com', 'ethanpass', '0655555555');
+VALUES ('Admin', 'Admin', 'admin@admin.com', 'password123', '0611111111'),
+       ('Coach', 'Coach', 'coach@coach.com', 'securepass', '0622222222'),
+       ('Propriétaire1', 'Utilisateur1', 'owner3@user.com', 'charliepass', '0633333333'),
+       ('Propriétaire2', 'Utilisateur2', 'owner4@user.com', 'dianapass', '0644444444'),
+       ('Propriétaire3', 'Utilisateur3', 'owner5@user.com', 'ethanpass', '0655555555');
 
 INSERT INTO owner (user_id, is_active, address, registration_date)
-VALUES (3, false,  '789 Pine Ln','2023-03-10'),
-       (4, true,  '101 Elm Rd','2023-04-20'),
-       (5, true,  '202 Maple Dr','2023-05-05');
+VALUES (3, false,  '789 Rue des Pins','2023-03-10'),
+       (4, true,  '101 Avenue des Ormes','2023-04-20'),
+       (5, true,  '202 Boulevard des Érables','2023-05-05');
 
 INSERT INTO club_owner (user_id)
 VALUES (1);
 
 -- Insert clubs (linked to club_owner with user_id 1)
 INSERT INTO club (name, address, user_id)
-VALUES ('Les moustaches Messines', '123 Dog Street, Paris', 1);
+VALUES ('Les moustaches Messines', '123 Rue des Chiens, Paris', 1);
 
 INSERT INTO coach (user_id, acaced_number, is_active, registration_date)
 VALUES (2, 'OEACHK90', true, '2025-04-16');
@@ -29,22 +29,22 @@ VALUES (0, 12),    -- 0-12 months (puppies)
 
 -- Insert course types
 INSERT INTO course_type (name, description, age_range_id)
-VALUES ('Puppy Socialization', 'Basic socialization and introduction to training for puppies', 1),
-       ('Basic Obedience', 'Fundamental commands and behavior training for all dogs', 2),
-       ('Advanced Obedience', 'Complex commands and off-leash training for well-behaved dogs', 3),
-       ('Agility Training', 'Obstacle course training for athletic dogs', 2),
-       ('Therapy Dog Training', 'Training for dogs to become certified therapy animals', 3),
-       ('Senior Dog Wellness', 'Gentle exercise and mental stimulation for older dogs', 4);
+VALUES ('Socialisation des Chiots', 'Socialisation de base et introduction à l''éducation pour chiots', 1),
+       ('Obéissance de Base', 'Commandes fondamentales et éducation comportementale pour tous les chiens', 2),
+       ('Obéissance Avancée', 'Commandes complexes et entraînement sans laisse pour chiens bien éduqués', 3),
+       ('Entraînement d''Agilité', 'Parcours d''obstacles pour chiens sportifs', 2),
+       ('Formation de Chien Thérapeutique', 'Formation pour chiens destinés à devenir des animaux thérapeutiques certifiés', 3),
+       ('Bien-être des Chiens Seniors', 'Exercices doux et stimulation mentale pour chiens âgés', 4);
 
 -- Insert courses
 INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, user_id, club_id, course_type_id)
 VALUES 
-    ('Puppy Basics - Spring Session', 'Introduction to basic commands and socialization for puppies', '2023-04-15 10:00:00', '2023-04-15 11:30:00', 8, 2, 1, 1),
-    ('Intermediate Obedience - Weekend', 'Follow-up training for dogs who have completed basic obedience', '2023-04-16 14:00:00', '2023-04-16 16:00:00', 10, 2, 1, 2),
-    ('Agility for Beginners', 'Introduction to agility equipment and basic techniques', '2023-04-22 09:00:00', '2023-04-22 11:00:00', 6, 2, 1, 4),
-    ('Advanced Commands Workshop', 'One-day intensive workshop for advanced commands and behaviors', '2023-05-06 13:00:00', '2023-05-06 17:00:00', 8, 2, 1, 3),
-    ('Therapy Dog Preparation', 'Preparation for therapy dog certification testing', '2023-05-13 10:00:00', '2023-05-13 12:00:00', 5, 2, 1, 5),
-    ('Senior Dog Enrichment', 'Mental stimulation and gentle exercise for senior dogs', '2023-05-20 11:00:00', '2023-05-20 12:00:00', 6, 2, 1, 6);
+    ('Bases pour Chiots - Session Printemps', 'Introduction aux commandes de base et socialisation pour chiots', '2023-04-15 10:00:00', '2023-04-15 11:30:00', 8, 2, 1, 1),
+    ('Obéissance Intermédiaire - Weekend', 'Formation complémentaire pour chiens ayant terminé l''obéissance de base', '2023-04-16 14:00:00', '2023-04-16 16:00:00', 10, 2, 1, 2),
+    ('Agilité pour Débutants', 'Introduction aux équipements d''agilité et techniques de base', '2023-04-22 09:00:00', '2023-04-22 11:00:00', 6, 2, 1, 4),
+    ('Atelier Commandes Avancées', 'Atelier intensif d''une journée pour commandes et comportements avancés', '2023-05-06 13:00:00', '2023-05-06 17:00:00', 8, 2, 1, 3),
+    ('Préparation Chien Thérapeutique', 'Préparation à la certification de chien thérapeutique', '2023-05-13 10:00:00', '2023-05-13 12:00:00', 5, 2, 1, 5),
+    ('Enrichissement pour Chiens Seniors', 'Stimulation mentale et exercices doux pour chiens âgés', '2023-05-20 11:00:00', '2023-05-20 12:00:00', 6, 2, 1, 6);
 
 create view OwnersV as
 select `o`.`is_active`         AS `is_active`,
@@ -86,186 +86,186 @@ FROM club_owner co
 -- Insert common dog breeds
 INSERT INTO breed (name)
 VALUES ('Labrador Retriever'),
-       ('German Shepherd'),
+       ('Berger Allemand'),
        ('Golden Retriever'),
-       ('French Bulldog'),
-       ('Bulldog'),
-       ('Poodle'),
+       ('Bouledogue Français'),
+       ('Bouledogue'),
+       ('Caniche'),
        ('Beagle'),
        ('Rottweiler'),
        ('Yorkshire Terrier'),
        ('Boxer'),
-       ('Dachshund'),
-       ('Siberian Husky'),
-       ('Great Dane'),
-       ('Doberman Pinscher'),
+       ('Teckel'),
+       ('Husky Sibérien'),
+       ('Dogue Allemand'),
+       ('Dobermann'),
        ('Shih Tzu'),
        ('Chihuahua'),
        ('Border Collie'),
-       ('Cavalier King Charles Spaniel'),
-       ('Australian Shepherd'),
-       ('Bernese Mountain Dog');
+       ('Cavalier King Charles'),
+       ('Berger Australien'),
+       ('Bouvier Bernois');
 
 -- Insert dogs (linked to owners with user_id 3, 4, and 5)
 INSERT INTO dog (name, birth_date, gender, chip_number, user_id)
-VALUES ('Max', '2020-05-15', 'MALE', 'CHIP123456', 3),
-       ('Bella', '2019-08-22', 'FEMALE', 'CHIP789012', 3),
-       ('Charlie', '2021-02-10', 'STERILIZED_MALE', 'CHIP345678', 4),
-       ('Luna', '2018-11-30', 'FEMALE', 'CHIP901234', 4),
-       ('Cooper', '2022-01-05', 'MALE', 'CHIP567890', 5),
-       ('Lucy', '2020-07-18', 'STERILIZED_FEMALE', 'CHIP234567', 5);
+VALUES ('Rex', '2020-05-15', 'MALE', 'CHIP123456', 3),
+       ('Nala', '2019-08-22', 'FEMALE', 'CHIP789012', 3),
+       ('Oscar', '2021-02-10', 'STERILIZED_MALE', 'CHIP345678', 4),
+       ('Lola', '2018-11-30', 'FEMALE', 'CHIP901234', 4),
+       ('Filou', '2022-01-05', 'MALE', 'CHIP567890', 5),
+       ('Mia', '2020-07-18', 'STERILIZED_FEMALE', 'CHIP234567', 5);
 
 -- Insert dog_breed relationships
 INSERT INTO dog_breed (dog_id, breed_id)
-VALUES (1, 1),  -- Max is a Labrador Retriever
-       (2, 3),  -- Bella is a Golden Retriever
-       (3, 2),  -- Charlie is a German Shepherd
-       (3, 5),  -- Charlie is also part Bulldog (crossbreed)
-       (4, 6),  -- Luna is a Poodle
-       (5, 8),  -- Cooper is a Rottweiler
-       (6, 10), -- Lucy is a Boxer
-       (6, 16); -- Lucy is also part Chihuahua (crossbreed)
+VALUES (1, 1),  -- Rex est un Labrador Retriever
+       (2, 3),  -- Nala est un Golden Retriever
+       (3, 2),  -- Oscar est un Berger Allemand
+       (3, 5),  -- Oscar est aussi en partie Bulldog (croisé)
+       (4, 6),  -- Lola est un Caniche
+       (5, 8),  -- Filou est un Rottweiler
+       (6, 10), -- Mia est un Boxer
+       (6, 16); -- Mia est aussi en partie Chihuahua (croisé)
 
 -- Insert dog weights
 INSERT INTO dog_weight (measurement_date, weight_value, unit, dog_id)
-VALUES ('2023-01-10', 25.55, 'KILOGRAM', 1),  -- Max's weight on Jan 10, 2023
-       ('2023-03-15', 26.25, 'KILOGRAM', 1),  -- Max's weight on Mar 15, 2023
-       ('2023-06-20', 26.85, 'KILOGRAM', 1),  -- Max's weight on Jun 20, 2023
-       ('2023-09-25', 27.15, 'KILOGRAM', 1),  -- Max's weight on Sep 25, 2023
-       ('2023-01-12', 22.30, 'KILOGRAM', 2),  -- Bella's weight on Jan 12, 2023
-       ('2023-05-18', 22.80, 'KILOGRAM', 2),  -- Bella's weight on May 18, 2023
-       ('2023-09-22', 23.10,  'KILOGRAM', 2),  -- Bella's weight on Sep 22, 2023
-       ('2023-02-05', 30.55, 'KILOGRAM', 3),  -- Charlie's weight on Feb 5, 2023
-       ('2023-08-15', 32.00, 'KILOGRAM', 3),  -- Charlie's weight on Aug 15, 2023
-       ('2023-03-10', 8.25,  'KILOGRAM', 4),   -- Luna's weight on Mar 10, 2023
-       ('2023-07-20', 8.50,  'KILOGRAM', 4),   -- Luna's weight on Jul 20, 2023
-       ('2023-11-05', 8.75, 'KILOGRAM', 4),   -- Luna's weight on Nov 5, 2023
-       ('2023-04-15', 40.25, 'KILOGRAM', 5),  -- Cooper's weight on Apr 15, 2023
-       ('2023-10-25', 41.55, 'KILOGRAM', 5),  -- Cooper's weight on Oct 25, 2023
-       ('2023-01-30', 20.50, 'KILOGRAM', 6),  -- Lucy's weight on Jan 30, 2023
-       ('2023-06-10', 21.20, 'KILOGRAM', 6),  -- Lucy's weight on Jun 10, 2023
-       ('2023-12-05', 21.80, 'KILOGRAM', 6);  -- Lucy's weight on Dec 5, 2023
+VALUES ('2023-01-10', 25.55, 'KILOGRAM', 1),  -- Poids de Rex le 10 Jan 2023
+       ('2023-03-15', 26.25, 'KILOGRAM', 1),  -- Poids de Rex le 15 Mar 2023
+       ('2023-06-20', 26.85, 'KILOGRAM', 1),  -- Poids de Rex le 20 Juin 2023
+       ('2023-09-25', 27.15, 'KILOGRAM', 1),  -- Poids de Rex le 25 Sep 2023
+       ('2023-01-12', 22.30, 'KILOGRAM', 2),  -- Poids de Nala le 12 Jan 2023
+       ('2023-05-18', 22.80, 'KILOGRAM', 2),  -- Poids de Nala le 18 Mai 2023
+       ('2023-09-22', 23.10,  'KILOGRAM', 2),  -- Poids de Nala le 22 Sep 2023
+       ('2023-02-05', 30.55, 'KILOGRAM', 3),  -- Poids d'Oscar le 5 Fév 2023
+       ('2023-08-15', 32.00, 'KILOGRAM', 3),  -- Poids d'Oscar le 15 Août 2023
+       ('2023-03-10', 8.25,  'KILOGRAM', 4),   -- Poids de Lola le 10 Mar 2023
+       ('2023-07-20', 8.50,  'KILOGRAM', 4),   -- Poids de Lola le 20 Juil 2023
+       ('2023-11-05', 8.75, 'KILOGRAM', 4),   -- Poids de Lola le 5 Nov 2023
+       ('2023-04-15', 40.25, 'KILOGRAM', 5),  -- Poids de Filou le 15 Avr 2023
+       ('2023-10-25', 41.55, 'KILOGRAM', 5),  -- Poids de Filou le 25 Oct 2023
+       ('2023-01-30', 20.50, 'KILOGRAM', 6),  -- Poids de Mia le 30 Jan 2023
+       ('2023-06-10', 21.20, 'KILOGRAM', 6),  -- Poids de Mia le 10 Juin 2023
+       ('2023-12-05', 21.80, 'KILOGRAM', 6);  -- Poids de Mia le 5 Déc 2023
 
 -- Insert common dog vaccines with their renewal periods
 INSERT INTO vaccine (vaccine_name, renew_delay)
-VALUES ('Rabies', '2023-01-01'), -- Rabies vaccine, renewed every 3 years
-       ('DHPP (Distemper, Hepatitis, Parainfluenza, Parvovirus)', '2023-01-01'), -- DHPP vaccine, renewed annually
-       ('Bordetella (Kennel Cough)', '2023-01-01'), -- Bordetella vaccine, renewed every 6 months
-       ('Leptospirosis', '2023-01-01'), -- Leptospirosis vaccine, renewed annually
-       ('Lyme Disease', '2023-01-01'), -- Lyme disease vaccine, renewed annually
-       ('Canine Influenza', '2023-01-01'), -- Canine influenza vaccine, renewed annually
-       ('Coronavirus', '2023-01-01'); -- Coronavirus vaccine, renewed annually
+VALUES ('Rage', '2023-01-01'), -- Vaccin contre la rage, renouvelé tous les 3 ans
+       ('CHPPIL (Carré, Hépatite, Parvovirose, Parainfluenza, Leptospirose)', '2023-01-01'), -- Vaccin CHPPIL, renouvelé annuellement
+       ('Bordetella (Toux du Chenil)', '2023-01-01'), -- Vaccin Bordetella, renouvelé tous les 6 mois
+       ('Leptospirose', '2023-01-01'), -- Vaccin contre la leptospirose, renouvelé annuellement
+       ('Maladie de Lyme', '2023-01-01'), -- Vaccin contre la maladie de Lyme, renouvelé annuellement
+       ('Grippe Canine', '2023-01-01'), -- Vaccin contre la grippe canine, renouvelé annuellement
+       ('Coronavirus', '2023-01-01'); -- Vaccin contre le coronavirus, renouvelé annuellement
 
 -- Insert vaccination records for dogs
 INSERT INTO vaccination (vaccination_date, reminder_date, batch_number, veterinarian, dog_id, vaccine_id)
-VALUES ('2023-01-15', '2026-01-15', 'RAB123456', 'Dr. Smith', 1, 1), -- Max's rabies vaccination
-       ('2023-02-10', '2024-02-10', 'DHPP789012', 'Dr. Johnson', 1, 2), -- Max's DHPP vaccination
-       ('2023-03-05', '2023-09-05', 'BOR345678', 'Dr. Smith', 1, 3), -- Max's Bordetella vaccination
-       ('2023-01-20', '2026-01-20', 'RAB567890', 'Dr. Wilson', 2, 1), -- Bella's rabies vaccination
-       ('2023-02-15', '2024-02-15', 'DHPP123456', 'Dr. Wilson', 2, 2), -- Bella's DHPP vaccination
-       ('2023-02-01', '2026-02-01', 'RAB234567', 'Dr. Brown', 3, 1), -- Charlie's rabies vaccination
-       ('2023-03-10', '2024-03-10', 'DHPP345678', 'Dr. Brown', 3, 2), -- Charlie's DHPP vaccination
-       ('2023-04-05', '2023-10-05', 'BOR456789', 'Dr. Brown', 3, 3), -- Charlie's Bordetella vaccination
-       ('2023-01-25', '2026-01-25', 'RAB345678', 'Dr. Davis', 4, 1), -- Luna's rabies vaccination
-       ('2023-02-20', '2024-02-20', 'DHPP456789', 'Dr. Davis', 4, 2), -- Luna's DHPP vaccination
-       ('2023-03-15', '2024-03-15', 'LEP567890', 'Dr. Davis', 4, 4), -- Luna's Leptospirosis vaccination
-       ('2023-02-05', '2026-02-05', 'RAB456789', 'Dr. Miller', 5, 1), -- Cooper's rabies vaccination
-       ('2023-03-01', '2024-03-01', 'DHPP567890', 'Dr. Miller', 5, 2), -- Cooper's DHPP vaccination
-       ('2023-04-10', '2024-04-10', 'LYM678901', 'Dr. Miller', 5, 5), -- Cooper's Lyme disease vaccination
-       ('2023-01-30', '2026-01-30', 'RAB678901', 'Dr. Wilson', 6, 1), -- Lucy's rabies vaccination
-       ('2023-02-25', '2024-02-25', 'DHPP678901', 'Dr. Wilson', 6, 2), -- Lucy's DHPP vaccination
-       ('2023-03-20', '2023-09-20', 'BOR789012', 'Dr. Wilson', 6, 3); -- Lucy's Bordetella vaccination
+VALUES ('2023-01-15', '2026-01-15', 'RAB123456', 'Dr. Dupont', 1, 1), -- Vaccination contre la rage de Rex
+       ('2023-02-10', '2024-02-10', 'DHPP789012', 'Dr. Martin', 1, 2), -- Vaccination CHPPIL de Rex
+       ('2023-03-05', '2023-09-05', 'BOR345678', 'Dr. Dupont', 1, 3), -- Vaccination Bordetella de Rex
+       ('2023-01-20', '2026-01-20', 'RAB567890', 'Dr. Bernard', 2, 1), -- Vaccination contre la rage de Nala
+       ('2023-02-15', '2024-02-15', 'DHPP123456', 'Dr. Bernard', 2, 2), -- Vaccination CHPPIL de Nala
+       ('2023-02-01', '2026-02-01', 'RAB234567', 'Dr. Petit', 3, 1), -- Vaccination contre la rage d'Oscar
+       ('2023-03-10', '2024-03-10', 'DHPP345678', 'Dr. Petit', 3, 2), -- Vaccination CHPPIL d'Oscar
+       ('2023-04-05', '2023-10-05', 'BOR456789', 'Dr. Petit', 3, 3), -- Vaccination Bordetella d'Oscar
+       ('2023-01-25', '2026-01-25', 'RAB345678', 'Dr. Moreau', 4, 1), -- Vaccination contre la rage de Lola
+       ('2023-02-20', '2024-02-20', 'DHPP456789', 'Dr. Moreau', 4, 2), -- Vaccination CHPPIL de Lola
+       ('2023-03-15', '2024-03-15', 'LEP567890', 'Dr. Moreau', 4, 4), -- Vaccination contre la leptospirose de Lola
+       ('2023-02-05', '2026-02-05', 'RAB456789', 'Dr. Leroy', 5, 1), -- Vaccination contre la rage de Filou
+       ('2023-03-01', '2024-03-01', 'DHPP567890', 'Dr. Leroy', 5, 2), -- Vaccination CHPPIL de Filou
+       ('2023-04-10', '2024-04-10', 'LYM678901', 'Dr. Leroy', 5, 5), -- Vaccination contre la maladie de Lyme de Filou
+       ('2023-01-30', '2026-01-30', 'RAB678901', 'Dr. Bernard', 6, 1), -- Vaccination contre la rage de Mia
+       ('2023-02-25', '2024-02-25', 'DHPP678901', 'Dr. Bernard', 6, 2), -- Vaccination CHPPIL de Mia
+       ('2023-03-20', '2023-09-20', 'BOR789012', 'Dr. Bernard', 6, 3); -- Vaccination Bordetella de Mia
 
 -- Insert medication treatments for dogs
 INSERT INTO medication_treatment (medication_name, dosage, frequency, start_date, end_date, treatment_reason, dog_id)
 VALUES 
-    -- Max's treatments
-    ('Amoxicillin', '250mg', '08:00:00', '2023-02-15', '2023-02-25', 'Ear infection', 1),
-    ('Prednisone', '10mg', '12:00:00', '2023-05-10', '2023-05-20', 'Allergic reaction', 1),
-    ('Heartworm preventative', '1 tablet', '09:00:00', '2023-06-01', NULL, 'Monthly heartworm prevention', 1),
+    -- Traitements de Rex
+    ('Amoxicilline', '250mg', '08:00:00', '2023-02-15', '2023-02-25', 'Infection de l''oreille', 1),
+    ('Prednisolone', '10mg', '12:00:00', '2023-05-10', '2023-05-20', 'Réaction allergique', 1),
+    ('Préventif contre les vers du cœur', '1 comprimé', '09:00:00', '2023-06-01', NULL, 'Prévention mensuelle contre les vers du cœur', 1),
 
-    -- Bella's treatments
-    ('Carprofen', '75mg', '08:00:00', '2023-03-20', '2023-04-03', 'Joint pain', 2),
-    ('Insulin', '10 units', '07:00:00', '2023-07-15', NULL, 'Diabetes management', 2),
+    -- Traitements de Nala
+    ('Carprofène', '75mg', '08:00:00', '2023-03-20', '2023-04-03', 'Douleur articulaire', 2),
+    ('Insuline', '10 unités', '07:00:00', '2023-07-15', NULL, 'Gestion du diabète', 2),
 
-    -- Charlie's treatments
-    ('Metronidazole', '500mg', '12:00:00', '2023-01-10', '2023-01-20', 'Digestive issues', 3),
-    ('Apoquel', '5.4mg', '18:00:00', '2023-04-05', NULL, 'Chronic skin allergy', 3),
-    ('Eye drops', '2 drops', '08:00:00', '2023-08-10', '2023-08-24', 'Conjunctivitis', 3),
+    -- Traitements d'Oscar
+    ('Métronidazole', '500mg', '12:00:00', '2023-01-10', '2023-01-20', 'Problèmes digestifs', 3),
+    ('Apoquel', '5.4mg', '18:00:00', '2023-04-05', NULL, 'Allergie cutanée chronique', 3),
+    ('Gouttes oculaires', '2 gouttes', '08:00:00', '2023-08-10', '2023-08-24', 'Conjonctivite', 3),
 
-    -- Luna's treatments
-    ('Cephalexin', '300mg', '08:00:00', '2023-02-05', '2023-02-19', 'Skin infection', 4),
-    ('Tramadol', '50mg', '12:00:00', '2023-05-15', '2023-05-22', 'Post-surgery pain management', 4),
+    -- Traitements de Lola
+    ('Céfalexine', '300mg', '08:00:00', '2023-02-05', '2023-02-19', 'Infection cutanée', 4),
+    ('Tramadol', '50mg', '12:00:00', '2023-05-15', '2023-05-22', 'Gestion de la douleur post-chirurgicale', 4),
 
-    -- Cooper's treatments
-    ('Fluconazole', '100mg', '08:00:00', '2023-03-10', '2023-03-24', 'Fungal infection', 5),
-    ('Phenobarbital', '30mg', '08:00:00', '2023-06-20', NULL, 'Seizure management', 5),
-    ('Furosemide', '20mg', '12:00:00', '2023-09-05', NULL, 'Heart condition', 5),
+    -- Traitements de Filou
+    ('Fluconazole', '100mg', '08:00:00', '2023-03-10', '2023-03-24', 'Infection fongique', 5),
+    ('Phénobarbital', '30mg', '08:00:00', '2023-06-20', NULL, 'Gestion des crises d''épilepsie', 5),
+    ('Furosémide', '20mg', '12:00:00', '2023-09-05', NULL, 'Problème cardiaque', 5),
 
-    -- Lucy's treatments
-    ('Doxycycline', '100mg', '08:00:00', '2023-01-05', '2023-01-19', 'Tick-borne disease', 6),
-    ('Thyroid medication', '0.5mg', '08:00:00', '2023-04-10', NULL, 'Hypothyroidism', 6),
-    ('Antihistamine', '10mg', '12:00:00', '2023-07-15', '2023-08-15', 'Seasonal allergies', 6);
+    -- Traitements de Mia
+    ('Doxycycline', '100mg', '08:00:00', '2023-01-05', '2023-01-19', 'Maladie transmise par les tiques', 6),
+    ('Médicament pour la thyroïde', '0.5mg', '08:00:00', '2023-04-10', NULL, 'Hypothyroïdie', 6),
+    ('Antihistaminique', '10mg', '12:00:00', '2023-07-15', '2023-08-15', 'Allergies saisonnières', 6);
 
 -- Insert registrations for dogs in courses
 INSERT INTO registration (registration_date, status, dog_id, course_id)
 VALUES 
-    -- Max (dog_id 1) registrations
-    ('2023-03-15 09:30:00', 'CONFIRMED', 1, 1),  -- Max registered for Puppy Basics
-    ('2023-04-01 14:15:00', 'CONFIRMED', 1, 3),  -- Max registered for Agility for Beginners
-    ('2023-04-25 10:45:00', 'PENDING', 1, 4),    -- Max pending for Advanced Commands Workshop
+    -- Inscriptions de Rex (dog_id 1)
+    ('2023-03-15 09:30:00', 'CONFIRMED', 1, 1),  -- Rex inscrit à Bases pour Chiots
+    ('2023-04-01 14:15:00', 'CONFIRMED', 1, 3),  -- Rex inscrit à Agilité pour Débutants
+    ('2023-04-25 10:45:00', 'PENDING', 1, 4),    -- Rex en attente pour Atelier Commandes Avancées
 
-    -- Bella (dog_id 2) registrations
-    ('2023-03-20 11:00:00', 'CONFIRMED', 2, 2),  -- Bella registered for Intermediate Obedience
-    ('2023-04-05 16:30:00', 'CANCELLED', 2, 3),  -- Bella cancelled Agility for Beginners
-    ('2023-05-01 09:15:00', 'CONFIRMED', 2, 5),  -- Bella registered for Therapy Dog Preparation
+    -- Inscriptions de Nala (dog_id 2)
+    ('2023-03-20 11:00:00', 'CONFIRMED', 2, 2),  -- Nala inscrite à Obéissance Intermédiaire
+    ('2023-04-05 16:30:00', 'CANCELLED', 2, 3),  -- Nala a annulé Agilité pour Débutants
+    ('2023-05-01 09:15:00', 'CONFIRMED', 2, 5),  -- Nala inscrite à Préparation Chien Thérapeutique
 
-    -- Charlie (dog_id 3) registrations
-    ('2023-04-02 10:00:00', 'CONFIRMED', 3, 2),  -- Charlie registered for Intermediate Obedience
-    ('2023-04-28 15:45:00', 'CONFIRMED', 3, 4),  -- Charlie registered for Advanced Commands Workshop
+    -- Inscriptions d'Oscar (dog_id 3)
+    ('2023-04-02 10:00:00', 'CONFIRMED', 3, 2),  -- Oscar inscrit à Obéissance Intermédiaire
+    ('2023-04-28 15:45:00', 'CONFIRMED', 3, 4),  -- Oscar inscrit à Atelier Commandes Avancées
 
-    -- Luna (dog_id 4) registrations
-    ('2023-03-25 13:30:00', 'CONFIRMED', 4, 1),  -- Luna registered for Puppy Basics
-    ('2023-05-10 11:15:00', 'PENDING', 4, 5),    -- Luna pending for Therapy Dog Preparation
+    -- Inscriptions de Lola (dog_id 4)
+    ('2023-03-25 13:30:00', 'CONFIRMED', 4, 1),  -- Lola inscrite à Bases pour Chiots
+    ('2023-05-10 11:15:00', 'PENDING', 4, 5),    -- Lola en attente pour Préparation Chien Thérapeutique
 
-    -- Cooper (dog_id 5) registrations
-    ('2023-04-10 09:45:00', 'CONFIRMED', 5, 3),  -- Cooper registered for Agility for Beginners
-    ('2023-05-15 14:00:00', 'CONFIRMED', 5, 6),  -- Cooper registered for Senior Dog Enrichment
+    -- Inscriptions de Filou (dog_id 5)
+    ('2023-04-10 09:45:00', 'CONFIRMED', 5, 3),  -- Filou inscrit à Agilité pour Débutants
+    ('2023-05-15 14:00:00', 'CONFIRMED', 5, 6),  -- Filou inscrit à Enrichissement pour Chiens Seniors
 
-    -- Lucy (dog_id 6) registrations
-    ('2023-04-15 10:30:00', 'CONFIRMED', 6, 2),  -- Lucy registered for Intermediate Obedience
-    ('2023-05-05 13:45:00', 'CANCELLED', 6, 4),  -- Lucy cancelled Advanced Commands Workshop
-    ('2023-05-18 11:30:00', 'CONFIRMED', 6, 6);  -- Lucy registered for Senior Dog Enrichment
+    -- Inscriptions de Mia (dog_id 6)
+    ('2023-04-15 10:30:00', 'CONFIRMED', 6, 2),  -- Mia inscrite à Obéissance Intermédiaire
+    ('2023-05-05 13:45:00', 'CANCELLED', 6, 4),  -- Mia a annulé Atelier Commandes Avancées
+    ('2023-05-18 11:30:00', 'CONFIRMED', 6, 6);  -- Mia inscrite à Enrichissement pour Chiens Seniors
 
 -- Insert veterinary visits for dogs
 INSERT INTO veterinary_visit (visit_date, diagnosis, reason_for_visit, treatment, veterinarian, dog_id)
 VALUES 
-    -- Max's visits
-    ('2023-02-10', 'Otitis externa in right ear', 'Scratching ear and head shaking', 'Prescribed Amoxicillin for 10 days and ear cleaning solution', 'Dr. Smith', 1),
-    ('2023-05-05', 'Allergic reaction to insect bite', 'Swelling on muzzle and hives', 'Administered antihistamine injection, prescribed Prednisone', 'Dr. Johnson', 1),
-    ('2023-09-15', 'Annual checkup, all systems normal', 'Routine examination', 'Updated vaccinations, heartworm test negative', 'Dr. Smith', 1),
+    -- Visites de Rex
+    ('2023-02-10', 'Otite externe à l''oreille droite', 'Grattement d''oreille et secouement de tête', 'Prescription d''Amoxicilline pour 10 jours et solution de nettoyage auriculaire', 'Dr. Dupont', 1),
+    ('2023-05-05', 'Réaction allergique à une piqûre d''insecte', 'Gonflement du museau et urticaire', 'Administration d''injection d''antihistaminique, prescription de Prednisolone', 'Dr. Martin', 1),
+    ('2023-09-15', 'Bilan annuel, tous les systèmes normaux', 'Examen de routine', 'Mise à jour des vaccinations, test de dirofilariose négatif', 'Dr. Dupont', 1),
 
-    -- Bella's visits
-    ('2023-03-15', 'Osteoarthritis in hip joints', 'Difficulty rising and limping', 'Prescribed Carprofen for pain management, recommended weight management', 'Dr. Wilson', 2),
-    ('2023-07-10', 'Diabetes mellitus', 'Increased thirst, urination, and weight loss', 'Started on insulin therapy, dietary changes recommended', 'Dr. Wilson', 2),
-    ('2023-11-20', 'Diabetic monitoring', 'Follow-up for diabetes management', 'Adjusted insulin dosage, blood glucose levels improving', 'Dr. Wilson', 2),
+    -- Visites de Nala
+    ('2023-03-15', 'Arthrose des articulations de la hanche', 'Difficulté à se lever et boiterie', 'Prescription de Carprofène pour la gestion de la douleur, recommandation de gestion du poids', 'Dr. Bernard', 2),
+    ('2023-07-10', 'Diabète sucré', 'Augmentation de la soif, miction et perte de poids', 'Début de l''insulinothérapie, changements alimentaires recommandés', 'Dr. Bernard', 2),
+    ('2023-11-20', 'Suivi du diabète', 'Suivi pour la gestion du diabète', 'Ajustement de la posologie d''insuline, amélioration des niveaux de glucose sanguin', 'Dr. Bernard', 2),
 
-    -- Charlie's visits
-    ('2023-01-05', 'Gastroenteritis', 'Vomiting and diarrhea for 2 days', 'Prescribed Metronidazole, recommended bland diet for 5 days', 'Dr. Brown', 3),
-    ('2023-04-01', 'Atopic dermatitis', 'Persistent itching and redness on skin', 'Started on Apoquel, recommended hypoallergenic shampoo', 'Dr. Brown', 3),
-    ('2023-08-05', 'Conjunctivitis', 'Red, swollen eyes with discharge', 'Prescribed antibiotic eye drops, e-collar to prevent scratching', 'Dr. Davis', 3),
+    -- Visites d'Oscar
+    ('2023-01-05', 'Gastro-entérite', 'Vomissements et diarrhée depuis 2 jours', 'Prescription de Métronidazole, recommandation d''un régime fade pendant 5 jours', 'Dr. Petit', 3),
+    ('2023-04-01', 'Dermatite atopique', 'Démangeaisons persistantes et rougeurs sur la peau', 'Début d''Apoquel, recommandation de shampooing hypoallergénique', 'Dr. Petit', 3),
+    ('2023-08-05', 'Conjonctivite', 'Yeux rouges, gonflés avec écoulement', 'Prescription de gouttes antibiotiques pour les yeux, collier élisabéthain pour éviter les grattements', 'Dr. Moreau', 3),
 
-    -- Luna's visits
-    ('2023-02-01', 'Bacterial skin infection', 'Hot spots and hair loss on back', 'Prescribed Cephalexin, medicated baths twice weekly', 'Dr. Davis', 4),
-    ('2023-05-10', 'Cruciate ligament tear', 'Sudden lameness in right hind leg', 'Surgical repair performed, prescribed Tramadol for pain', 'Dr. Miller', 4),
-    ('2023-06-01', 'Post-surgical follow-up', 'Monitoring surgical site healing', 'Removed sutures, rehabilitation exercises recommended', 'Dr. Miller', 4),
+    -- Visites de Lola
+    ('2023-02-01', 'Infection bactérienne de la peau', 'Points chauds et perte de poils sur le dos', 'Prescription de Céfalexine, bains médicamenteux deux fois par semaine', 'Dr. Moreau', 4),
+    ('2023-05-10', 'Déchirure du ligament croisé', 'Boiterie soudaine de la patte arrière droite', 'Réparation chirurgicale effectuée, prescription de Tramadol pour la douleur', 'Dr. Leroy', 4),
+    ('2023-06-01', 'Suivi post-chirurgical', 'Surveillance de la cicatrisation du site chirurgical', 'Retrait des sutures, exercices de rééducation recommandés', 'Dr. Leroy', 4),
 
-    -- Cooper's visits
-    ('2023-03-05', 'Fungal skin infection', 'Circular lesions on skin with hair loss', 'Prescribed Fluconazole, topical antifungal cream', 'Dr. Miller', 5),
-    ('2023-06-15', 'Idiopathic epilepsy', 'Two seizure episodes reported', 'Started on Phenobarbital, blood work to monitor liver function', 'Dr. Smith', 5),
-    ('2023-09-01', 'Congestive heart failure', 'Coughing and exercise intolerance', 'Prescribed Furosemide, recommended restricted activity', 'Dr. Johnson', 5),
+    -- Visites de Filou
+    ('2023-03-05', 'Infection fongique de la peau', 'Lésions circulaires sur la peau avec perte de poils', 'Prescription de Fluconazole, crème antifongique topique', 'Dr. Leroy', 5),
+    ('2023-06-15', 'Épilepsie idiopathique', 'Deux épisodes de crises signalés', 'Début de Phénobarbital, analyses sanguines pour surveiller la fonction hépatique', 'Dr. Dupont', 5),
+    ('2023-09-01', 'Insuffisance cardiaque congestive', 'Toux et intolérance à l''exercice', 'Prescription de Furosémide, recommandation d''activité restreinte', 'Dr. Martin', 5),
 
-    -- Lucy's visits
-    ('2023-01-01', 'Lyme disease', 'Lameness in multiple legs, fever', 'Prescribed Doxycycline, rest recommended', 'Dr. Wilson', 6),
-    ('2023-04-05', 'Hypothyroidism', 'Weight gain, lethargy, hair thinning', 'Started on thyroid medication, follow-up in 1 month', 'Dr. Wilson', 6),
-    ('2023-07-10', 'Seasonal allergies', 'Itching, sneezing, and watery eyes', 'Prescribed antihistamine, recommended limited outdoor time during high pollen days', 'Dr. Davis', 6);
+    -- Visites de Mia
+    ('2023-01-01', 'Maladie de Lyme', 'Boiterie de plusieurs pattes, fièvre', 'Prescription de Doxycycline, repos recommandé', 'Dr. Bernard', 6),
+    ('2023-04-05', 'Hypothyroïdie', 'Prise de poids, léthargie, amincissement des poils', 'Début de médicament pour la thyroïde, suivi dans 1 mois', 'Dr. Bernard', 6),
+    ('2023-07-10', 'Allergies saisonnières', 'Démangeaisons, éternuements et yeux larmoyants', 'Prescription d''antihistaminique, recommandation de temps limité à l''extérieur pendant les jours à forte concentration de pollen', 'Dr. Moreau', 6);
