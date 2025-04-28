@@ -207,6 +207,36 @@ VALUES
     ('Thyroid medication', '0.5mg', '08:00:00', '2023-04-10', NULL, 'Hypothyroidism', 6),
     ('Antihistamine', '10mg', '12:00:00', '2023-07-15', '2023-08-15', 'Seasonal allergies', 6);
 
+-- Insert registrations for dogs in courses
+INSERT INTO registration (registration_date, status, dog_id, course_id)
+VALUES 
+    -- Max (dog_id 1) registrations
+    ('2023-03-15 09:30:00', 'CONFIRMED', 1, 1),  -- Max registered for Puppy Basics
+    ('2023-04-01 14:15:00', 'CONFIRMED', 1, 3),  -- Max registered for Agility for Beginners
+    ('2023-04-25 10:45:00', 'PENDING', 1, 4),    -- Max pending for Advanced Commands Workshop
+
+    -- Bella (dog_id 2) registrations
+    ('2023-03-20 11:00:00', 'CONFIRMED', 2, 2),  -- Bella registered for Intermediate Obedience
+    ('2023-04-05 16:30:00', 'CANCELLED', 2, 3),  -- Bella cancelled Agility for Beginners
+    ('2023-05-01 09:15:00', 'CONFIRMED', 2, 5),  -- Bella registered for Therapy Dog Preparation
+
+    -- Charlie (dog_id 3) registrations
+    ('2023-04-02 10:00:00', 'CONFIRMED', 3, 2),  -- Charlie registered for Intermediate Obedience
+    ('2023-04-28 15:45:00', 'CONFIRMED', 3, 4),  -- Charlie registered for Advanced Commands Workshop
+
+    -- Luna (dog_id 4) registrations
+    ('2023-03-25 13:30:00', 'CONFIRMED', 4, 1),  -- Luna registered for Puppy Basics
+    ('2023-05-10 11:15:00', 'PENDING', 4, 5),    -- Luna pending for Therapy Dog Preparation
+
+    -- Cooper (dog_id 5) registrations
+    ('2023-04-10 09:45:00', 'CONFIRMED', 5, 3),  -- Cooper registered for Agility for Beginners
+    ('2023-05-15 14:00:00', 'CONFIRMED', 5, 6),  -- Cooper registered for Senior Dog Enrichment
+
+    -- Lucy (dog_id 6) registrations
+    ('2023-04-15 10:30:00', 'CONFIRMED', 6, 2),  -- Lucy registered for Intermediate Obedience
+    ('2023-05-05 13:45:00', 'CANCELLED', 6, 4),  -- Lucy cancelled Advanced Commands Workshop
+    ('2023-05-18 11:30:00', 'CONFIRMED', 6, 6);  -- Lucy registered for Senior Dog Enrichment
+
 -- Insert veterinary visits for dogs
 INSERT INTO veterinary_visit (visit_date, diagnosis, reason_for_visit, treatment, veterinarian, dog_id)
 VALUES 
