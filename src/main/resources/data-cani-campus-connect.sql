@@ -77,13 +77,13 @@ VALUES ('Labrador Retriever'),
        ('Bernese Mountain Dog');
 
 -- Insert dogs (linked to owners with user_id 3, 4, and 5)
-INSERT INTO dog (name, birth_date, is_male, is_sociable, is_in_heat, is_crossbreed, chip_number, user_id)
-VALUES ('Max', '2020-05-15', true, true, false, false, 'CHIP123456', 3),
-       ('Bella', '2019-08-22', false, true, false, false, 'CHIP789012', 3),
-       ('Charlie', '2021-02-10', true, false, false, true, 'CHIP345678', 4),
-       ('Luna', '2018-11-30', false, true, true, false, 'CHIP901234', 4),
-       ('Cooper', '2022-01-05', true, true, false, false, 'CHIP567890', 5),
-       ('Lucy', '2020-07-18', false, true, false, true, 'CHIP234567', 5);
+INSERT INTO dog (name, birth_date, gender, chip_number, user_id)
+VALUES ('Max', '2020-05-15', 'MALE', 'CHIP123456', 3),
+       ('Bella', '2019-08-22', 'FEMALE', 'CHIP789012', 3),
+       ('Charlie', '2021-02-10', 'STERILIZED_MALE', 'CHIP345678', 4),
+       ('Luna', '2018-11-30', 'FEMALE', 'CHIP901234', 4),
+       ('Cooper', '2022-01-05', 'MALE', 'CHIP567890', 5),
+       ('Lucy', '2020-07-18', 'STERILIZED_FEMALE', 'CHIP234567', 5);
 
 -- Insert dog_breed relationships
 INSERT INTO dog_breed (dog_id, breed_id)

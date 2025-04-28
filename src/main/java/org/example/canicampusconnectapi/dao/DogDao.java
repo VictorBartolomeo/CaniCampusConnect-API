@@ -1,6 +1,7 @@
 package org.example.canicampusconnectapi.dao;
 
 import org.example.canicampusconnectapi.model.Dog;
+import org.example.canicampusconnectapi.model.Owner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +12,6 @@ import java.util.Optional;
 public interface DogDao extends JpaRepository<Dog, Long> {
     List<Dog> findByName(String name);
     Optional<Dog> findByChipNumber(String chipNumber);
+    List<Dog> findByOwner(Owner owner);
+    List<Dog> findByOwnerId(Long ownerId);
 }

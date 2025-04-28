@@ -27,13 +27,9 @@ public class Vaccination {
     @JoinColumn(nullable = false)
     private Dog dog;
 
-    @ManyToMany
-    @JoinTable(
-            name = "vaccine_vaccination",
-            joinColumns = @JoinColumn(name = "vaccination_id"),
-            inverseJoinColumns = @JoinColumn(name = "vaccine_id")
-    )
-    protected List<Vaccination> vaccinations = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "vaccine_id", nullable = false)
+    protected Vaccine vaccine;
 
 
 
