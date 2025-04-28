@@ -115,3 +115,33 @@ VALUES ('2023-01-10', 25.55, 'KILOGRAM', 1),  -- Max's weight on Jan 10, 2023
        ('2023-01-30', 20.50, 'KILOGRAM', 6),  -- Lucy's weight on Jan 30, 2023
        ('2023-06-10', 21.20, 'KILOGRAM', 6),  -- Lucy's weight on Jun 10, 2023
        ('2023-12-05', 21.80, 'KILOGRAM', 6);  -- Lucy's weight on Dec 5, 2023
+
+-- Insert common dog vaccines with their renewal periods
+INSERT INTO vaccine (vaccine_name, renew_delay)
+VALUES ('Rabies', '2023-01-01'), -- Rabies vaccine, renewed every 3 years
+       ('DHPP (Distemper, Hepatitis, Parainfluenza, Parvovirus)', '2023-01-01'), -- DHPP vaccine, renewed annually
+       ('Bordetella (Kennel Cough)', '2023-01-01'), -- Bordetella vaccine, renewed every 6 months
+       ('Leptospirosis', '2023-01-01'), -- Leptospirosis vaccine, renewed annually
+       ('Lyme Disease', '2023-01-01'), -- Lyme disease vaccine, renewed annually
+       ('Canine Influenza', '2023-01-01'), -- Canine influenza vaccine, renewed annually
+       ('Coronavirus', '2023-01-01'); -- Coronavirus vaccine, renewed annually
+
+-- Insert vaccination records for dogs
+INSERT INTO vaccination (vaccination_date, reminder_date, batch_number, veterinarian, dog_id, vaccine_id)
+VALUES ('2023-01-15', '2026-01-15', 'RAB123456', 'Dr. Smith', 1, 1), -- Max's rabies vaccination
+       ('2023-02-10', '2024-02-10', 'DHPP789012', 'Dr. Johnson', 1, 2), -- Max's DHPP vaccination
+       ('2023-03-05', '2023-09-05', 'BOR345678', 'Dr. Smith', 1, 3), -- Max's Bordetella vaccination
+       ('2023-01-20', '2026-01-20', 'RAB567890', 'Dr. Wilson', 2, 1), -- Bella's rabies vaccination
+       ('2023-02-15', '2024-02-15', 'DHPP123456', 'Dr. Wilson', 2, 2), -- Bella's DHPP vaccination
+       ('2023-02-01', '2026-02-01', 'RAB234567', 'Dr. Brown', 3, 1), -- Charlie's rabies vaccination
+       ('2023-03-10', '2024-03-10', 'DHPP345678', 'Dr. Brown', 3, 2), -- Charlie's DHPP vaccination
+       ('2023-04-05', '2023-10-05', 'BOR456789', 'Dr. Brown', 3, 3), -- Charlie's Bordetella vaccination
+       ('2023-01-25', '2026-01-25', 'RAB345678', 'Dr. Davis', 4, 1), -- Luna's rabies vaccination
+       ('2023-02-20', '2024-02-20', 'DHPP456789', 'Dr. Davis', 4, 2), -- Luna's DHPP vaccination
+       ('2023-03-15', '2024-03-15', 'LEP567890', 'Dr. Davis', 4, 4), -- Luna's Leptospirosis vaccination
+       ('2023-02-05', '2026-02-05', 'RAB456789', 'Dr. Miller', 5, 1), -- Cooper's rabies vaccination
+       ('2023-03-01', '2024-03-01', 'DHPP567890', 'Dr. Miller', 5, 2), -- Cooper's DHPP vaccination
+       ('2023-04-10', '2024-04-10', 'LYM678901', 'Dr. Miller', 5, 5), -- Cooper's Lyme disease vaccination
+       ('2023-01-30', '2026-01-30', 'RAB678901', 'Dr. Wilson', 6, 1), -- Lucy's rabies vaccination
+       ('2023-02-25', '2024-02-25', 'DHPP678901', 'Dr. Wilson', 6, 2), -- Lucy's DHPP vaccination
+       ('2023-03-20', '2023-09-20', 'BOR789012', 'Dr. Wilson', 6, 3); -- Lucy's Bordetella vaccination
