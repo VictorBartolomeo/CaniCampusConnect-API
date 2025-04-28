@@ -176,3 +176,36 @@ VALUES
     ('Doxycycline', '100mg', '08:00:00', '2023-01-05', '2023-01-19', 'Tick-borne disease', 6),
     ('Thyroid medication', '0.5mg', '08:00:00', '2023-04-10', NULL, 'Hypothyroidism', 6),
     ('Antihistamine', '10mg', '12:00:00', '2023-07-15', '2023-08-15', 'Seasonal allergies', 6);
+
+-- Insert veterinary visits for dogs
+INSERT INTO veterinary_visit (visit_date, diagnosis, reason_for_visit, treatment, veterinarian, dog_id)
+VALUES 
+    -- Max's visits
+    ('2023-02-10', 'Otitis externa in right ear', 'Scratching ear and head shaking', 'Prescribed Amoxicillin for 10 days and ear cleaning solution', 'Dr. Smith', 1),
+    ('2023-05-05', 'Allergic reaction to insect bite', 'Swelling on muzzle and hives', 'Administered antihistamine injection, prescribed Prednisone', 'Dr. Johnson', 1),
+    ('2023-09-15', 'Annual checkup, all systems normal', 'Routine examination', 'Updated vaccinations, heartworm test negative', 'Dr. Smith', 1),
+
+    -- Bella's visits
+    ('2023-03-15', 'Osteoarthritis in hip joints', 'Difficulty rising and limping', 'Prescribed Carprofen for pain management, recommended weight management', 'Dr. Wilson', 2),
+    ('2023-07-10', 'Diabetes mellitus', 'Increased thirst, urination, and weight loss', 'Started on insulin therapy, dietary changes recommended', 'Dr. Wilson', 2),
+    ('2023-11-20', 'Diabetic monitoring', 'Follow-up for diabetes management', 'Adjusted insulin dosage, blood glucose levels improving', 'Dr. Wilson', 2),
+
+    -- Charlie's visits
+    ('2023-01-05', 'Gastroenteritis', 'Vomiting and diarrhea for 2 days', 'Prescribed Metronidazole, recommended bland diet for 5 days', 'Dr. Brown', 3),
+    ('2023-04-01', 'Atopic dermatitis', 'Persistent itching and redness on skin', 'Started on Apoquel, recommended hypoallergenic shampoo', 'Dr. Brown', 3),
+    ('2023-08-05', 'Conjunctivitis', 'Red, swollen eyes with discharge', 'Prescribed antibiotic eye drops, e-collar to prevent scratching', 'Dr. Davis', 3),
+
+    -- Luna's visits
+    ('2023-02-01', 'Bacterial skin infection', 'Hot spots and hair loss on back', 'Prescribed Cephalexin, medicated baths twice weekly', 'Dr. Davis', 4),
+    ('2023-05-10', 'Cruciate ligament tear', 'Sudden lameness in right hind leg', 'Surgical repair performed, prescribed Tramadol for pain', 'Dr. Miller', 4),
+    ('2023-06-01', 'Post-surgical follow-up', 'Monitoring surgical site healing', 'Removed sutures, rehabilitation exercises recommended', 'Dr. Miller', 4),
+
+    -- Cooper's visits
+    ('2023-03-05', 'Fungal skin infection', 'Circular lesions on skin with hair loss', 'Prescribed Fluconazole, topical antifungal cream', 'Dr. Miller', 5),
+    ('2023-06-15', 'Idiopathic epilepsy', 'Two seizure episodes reported', 'Started on Phenobarbital, blood work to monitor liver function', 'Dr. Smith', 5),
+    ('2023-09-01', 'Congestive heart failure', 'Coughing and exercise intolerance', 'Prescribed Furosemide, recommended restricted activity', 'Dr. Johnson', 5),
+
+    -- Lucy's visits
+    ('2023-01-01', 'Lyme disease', 'Lameness in multiple legs, fever', 'Prescribed Doxycycline, rest recommended', 'Dr. Wilson', 6),
+    ('2023-04-05', 'Hypothyroidism', 'Weight gain, lethargy, hair thinning', 'Started on thyroid medication, follow-up in 1 month', 'Dr. Wilson', 6),
+    ('2023-07-10', 'Seasonal allergies', 'Itching, sneezing, and watery eyes', 'Prescribed antihistamine, recommended limited outdoor time during high pollen days', 'Dr. Davis', 6);
