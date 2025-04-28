@@ -1,9 +1,9 @@
 package org.example.canicampusconnectapi.security;
 
-import org.example.canicampusconnectapi.model.Coach;
-import org.example.canicampusconnectapi.model.Owner;
-import org.example.canicampusconnectapi.model.ClubOwner;
-import org.example.canicampusconnectapi.model.User;
+import org.example.canicampusconnectapi.model.users.Coach;
+import org.example.canicampusconnectapi.model.users.Owner;
+import org.example.canicampusconnectapi.model.users.ClubOwner;
+import org.example.canicampusconnectapi.model.users.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

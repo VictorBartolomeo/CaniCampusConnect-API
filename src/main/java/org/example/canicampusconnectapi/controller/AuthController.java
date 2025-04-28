@@ -2,7 +2,7 @@ package org.example.canicampusconnectapi.controller;
 
 import jakarta.validation.Valid;
 import org.example.canicampusconnectapi.dao.UserDao;
-import org.example.canicampusconnectapi.model.User;
+import org.example.canicampusconnectapi.model.users.User;
 import org.example.canicampusconnectapi.security.AppUserDetails;
 import org.example.canicampusconnectapi.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;

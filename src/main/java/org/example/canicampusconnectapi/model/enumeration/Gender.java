@@ -1,4 +1,4 @@
-package org.example.canicampusconnectapi.model;
+package org.example.canicampusconnectapi.model.enumeration;
 
 public enum Gender {
     MALE,

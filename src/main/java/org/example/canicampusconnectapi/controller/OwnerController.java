@@ -1,7 +1,7 @@
 package org.example.canicampusconnectapi.controller;
 
 import org.example.canicampusconnectapi.dao.OwnerDao;
-import org.example.canicampusconnectapi.model.Owner;
+import org.example.canicampusconnectapi.model.users.Owner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

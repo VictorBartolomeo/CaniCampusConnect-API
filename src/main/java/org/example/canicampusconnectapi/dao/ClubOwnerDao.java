@@ -1,6 +1,6 @@
 package org.example.canicampusconnectapi.dao;
 
-import org.example.canicampusconnectapi.model.ClubOwner;
+import org.example.canicampusconnectapi.model.users.ClubOwner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

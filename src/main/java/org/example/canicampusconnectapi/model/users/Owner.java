@@ -1,4 +1,4 @@
-package org.example.canicampusconnectapi.model;
+package org.example.canicampusconnectapi.model.users;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

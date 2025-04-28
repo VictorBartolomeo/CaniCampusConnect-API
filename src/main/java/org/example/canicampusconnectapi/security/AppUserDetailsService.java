@@ -2,8 +2,8 @@ package org.example.canicampusconnectapi.security;
 
 import org.example.canicampusconnectapi.dao.OwnerDao;
 import org.example.canicampusconnectapi.dao.ClubOwnerDao;
-import org.example.canicampusconnectapi.model.Owner;
-import org.example.canicampusconnectapi.model.ClubOwner;
+import org.example.canicampusconnectapi.model.users.Owner;
+import org.example.canicampusconnectapi.model.users.ClubOwner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

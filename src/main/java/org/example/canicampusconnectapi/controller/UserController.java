@@ -1,7 +1,7 @@
 package org.example.canicampusconnectapi.controller;
 
 import org.example.canicampusconnectapi.dao.UserDao;
-import org.example.canicampusconnectapi.model.User;
+import org.example.canicampusconnectapi.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,10 +1,12 @@
-package org.example.canicampusconnectapi.model;
+package org.example.canicampusconnectapi.model.courseRelated;
 
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.canicampusconnectapi.model.dogRelated.Dog;
+import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;

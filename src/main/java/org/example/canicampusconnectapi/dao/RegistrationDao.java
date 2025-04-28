@@ -1,10 +1,10 @@
 package org.example.canicampusconnectapi.dao;
 
-import org.example.canicampusconnectapi.model.Course;
-import org.example.canicampusconnectapi.model.CourseType;
-import org.example.canicampusconnectapi.model.Dog;
-import org.example.canicampusconnectapi.model.Registration;
-import org.example.canicampusconnectapi.model.RegistrationStatus;
+import org.example.canicampusconnectapi.model.courseRelated.Course;
+import org.example.canicampusconnectapi.model.courseRelated.CourseType;
+import org.example.canicampusconnectapi.model.dogRelated.Dog;
+import org.example.canicampusconnectapi.model.courseRelated.Registration;
+import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

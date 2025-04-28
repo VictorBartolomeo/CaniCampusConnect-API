@@ -1,4 +1,4 @@
-package org.example.canicampusconnectapi.model;
+package org.example.canicampusconnectapi.model.courseRelated;
 
 
 import jakarta.persistence.*;

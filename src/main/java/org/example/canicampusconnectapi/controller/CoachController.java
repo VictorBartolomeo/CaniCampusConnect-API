@@ -1,7 +1,7 @@
 package org.example.canicampusconnectapi.controller;
 
 import org.example.canicampusconnectapi.dao.CoachDao;
-import org.example.canicampusconnectapi.model.Coach;
+import org.example.canicampusconnectapi.model.users.Coach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

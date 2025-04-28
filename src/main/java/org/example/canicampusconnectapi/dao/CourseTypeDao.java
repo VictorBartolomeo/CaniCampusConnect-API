@@ -1,7 +1,7 @@
 package org.example.canicampusconnectapi.dao;
 
-import org.example.canicampusconnectapi.model.AgeRange;
-import org.example.canicampusconnectapi.model.CourseType;
+import org.example.canicampusconnectapi.model.courseRelated.AgeRange;
+import org.example.canicampusconnectapi.model.courseRelated.CourseType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

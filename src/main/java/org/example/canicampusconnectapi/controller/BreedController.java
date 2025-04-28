@@ -1,7 +1,7 @@
 package org.example.canicampusconnectapi.controller;
 
 import org.example.canicampusconnectapi.dao.BreedDao;
-import org.example.canicampusconnectapi.model.Breed;
+import org.example.canicampusconnectapi.model.dogRelated.Breed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

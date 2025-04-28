@@ -3,7 +3,7 @@ package org.example.canicampusconnectapi.controller;
 import org.example.canicampusconnectapi.dao.DogDao;
 import org.example.canicampusconnectapi.dao.VaccinationDao;
 import org.example.canicampusconnectapi.dao.VaccineDao;
-import org.example.canicampusconnectapi.model.Dog;
+import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.healthRecord.Vaccination;
 import org.example.canicampusconnectapi.model.healthRecord.Vaccine;
 import org.springframework.beans.factory.annotation.Autowired;

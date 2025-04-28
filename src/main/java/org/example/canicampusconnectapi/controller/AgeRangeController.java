@@ -1,7 +1,7 @@
 package org.example.canicampusconnectapi.controller;
 
 import org.example.canicampusconnectapi.dao.AgeRangeDao;
-import org.example.canicampusconnectapi.model.AgeRange;
+import org.example.canicampusconnectapi.model.courseRelated.AgeRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

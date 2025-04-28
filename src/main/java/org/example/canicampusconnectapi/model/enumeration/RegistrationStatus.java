@@ -1,4 +1,4 @@
-package org.example.canicampusconnectapi.model;
+package org.example.canicampusconnectapi.model.enumeration;
 
 /**
  * Represents the status of a registration for a course.

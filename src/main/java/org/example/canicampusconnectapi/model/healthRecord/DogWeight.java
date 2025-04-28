@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.canicampusconnectapi.model.Dog;
+import org.example.canicampusconnectapi.model.dogRelated.Dog;
+import org.example.canicampusconnectapi.model.enumeration.MassUnit;
 
 import java.math.BigDecimal;
 import java.util.Date;

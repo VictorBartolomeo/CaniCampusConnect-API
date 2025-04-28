@@ -1,12 +1,15 @@
-package org.example.canicampusconnectapi.model;
+package org.example.canicampusconnectapi.model.dogRelated;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.canicampusconnectapi.model.courseRelated.Registration;
+import org.example.canicampusconnectapi.model.enumeration.Gender;
 import org.example.canicampusconnectapi.model.healthRecord.DogWeight;
 import org.example.canicampusconnectapi.model.healthRecord.MedicationTreatment;
 import org.example.canicampusconnectapi.model.healthRecord.Vaccination;
 import org.example.canicampusconnectapi.model.healthRecord.VeterinaryVisit;
+import org.example.canicampusconnectapi.model.users.Owner;
 
 import java.time.LocalDate;
 import java.util.List;

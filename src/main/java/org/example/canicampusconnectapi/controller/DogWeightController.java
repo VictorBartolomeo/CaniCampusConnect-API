@@ -3,7 +3,7 @@ package org.example.canicampusconnectapi.controller;
 import org.example.canicampusconnectapi.dao.DogWeightDao;
 import org.example.canicampusconnectapi.dao.DogDao;
 import org.example.canicampusconnectapi.model.healthRecord.DogWeight;
-import org.example.canicampusconnectapi.model.Dog;
+import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;

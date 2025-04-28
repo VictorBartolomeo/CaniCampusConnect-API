@@ -1,7 +1,7 @@
 package org.example.canicampusconnectapi.dao;
 
 import org.example.canicampusconnectapi.model.healthRecord.DogWeight;
-import org.example.canicampusconnectapi.model.Dog;
+import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
