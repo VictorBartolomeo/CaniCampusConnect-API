@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,9 +30,14 @@ public class Dog {
 
     protected String chipNumber;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Breed breed;
+    @ManyToMany(fetch = FetchType.LAZY) // LAZY est généralement préférable pour les performances
+    @JoinTable(
+            name = "dog_breed", // Nom de la table de jointure
+            joinColumns = @JoinColumn(name = "dog_id"), // Clé étrangère vers Dog
+            inverseJoinColumns = @JoinColumn(name = "breed_id") // Clé étrangère vers Breed
+    )
+    private Set<Breed> breeds; // Utilisation de Set pour représenter les races
+
 
     @OneToMany(mappedBy = "dog")
     private List<Registration> registrations;
