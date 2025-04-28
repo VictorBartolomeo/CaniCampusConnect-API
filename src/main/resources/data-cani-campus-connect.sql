@@ -5,20 +5,20 @@ VALUES ('Admin', 'Admin', 'admin@admin.com', 'password123', '0611111111'),
        ('Propriétaire2', 'Utilisateur2', 'owner4@user.com', 'dianapass', '0644444444'),
        ('Propriétaire3', 'Utilisateur3', 'owner5@user.com', 'ethanpass', '0655555555');
 
+INSERT INTO club_owner (user_id)
+VALUES (1);
+
+INSERT INTO coach (user_id, acaced_number, is_active, registration_date)
+VALUES (2, 'OEACHK90', true, '2025-04-16');
+
 INSERT INTO owner (user_id, is_active, address, registration_date)
 VALUES (3, false,  '789 Rue des Pins','2023-03-10'),
        (4, true,  '101 Avenue des Ormes','2023-04-20'),
        (5, true,  '202 Boulevard des Érables','2023-05-05');
 
-INSERT INTO club_owner (user_id)
-VALUES (1);
-
 -- Insert clubs (linked to club_owner with user_id 1)
 INSERT INTO club (name, address, user_id)
 VALUES ('Les moustaches Messines', '123 Rue des Chiens, Paris', 1);
-
-INSERT INTO coach (user_id, acaced_number, is_active, registration_date)
-VALUES (2, 'OEACHK90', true, '2025-04-16');
 
 -- Insert age ranges for course types
 INSERT INTO age_range (min_age, max_age)
@@ -46,42 +46,10 @@ VALUES
     ('Préparation Chien Thérapeutique', 'Préparation à la certification de chien thérapeutique', '2023-05-13 10:00:00', '2023-05-13 12:00:00', 5, 2, 1, 5),
     ('Enrichissement pour Chiens Seniors', 'Stimulation mentale et exercices doux pour chiens âgés', '2023-05-20 11:00:00', '2023-05-20 12:00:00', 6, 2, 1, 6);
 
-create view OwnersV as
-select `o`.`is_active`         AS `is_active`,
-       `o`.`registration_date` AS `registration_date`,
-       `o`.`user_id`           AS `user_id`,
-       `o`.`address`           AS `address`,
-       `u`.`email`             AS `email`,
-       `u`.`firstname`         AS `firstname`,
-       `u`.`lastname`          AS `lastname`,
-       `u`.`phone`             AS `phone`
-from (`CaniCampusConnect`.`owner` `o` left join `CaniCampusConnect`.`user` `u` on ((`u`.`user_id` = `o`.`user_id`)));
-
-
-CREATE VIEW CoachesV AS
-SELECT
-    c.acaced_number AS acaced_number,
-    c.is_active AS is_active,
-    c.registration_date AS registration_date,
-    c.user_id AS user_id,
-    u.email AS email,
-    u.firstname AS firstname,
-    u.lastname AS lastname,
-    u.phone AS phone
-FROM coach c
-         LEFT JOIN CaniCampusConnect.user u ON u.user_id = c.user_id;
-
-CREATE VIEW ClubOwnersV AS
-SELECT
-    co.user_id AS user_id,
-    u.email AS email,
-    u.firstname AS firstname,
-    u.lastname AS lastname,
-    u.phone AS phone
-FROM club_owner co
-         LEFT JOIN CaniCampusConnect.user u ON u.user_id = co.user_id;
 
 -- TODO Demander à Franck pourquoi le register avec les infos du coach me crée juste un user et non pas un coach, comment valider cela
+
+
 
 -- Insert common dog breeds
 INSERT INTO breed (name)
@@ -269,3 +237,199 @@ VALUES
     ('2023-01-01', 'Maladie de Lyme', 'Boiterie de plusieurs pattes, fièvre', 'Prescription de Doxycycline, repos recommandé', 'Dr. Bernard', 6),
     ('2023-04-05', 'Hypothyroïdie', 'Prise de poids, léthargie, amincissement des poils', 'Début de médicament pour la thyroïde, suivi dans 1 mois', 'Dr. Bernard', 6),
     ('2023-07-10', 'Allergies saisonnières', 'Démangeaisons, éternuements et yeux larmoyants', 'Prescription d''antihistaminique, recommandation de temps limité à l''extérieur pendant les jours à forte concentration de pollen', 'Dr. Moreau', 6);
+
+
+### VIEWS ###
+
+create view OwnersV as
+select `o`.`is_active`         AS `is_active`,
+       `o`.`registration_date` AS `registration_date`,
+       `o`.`user_id`           AS `user_id`,
+       `o`.`address`           AS `address`,
+       `u`.`email`             AS `email`,
+       `u`.`firstname`         AS `firstname`,
+       `u`.`lastname`          AS `lastname`,
+       `u`.`phone`             AS `phone`
+from (`CaniCampusConnect`.`owner` `o` left join `CaniCampusConnect`.`user` `u` on ((`u`.`user_id` = `o`.`user_id`)));
+
+
+CREATE VIEW CoachesV AS
+SELECT
+    c.acaced_number AS acaced_number,
+    c.is_active AS is_active,
+    c.registration_date AS registration_date,
+    c.user_id AS user_id,
+    u.email AS email,
+    u.firstname AS firstname,
+    u.lastname AS lastname,
+    u.phone AS phone
+FROM coach c
+         LEFT JOIN CaniCampusConnect.user u ON u.user_id = c.user_id;
+
+CREATE VIEW ClubOwnersV AS
+SELECT
+    co.user_id AS user_id,
+    u.email AS email,
+    u.firstname AS firstname,
+    u.lastname AS lastname,
+    u.phone AS phone
+FROM club_owner co
+         LEFT JOIN CaniCampusConnect.user u ON u.user_id = co.user_id;
+
+-- Create view for dogs with their breeds
+CREATE VIEW DogsWithBreedsV AS
+SELECT
+    d.id AS dog_id,
+    d.name AS dog_name,
+    d.birth_date AS birth_date,
+    d.gender AS gender,
+    d.chip_number AS chip_number,
+    d.user_id AS owner_id,
+    o.firstname AS owner_firstname,
+    o.lastname AS owner_lastname,
+    b.id AS breed_id,
+    b.name AS breed_name
+FROM dog d
+         JOIN dog_breed db ON d.id = db.dog_id
+         JOIN breed b ON db.breed_id = b.id
+         JOIN owner ow ON d.user_id = ow.user_id
+         JOIN user o ON ow.user_id = o.user_id;
+
+-- Create view for dogs with their weights
+CREATE VIEW DogsWithWeightsV AS
+SELECT
+    d.id AS dog_id,
+    d.name AS dog_name,
+    d.birth_date AS birth_date,
+    d.gender AS gender,
+    d.chip_number AS chip_number,
+    d.user_id AS owner_id,
+    o.firstname AS owner_firstname,
+    o.lastname AS owner_lastname,
+    dw.id AS weight_id,
+    dw.measurement_date AS measurement_date,
+    dw.weight_value AS weight_value,
+    dw.unit AS weight_unit
+FROM dog d
+         JOIN dog_weight dw ON d.id = dw.dog_id
+         JOIN owner ow ON d.user_id = ow.user_id
+         JOIN user o ON ow.user_id = o.user_id;
+
+-- Create view for dogs with complete information (breeds and latest weight)
+CREATE VIEW DogsCompleteV AS
+SELECT
+    d.id AS dog_id,
+    d.name AS dog_name,
+    d.birth_date AS birth_date,
+    d.gender AS gender,
+    d.chip_number AS chip_number,
+    d.user_id AS owner_id,
+    o.firstname AS owner_firstname,
+    o.lastname AS owner_lastname,
+    GROUP_CONCAT(DISTINCT b.name SEPARATOR ', ') AS breeds,
+    lw.weight_value AS latest_weight_value,
+    lw.unit AS latest_weight_unit,
+    lw.measurement_date AS latest_weight_date
+FROM dog d
+         JOIN owner ow ON d.user_id = ow.user_id
+         JOIN user o ON ow.user_id = o.user_id
+         LEFT JOIN dog_breed db ON d.id = db.dog_id
+         LEFT JOIN breed b ON db.breed_id = b.id
+         LEFT JOIN (
+    SELECT dw.dog_id, dw.weight_value, dw.unit, dw.measurement_date
+    FROM dog_weight dw
+             INNER JOIN (
+        SELECT dog_id, MAX(measurement_date) as max_date
+        FROM dog_weight
+        GROUP BY dog_id
+    ) latest ON dw.dog_id = latest.dog_id AND dw.measurement_date = latest.max_date
+) lw ON d.id = lw.dog_id
+GROUP BY d.id, d.name, d.birth_date, d.gender, d.chip_number, d.user_id,
+         o.firstname, o.lastname, lw.weight_value, lw.unit, lw.measurement_date;
+
+-- Create view for dogs with health records (vaccinations, veterinary visits, medication treatments)
+CREATE VIEW DogsHealthRecordsV AS
+SELECT
+    d.id AS dog_id,
+    d.name AS dog_name,
+    d.birth_date AS birth_date,
+    d.gender AS gender,
+    d.chip_number AS chip_number,
+    d.user_id AS owner_id,
+    o.firstname AS owner_firstname,
+    o.lastname AS owner_lastname,
+
+    -- Vaccination information
+    v.vaccination_id,
+    v.vaccination_date,
+    v.reminder_date,
+    v.batch_number,
+    v.veterinarian AS vaccination_veterinarian,
+    vac.vaccine_name,
+
+    -- Veterinary visit information
+    vv.visit_id,
+    vv.visit_date,
+    vv.diagnosis,
+    vv.reason_for_visit,
+    vv.treatment,
+    vv.veterinarian AS visit_veterinarian,
+
+    -- Medication treatment information
+    mt.treatment_id,
+    mt.medication_name,
+    mt.dosage,
+    mt.frequency,
+    mt.start_date,
+    mt.end_date,
+    mt.treatment_reason
+FROM dog d
+         JOIN owner ow ON d.user_id = ow.user_id
+         JOIN user o ON ow.user_id = o.user_id
+         LEFT JOIN vaccination v ON d.id = v.dog_id
+         LEFT JOIN vaccine vac ON v.vaccine_id = vac.vaccine_id
+         LEFT JOIN veterinary_visit vv ON d.id = vv.dog_id
+         LEFT JOIN medication_treatment mt ON d.id = mt.dog_id;
+
+-- Create view for dogs with their course registrations
+CREATE VIEW DogsRegistrationsV AS
+SELECT
+    d.id AS dog_id,
+    d.name AS dog_name,
+    d.birth_date AS birth_date,
+    d.gender AS gender,
+    d.chip_number AS chip_number,
+    d.user_id AS owner_id,
+    o.firstname AS owner_firstname,
+    o.lastname AS owner_lastname,
+
+    -- Registration information
+    r.registration_id,
+    r.registration_date,
+    r.status,
+
+    -- Course information
+    c.course_id,
+    c.title AS course_title,
+    c.description AS course_description,
+    c.start_datetime AS course_start,
+    c.end_datetime AS course_end,
+    c.max_capacity AS course_max_capacity,
+
+    -- Course type information
+    ct.course_type_id,
+    ct.name AS course_type_name,
+    ct.description AS course_type_description,
+
+    -- Coach information
+    coach.user_id AS coach_id,
+    coach_user.firstname AS coach_firstname,
+    coach_user.lastname AS coach_lastname
+FROM dog d
+         JOIN owner ow ON d.user_id = ow.user_id
+         JOIN user o ON ow.user_id = o.user_id
+         LEFT JOIN registration r ON d.id = r.dog_id
+         LEFT JOIN course c ON r.course_id = c.course_id
+         LEFT JOIN course_type ct ON c.course_type_id = ct.course_type_id
+         LEFT JOIN coach ON c.user_id = coach.user_id
+         LEFT JOIN user coach_user ON coach.user_id = coach_user.user_id;
