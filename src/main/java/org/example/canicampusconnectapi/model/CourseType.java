@@ -14,17 +14,20 @@ public class CourseType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "course_type_id")
     protected Long id;
 
+    @Column(nullable = false, length = 255)
     protected String name;
 
     @Column(columnDefinition = "TEXT")
     protected String description;
 
-    @OneToMany
+    @OneToMany(mappedBy = "courseType")
     protected List<Course> courses;
 
     @ManyToOne
+    @JoinColumn(name = "age_range_id", nullable = false)
     protected AgeRange ageRange;
 
 
