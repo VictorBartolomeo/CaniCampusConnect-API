@@ -61,10 +61,9 @@ public class CourseController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        // Get the default club (ID 1)
         Optional<Club> defaultClub = clubDao.findById(1);
         if (defaultClub.isEmpty()) {
-            return new ResponseEntity<>(List.of(), HttpStatus.OK); // Return empty list if default club not found
+            return new ResponseEntity<>(List.of(), HttpStatus.OK);
         }
 
         List<Course> courses = courseDao.findByClubAndCoach(defaultClub.get(), optionalCoach.get());
@@ -73,7 +72,6 @@ public class CourseController {
 
     @GetMapping("/club/{clubId}/courses")
     public ResponseEntity<List<Course>> getCoursesByClub(@PathVariable Integer clubId) {
-        // Always use the default club (ID 1), regardless of the clubId provided
         Optional<Club> defaultClub = clubDao.findById(1);
         if (defaultClub.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -89,10 +87,9 @@ public class CourseController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        // Get the default club (ID 1)
         Optional<Club> defaultClub = clubDao.findById(1);
         if (defaultClub.isEmpty()) {
-            return new ResponseEntity<>(List.of(), HttpStatus.OK); // Return empty list if default club not found
+            return new ResponseEntity<>(List.of(), HttpStatus.OK);
         }
 
         List<Course> courses = courseDao.findByClubAndCourseType(defaultClub.get(), optionalCourseType.get());
@@ -101,29 +98,26 @@ public class CourseController {
 
     @GetMapping("/courses/upcoming")
     public List<Course> getUpcomingCourses() {
-        // Get the default club (ID 1)
         Optional<Club> defaultClub = clubDao.findById(1);
         if (defaultClub.isPresent()) {
             return courseDao.findByClubAndStartDatetimeAfter(defaultClub.get(), LocalDateTime.now());
         }
-        return List.of(); // Return empty list if default club not found
+        return List.of();
     }
 
     @GetMapping("/courses/between")
     public List<Course> getCoursesBetweenDates(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-        // Get the default club (ID 1)
         Optional<Club> defaultClub = clubDao.findById(1);
         if (defaultClub.isPresent()) {
             return courseDao.findByClubAndStartDatetimeBetween(defaultClub.get(), start, end);
         }
-        return List.of(); // Return empty list if default club not found
+        return List.of();
     }
 
     @PostMapping("/course")
     public ResponseEntity<Course> createCourse(@RequestBody Course course) {
-        // Verify that the coach exists
         if (course.getCoach() == null || course.getCoach().getId() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -132,13 +126,11 @@ public class CourseController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        // Always use the default club (ID 1)
         Optional<Club> defaultClub = clubDao.findById(1);
         if (defaultClub.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        // Verify that the course type exists
         if (course.getCourseType() == null || course.getCourseType().getId() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -147,9 +139,8 @@ public class CourseController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        // Set the entities with the full objects from the database
         course.setCoach(optionalCoach.get());
-        course.setClub(defaultClub.get()); // Always use the default club
+        course.setClub(defaultClub.get());
         course.setCourseType(optionalCourseType.get());
 
         courseDao.save(course);
@@ -173,7 +164,6 @@ public class CourseController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        // Verify that the coach exists if it's being updated
         if (course.getCoach() != null && course.getCoach().getId() != null) {
             Optional<Coach> optionalCoach = coachDao.findById(course.getCoach().getId());
             if (optionalCoach.isEmpty()) {
@@ -181,18 +171,15 @@ public class CourseController {
             }
             course.setCoach(optionalCoach.get());
         } else {
-            // Keep the existing coach if not provided
             course.setCoach(optionalCourse.get().getCoach());
         }
 
-        // Always use the default club (ID 1)
         Optional<Club> defaultClub = clubDao.findById(1);
         if (defaultClub.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         course.setClub(defaultClub.get());
 
-        // Verify that the course type exists if it's being updated
         if (course.getCourseType() != null && course.getCourseType().getId() != null) {
             Optional<CourseType> optionalCourseType = courseTypeDao.findById(course.getCourseType().getId());
             if (optionalCourseType.isEmpty()) {
@@ -200,7 +187,6 @@ public class CourseController {
             }
             course.setCourseType(optionalCourseType.get());
         } else {
-            // Keep the existing course type if not provided
             course.setCourseType(optionalCourse.get().getCourseType());
         }
 
