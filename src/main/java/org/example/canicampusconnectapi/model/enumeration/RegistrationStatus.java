@@ -21,5 +21,10 @@ public enum RegistrationStatus {
     /**
      * The registration has been cancelled
      */
-    CANCELLED
+    CANCELLED,
+
+    /**
+     * The registration is refused
+     */
+    REFUSED
 }
