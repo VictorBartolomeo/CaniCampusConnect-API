@@ -1,9 +1,8 @@
 package org.example.canicampusconnectapi.controller;
 
-import org.example.canicampusconnectapi.dao.DogWeightDao;
-import org.example.canicampusconnectapi.dao.DogDao;
+import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
 import org.example.canicampusconnectapi.model.healthRecord.DogWeight;
-import org.example.canicampusconnectapi.model.dogRelated.Dog;
+import org.example.canicampusconnectapi.service.dogweight.DogWeightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -18,18 +17,16 @@ import java.util.Optional;
 @RestController
 public class DogWeightController {
 
-    protected DogWeightDao dogWeightDao;
-    protected DogDao dogDao;
+    private final DogWeightService dogWeightService;
 
     @Autowired
-    public DogWeightController(DogWeightDao dogWeightDao, DogDao dogDao) {
-        this.dogWeightDao = dogWeightDao;
-        this.dogDao = dogDao;
+    public DogWeightController(DogWeightService dogWeightService) {
+        this.dogWeightService = dogWeightService;
     }
 
     @GetMapping("/dogweight/{id}")
     public ResponseEntity<DogWeight> getDogWeight(@PathVariable Long id) {
-        Optional<DogWeight> optionalDogWeight = dogWeightDao.findById(id);
+        Optional<DogWeight> optionalDogWeight = dogWeightService.getDogWeightById(id);
         if (optionalDogWeight.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -38,24 +35,24 @@ public class DogWeightController {
 
     @GetMapping("/dogweights")
     public List<DogWeight> getAllDogWeights() {
-        return dogWeightDao.findAll();
+        return dogWeightService.getAllDogWeights();
     }
 
     @GetMapping("/dog/{dogId}/weights")
     public ResponseEntity<List<DogWeight>> getDogWeightsByDog(@PathVariable Long dogId) {
-        Optional<Dog> optionalDog = dogDao.findById(dogId);
-        if (optionalDog.isEmpty()) {
+        try {
+            List<DogWeight> dogWeights = dogWeightService.getDogWeightsByDog(dogId);
+            return new ResponseEntity<>(dogWeights, HttpStatus.OK);
+        } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        List<DogWeight> dogWeights = dogWeightDao.findByDogOrderByMeasurementDateDesc(optionalDog.get());
-        return new ResponseEntity<>(dogWeights, HttpStatus.OK);
     }
 
     @GetMapping("/dogweights/between")
     public List<DogWeight> getDogWeightsBetweenDates(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
-        return dogWeightDao.findByMeasurementDateBetween(startDate, endDate);
+        return dogWeightService.getDogWeightsBetweenDates(startDate, endDate);
     }
 
     @GetMapping("/dog/{dogId}/weights/between")
@@ -63,64 +60,83 @@ public class DogWeightController {
             @PathVariable Long dogId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
-        Optional<Dog> optionalDog = dogDao.findById(dogId);
-        if (optionalDog.isEmpty()) {
+        try {
+            List<DogWeight> dogWeights = dogWeightService.getDogWeightsByDogBetweenDates(dogId, startDate, endDate);
+            return new ResponseEntity<>(dogWeights, HttpStatus.OK);
+        } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        List<DogWeight> dogWeights = dogWeightDao.findByDogAndMeasurementDateBetween(optionalDog.get(), startDate, endDate);
-        return new ResponseEntity<>(dogWeights, HttpStatus.OK);
     }
 
     @PostMapping("/dogweight")
     public ResponseEntity<DogWeight> createDogWeight(@RequestBody DogWeight dogWeight) {
-        // Verify that the dog exists
-        if (dogWeight.getDog() == null || dogWeight.getDog().getId() == null) {
+        try {
+            DogWeight createdDogWeight = dogWeightService.createDogWeight(dogWeight);
+            return new ResponseEntity<>(createdDogWeight, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        
-        Optional<Dog> optionalDog = dogDao.findById(dogWeight.getDog().getId());
-        if (optionalDog.isEmpty()) {
+        } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        
-        // Set the dog to ensure the relationship is properly established
-        dogWeight.setDog(optionalDog.get());
-        
-        dogWeightDao.save(dogWeight);
-        return new ResponseEntity<>(dogWeight, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/dogweight/{id}")
     public ResponseEntity<DogWeight> deleteDogWeight(@PathVariable Long id) {
-        Optional<DogWeight> optionalDogWeight = dogWeightDao.findById(id);
-        if (optionalDogWeight.isEmpty()) {
+        try {
+            dogWeightService.deleteDogWeight(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        dogWeightDao.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/dogweight/{id}")
     public ResponseEntity<DogWeight> updateDogWeight(@PathVariable Long id, @RequestBody DogWeight dogWeight) {
-        Optional<DogWeight> optionalDogWeight = dogWeightDao.findById(id);
-        if (optionalDogWeight.isEmpty()) {
+        try {
+            DogWeight updatedDogWeight = dogWeightService.updateDogWeight(id, dogWeight);
+            return new ResponseEntity<>(updatedDogWeight, HttpStatus.OK);
+        } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        
-        // Verify that the dog exists if it's being updated
-        if (dogWeight.getDog() != null && dogWeight.getDog().getId() != null) {
-            Optional<Dog> optionalDog = dogDao.findById(dogWeight.getDog().getId());
-            if (optionalDog.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            dogWeight.setDog(optionalDog.get());
-        } else {
-            // Keep the existing dog if not provided in the update
-            dogWeight.setDog(optionalDogWeight.get().getDog());
+    }
+
+    @GetMapping("/dog/{dogId}/weights/last7days")
+    public ResponseEntity<List<DogWeight>> getDogWeightsFromLast7Days(@PathVariable Long dogId) {
+        try {
+            List<DogWeight> dogWeights = dogWeightService.getDogWeightsFromLast7Days(dogId);
+            return new ResponseEntity<>(dogWeights, HttpStatus.OK);
+        } catch (ResourceNotFound e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        
-        dogWeight.setId(id);
-        dogWeightDao.save(dogWeight);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/dog/{dogId}/weights/last3months")
+    public ResponseEntity<List<DogWeight>> getDogWeightsFromLast3Months(@PathVariable Long dogId) {
+        try {
+            List<DogWeight> dogWeights = dogWeightService.getDogWeightsFromLast3Months(dogId);
+            return new ResponseEntity<>(dogWeights, HttpStatus.OK);
+        } catch (ResourceNotFound e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/dog/{dogId}/weights/last6months")
+    public ResponseEntity<List<DogWeight>> getDogWeightsFromLast6Months(@PathVariable Long dogId) {
+        try {
+            List<DogWeight> dogWeights = dogWeightService.getDogWeightsFromLast6Months(dogId);
+            return new ResponseEntity<>(dogWeights, HttpStatus.OK);
+        } catch (ResourceNotFound e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/dog/{dogId}/weights/last12months")
+    public ResponseEntity<List<DogWeight>> getDogWeightsFromLast12Months(@PathVariable Long dogId) {
+        try {
+            List<DogWeight> dogWeights = dogWeightService.getDogWeightsFromLast12Months(dogId);
+            return new ResponseEntity<>(dogWeights, HttpStatus.OK);
+        } catch (ResourceNotFound e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
