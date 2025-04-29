@@ -34,7 +34,6 @@ VALUES ('Socialisation des Chiots', 'Socialisation de base et introduction à l'
         'Formation pour chiens destinés à devenir des animaux thérapeutiques certifiés', 3),
        ('Bien-être des Chiens Seniors', 'Exercices doux et stimulation mentale pour chiens âgés', 4);
 
--- Insert courses
 INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, user_id, club_id, course_type_id)
 VALUES ('Bases pour Chiots - Session Printemps', 'Introduction aux commandes de base et socialisation pour chiots',
         '2023-04-15 10:00:00', '2023-04-15 11:30:00', 8, 2, 1, 1),
@@ -49,8 +48,6 @@ VALUES ('Bases pour Chiots - Session Printemps', 'Introduction aux commandes de 
         '2023-05-13 10:00:00', '2023-05-13 12:00:00', 5, 2, 1, 5),
        ('Enrichissement pour Chiens Seniors', 'Stimulation mentale et exercices doux pour chiens âgés',
         '2023-05-20 11:00:00', '2023-05-20 12:00:00', 6, 2, 1, 6);
-
--- TODO Demander à Franck pourquoi le register avec les infos du coach me crée juste un user et non pas un coach, comment valider cela
 
 INSERT INTO breed (name)
 VALUES ('Berger Australien'),
@@ -315,7 +312,7 @@ INSERT INTO registration (registration_date, status, dog_id, course_id)
 VALUES
     -- Inscriptions de Rex (dog_id 1)
     ('2023-03-15 09:30:00', 'CONFIRMED', 1, 1), -- Rex inscrit à Bases pour Chiots
-    ('2023-04-01 14:15:00', 'CANCELED', 1, 3), -- Rex inscrit à Agilité pour Débutants
+    ('2023-04-01 14:15:00', 'CANCELLED', 1, 3), -- Rex inscrit à Agilité pour Débutants
     ('2023-04-25 10:45:00', 'PENDING', 1, 4),   -- Rex en attente pour Atelier Commandes Avancées
 
     -- Inscriptions de Nala (dog_id 2)
@@ -338,10 +335,9 @@ VALUES
     -- Inscriptions de Mia (dog_id 6)
     ('2023-04-15 10:30:00', 'CONFIRMED', 6, 2), -- Mia inscrite à Obéissance Intermédiaire
     ('2023-05-05 13:45:00', 'CANCELLED', 6, 4), -- Mia a annulé Atelier Commandes Avancées
-    ('2023-05-18 11:30:00', 'CONFIRMED', 6, 6);
--- Mia inscrite à Enrichissement pour Chiens Seniors
+    ('2023-05-18 11:30:00', 'CONFIRMED', 6, 6); -- Mia inscrite à Enrichissement pour Chiens Seniors
 
--- Insert veterinary visits for dogs
+
 INSERT INTO veterinary_visit (visit_date, diagnosis, reason_for_visit, treatment, veterinarian, dog_id)
 VALUES
     -- Visites de Rex
