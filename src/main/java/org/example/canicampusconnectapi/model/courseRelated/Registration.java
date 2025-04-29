@@ -23,49 +23,25 @@ public class Registration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "registration_id")
-    private Long id;
+    protected Long id;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     @NotNull(message = "Le cours ne peut pas être vide")
-    private Course course;
+    protected Course course;
 
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
     @NotNull(message = "Le chien ne peut pas être vide")
-    private Dog dog;
+    protected Dog dog;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDateTime registrationDate;
+    protected LocalDateTime registrationDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     @NotNull(message = "Le statut ne peut pas être vide")
-    private RegistrationStatus status;
+    protected RegistrationStatus status;
 
-    /**
-     * Checks if the registration is for an upcoming course.
-     * @return true if the course start date is in the future, false otherwise
-     */
-    public boolean isUpcoming() {
-        return course.getStartDatetime().isAfter(LocalDateTime.now());
-    }
-
-    /**
-     * Checks if the registration is for a past course.
-     * @return true if the course end date is in the past, false otherwise
-     */
-    public boolean isPast() {
-        return course.getEndDatetime().isBefore(LocalDateTime.now());
-    }
-
-    /**
-     * Checks if the registration is for a current course.
-     * @return true if the course is currently ongoing, false otherwise
-     */
-    public boolean isCurrent() {
-        LocalDateTime now = LocalDateTime.now();
-        return course.getStartDatetime().isBefore(now) && course.getEndDatetime().isAfter(now);
-    }
 }
