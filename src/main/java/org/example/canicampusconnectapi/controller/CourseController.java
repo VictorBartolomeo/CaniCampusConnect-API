@@ -1,13 +1,8 @@
 package org.example.canicampusconnectapi.controller;
 
-import org.example.canicampusconnectapi.dao.ClubDao;
-import org.example.canicampusconnectapi.dao.CoachDao;
-import org.example.canicampusconnectapi.dao.CourseDao;
-import org.example.canicampusconnectapi.dao.CourseTypeDao;
-import org.example.canicampusconnectapi.model.Club;
-import org.example.canicampusconnectapi.model.users.Coach;
+import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
-import org.example.canicampusconnectapi.model.courseRelated.CourseType;
+import org.example.canicampusconnectapi.service.course.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -22,22 +17,16 @@ import java.util.Optional;
 @RestController
 public class CourseController {
 
-    protected CourseDao courseDao;
-    protected CoachDao coachDao;
-    protected ClubDao clubDao;
-    protected CourseTypeDao courseTypeDao;
+    private final CourseService courseService;
 
     @Autowired
-    public CourseController(CourseDao courseDao, CoachDao coachDao, ClubDao clubDao, CourseTypeDao courseTypeDao) {
-        this.courseDao = courseDao;
-        this.coachDao = coachDao;
-        this.clubDao = clubDao;
-        this.courseTypeDao = courseTypeDao;
+    public CourseController(CourseService courseService) {
+        this.courseService = courseService;
     }
 
     @GetMapping("/course/{id}")
     public ResponseEntity<Course> getCourse(@PathVariable Long id) {
-        Optional<Course> optionalCourse = courseDao.findById(id);
+        Optional<Course> optionalCourse = courseService.getCourseById(id);
         if (optionalCourse.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -46,152 +35,90 @@ public class CourseController {
 
     @GetMapping("/courses")
     public List<Course> getAllCourses() {
-        // Get the default club (ID 1)
-        Optional<Club> defaultClub = clubDao.findById(1);
-        if (defaultClub.isPresent()) {
-            return courseDao.findByClub(defaultClub.get());
-        }
-        return List.of(); // Return empty list if default club not found
+        return courseService.getAllCourses();
     }
 
     @GetMapping("/coach/{coachId}/courses")
     public ResponseEntity<List<Course>> getCoursesByCoach(@PathVariable Long coachId) {
-        Optional<Coach> optionalCoach = coachDao.findById(coachId);
-        if (optionalCoach.isEmpty()) {
+        try {
+            List<Course> courses = courseService.getCoursesByCoach(coachId);
+            return new ResponseEntity<>(courses, HttpStatus.OK);
+        } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        Optional<Club> defaultClub = clubDao.findById(1);
-        if (defaultClub.isEmpty()) {
-            return new ResponseEntity<>(List.of(), HttpStatus.OK);
-        }
-
-        List<Course> courses = courseDao.findByClubAndCoach(defaultClub.get(), optionalCoach.get());
-        return new ResponseEntity<>(courses, HttpStatus.OK);
     }
 
     @GetMapping("/club/{clubId}/courses")
     public ResponseEntity<List<Course>> getCoursesByClub(@PathVariable Integer clubId) {
-        Optional<Club> defaultClub = clubDao.findById(1);
-        if (defaultClub.isEmpty()) {
+        try {
+            List<Course> courses = courseService.getCoursesByClub(clubId);
+            return new ResponseEntity<>(courses, HttpStatus.OK);
+        } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        List<Course> courses = courseDao.findByClub(defaultClub.get());
-        return new ResponseEntity<>(courses, HttpStatus.OK);
     }
 
     @GetMapping("/coursetype/{courseTypeId}/courses")
     public ResponseEntity<List<Course>> getCoursesByCourseType(@PathVariable Long courseTypeId) {
-        Optional<CourseType> optionalCourseType = courseTypeDao.findById(courseTypeId);
-        if (optionalCourseType.isEmpty()) {
+        try {
+            List<Course> courses = courseService.getCoursesByCourseType(courseTypeId);
+            return new ResponseEntity<>(courses, HttpStatus.OK);
+        } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
 
-        Optional<Club> defaultClub = clubDao.findById(1);
-        if (defaultClub.isEmpty()) {
-            return new ResponseEntity<>(List.of(), HttpStatus.OK);
+    @GetMapping("/agerange/{ageRangeId}/courses")
+    public ResponseEntity<List<Course>> getCoursesByAgeRange(@PathVariable Long ageRangeId) {
+        try {
+            List<Course> courses = courseService.getCoursesByAgeRange(ageRangeId);
+            return new ResponseEntity<>(courses, HttpStatus.OK);
+        } catch (ResourceNotFound e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        List<Course> courses = courseDao.findByClubAndCourseType(defaultClub.get(), optionalCourseType.get());
-        return new ResponseEntity<>(courses, HttpStatus.OK);
     }
 
     @GetMapping("/courses/upcoming")
     public List<Course> getUpcomingCourses() {
-        Optional<Club> defaultClub = clubDao.findById(1);
-        if (defaultClub.isPresent()) {
-            return courseDao.findByClubAndStartDatetimeAfter(defaultClub.get(), LocalDateTime.now());
-        }
-        return List.of();
+        return courseService.getUpcomingCourses();
     }
 
     @GetMapping("/courses/between")
     public List<Course> getCoursesBetweenDates(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-        Optional<Club> defaultClub = clubDao.findById(1);
-        if (defaultClub.isPresent()) {
-            return courseDao.findByClubAndStartDatetimeBetween(defaultClub.get(), start, end);
-        }
-        return List.of();
+        return courseService.getCoursesBetweenDates(start, end);
     }
 
     @PostMapping("/course")
     public ResponseEntity<Course> createCourse(@RequestBody Course course) {
-        if (course.getCoach() == null || course.getCoach().getId() == null) {
+        try {
+            Course createdCourse = courseService.createCourse(course);
+            return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        Optional<Coach> optionalCoach = coachDao.findById(course.getCoach().getId());
-        if (optionalCoach.isEmpty()) {
+        } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        Optional<Club> defaultClub = clubDao.findById(1);
-        if (defaultClub.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        if (course.getCourseType() == null || course.getCourseType().getId() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        Optional<CourseType> optionalCourseType = courseTypeDao.findById(course.getCourseType().getId());
-        if (optionalCourseType.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        course.setCoach(optionalCoach.get());
-        course.setClub(defaultClub.get());
-        course.setCourseType(optionalCourseType.get());
-
-        courseDao.save(course);
-        return new ResponseEntity<>(course, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/course/{id}")
     public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
-        Optional<Course> optionalCourse = courseDao.findById(id);
-        if (optionalCourse.isEmpty()) {
+        try {
+            courseService.deleteCourse(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        courseDao.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/course/{id}")
-    public ResponseEntity<Void> updateCourse(@PathVariable Long id, @RequestBody Course course) {
-        Optional<Course> optionalCourse = courseDao.findById(id);
-        if (optionalCourse.isEmpty()) {
+    public ResponseEntity<Course> updateCourse(@PathVariable Long id, @RequestBody Course course) {
+        try {
+            Course updatedCourse = courseService.updateCourse(id, course);
+            return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
+        } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        if (course.getCoach() != null && course.getCoach().getId() != null) {
-            Optional<Coach> optionalCoach = coachDao.findById(course.getCoach().getId());
-            if (optionalCoach.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            course.setCoach(optionalCoach.get());
-        } else {
-            course.setCoach(optionalCourse.get().getCoach());
-        }
-
-        Optional<Club> defaultClub = clubDao.findById(1);
-        if (defaultClub.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        course.setClub(defaultClub.get());
-
-        if (course.getCourseType() != null && course.getCourseType().getId() != null) {
-            Optional<CourseType> optionalCourseType = courseTypeDao.findById(course.getCourseType().getId());
-            if (optionalCourseType.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            course.setCourseType(optionalCourseType.get());
-        } else {
-            course.setCourseType(optionalCourse.get().getCourseType());
-        }
-
-        course.setId(id);
-        courseDao.save(course);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
