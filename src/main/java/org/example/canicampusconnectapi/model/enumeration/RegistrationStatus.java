@@ -8,23 +8,8 @@ package org.example.canicampusconnectapi.model.enumeration;
  * 3. A registration can be CANCELLED at any time by the owner, coach, or club owner
  */
 public enum RegistrationStatus {
-    /**
-     * The registration has been validated by a club owner or coach
-     */
     CONFIRMED,
-
-    /**
-     * The registration is waiting for validation by a club owner or coach
-     */
     PENDING,
-
-    /**
-     * The registration has been cancelled
-     */
     CANCELLED,
-
-    /**
-     * The registration is refused
-     */
     REFUSED
 }
