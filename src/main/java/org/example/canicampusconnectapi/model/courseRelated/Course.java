@@ -57,44 +57,4 @@ public class Course {
     @OneToMany(mappedBy = "course")
     protected List<Registration> registrations;
 
-    /**
-     * Checks if the course is upcoming.
-     * @return true if the course start date is in the future, false otherwise
-     */
-    public boolean isUpcoming() {
-        return startDatetime.isAfter(LocalDateTime.now());
-    }
-
-    /**
-     * Checks if the course is past.
-     * @return true if the course end date is in the past, false otherwise
-     */
-    public boolean isPast() {
-        return endDatetime.isBefore(LocalDateTime.now());
-    }
-
-    /**
-     * Checks if the course is currently ongoing.
-     * @return true if the course is currently ongoing, false otherwise
-     */
-    public boolean isCurrent() {
-        LocalDateTime now = LocalDateTime.now();
-        return startDatetime.isBefore(now) && endDatetime.isAfter(now);
-    }
-
-    /**
-     * Gets the number of registrations for this course.
-     * @return the number of registrations
-     */
-    public int getRegistrationCount() {
-        return registrations != null ? registrations.size() : 0;
-    }
-
-    /**
-     * Checks if the course is full.
-     * @return true if the number of registrations is greater than or equal to the maximum capacity, false otherwise
-     */
-    public boolean isFull() {
-        return getRegistrationCount() >= maxCapacity;
-    }
 }
