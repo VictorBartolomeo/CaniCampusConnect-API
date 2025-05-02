@@ -1,9 +1,7 @@
 package org.example.canicampusconnectapi.model.dogRelated;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,10 +20,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
 public class Dog {
 
     @Id
@@ -47,7 +41,7 @@ public class Dog {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("owner-dogs")
     private Owner owner;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -56,6 +50,7 @@ public class Dog {
             joinColumns = @JoinColumn(name = "dog_id"),
             inverseJoinColumns = @JoinColumn(name = "breed_id")
     )
+    @JsonManagedReference("breed-dogs")
     private Set<Breed> breeds;
 
 

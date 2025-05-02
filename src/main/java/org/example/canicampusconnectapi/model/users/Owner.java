@@ -30,8 +30,8 @@ public class Owner extends User {
 
     protected String address;
 
-    @OneToMany
-    @JsonManagedReference
+    @OneToMany(mappedBy ="owner")
+    @JsonManagedReference("owner-dogs")
     protected List<Dog> dogs;
 
 }

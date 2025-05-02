@@ -35,6 +35,7 @@ public class Registration {
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
     @NotNull(message = "Le chien ne peut pas être vide")
+    @JsonBackReference
     protected Dog dog;
 
     @CreatedDate
