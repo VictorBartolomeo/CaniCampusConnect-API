@@ -6,7 +6,7 @@ import org.example.canicampusconnectapi.dto.UserLoginDto;
 import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.model.users.User;
 import org.example.canicampusconnectapi.security.AppUserDetails;
-import org.example.canicampusconnectapi.security.JwtUtils;
+import org.example.canicampusconnectapi.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +26,14 @@ public class AuthController {
     protected UserDao userDao;
     protected PasswordEncoder passwordEncoder;
     protected AuthenticationProvider authenticationProvider;
-    protected JwtUtils jwtUtils;
+    protected SecurityUtils securityUtils;
 
     @Autowired
-    public AuthController(UserDao userDao, PasswordEncoder passwordEncoder, AuthenticationProvider authenticationProvider, JwtUtils jwtUtils) {
+    public AuthController(UserDao userDao, PasswordEncoder passwordEncoder, AuthenticationProvider authenticationProvider, SecurityUtils securityUtils) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.authenticationProvider = authenticationProvider;
-        this.jwtUtils = jwtUtils;
+        this.securityUtils = securityUtils;
     }
 
 //TODO Demander à Franck comment faire pour ajouter les informations d'un Owner directement
@@ -65,8 +65,8 @@ public class AuthController {
                                     userLogin.getEmail(),
                                     userLogin.getPassword()))
                     .getPrincipal();
-            System.out.println(jwtUtils.generateToken(userDetails));
-            return new ResponseEntity<>(jwtUtils.generateToken(userDetails), HttpStatus.OK);
+            System.out.println(securityUtils.generateToken(userDetails));
+            return new ResponseEntity<>(securityUtils.generateToken(userDetails), HttpStatus.OK);
 
         } catch (AuthenticationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
