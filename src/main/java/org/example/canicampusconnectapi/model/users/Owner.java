@@ -1,16 +1,17 @@
 package org.example.canicampusconnectapi.model.users;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.PrimaryKeyJoinColumn;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,6 +29,10 @@ public class Owner extends User {
     protected boolean isActive;
 
     protected String address;
+
+    @OneToMany
+    @JsonManagedReference
+    protected List<Dog> dogs;
 
 }
 

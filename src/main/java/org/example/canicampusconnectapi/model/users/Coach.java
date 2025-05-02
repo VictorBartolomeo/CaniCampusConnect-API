@@ -1,13 +1,15 @@
 package org.example.canicampusconnectapi.model.users;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.canicampusconnectapi.model.Club;
+import org.example.canicampusconnectapi.model.courseRelated.Course;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,4 +27,7 @@ public class Coach extends User {
     @Column(nullable = false, updatable = false)
     protected LocalDate registrationDate;
 
+    @OneToMany(mappedBy = "coach")
+    @JsonManagedReference
+    protected List<Course> course;
 }

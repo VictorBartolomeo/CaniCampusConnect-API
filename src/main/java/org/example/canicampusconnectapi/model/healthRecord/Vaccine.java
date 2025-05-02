@@ -1,5 +1,6 @@
 package org.example.canicampusconnectapi.model.healthRecord;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class Vaccine {
     protected Date renewDelay;
 
     @OneToMany(mappedBy = "vaccine")
+    @JsonManagedReference
     private List<Vaccination> vaccinations;
 
 }

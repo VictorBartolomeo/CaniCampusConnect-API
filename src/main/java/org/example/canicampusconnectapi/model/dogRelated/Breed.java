@@ -18,8 +18,8 @@ public class Breed {
     @Column(length = 100, unique = true, nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "breeds", fetch = FetchType.LAZY) // mappedBy fait référence au champ "breeds" dans Dog
-    private Set<Dog> dogs; // Utilisation de Set
+    @ManyToMany(mappedBy = "breeds", fetch = FetchType.LAZY)
+    private Set<Dog> dogs;
 
 
 

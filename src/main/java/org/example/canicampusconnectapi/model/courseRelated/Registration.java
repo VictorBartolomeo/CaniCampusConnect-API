@@ -1,6 +1,7 @@
 package org.example.canicampusconnectapi.model.courseRelated;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class Registration {
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     @NotNull(message = "Le cours ne peut pas être vide")
+    @JsonBackReference
     protected Course course;
 
     @ManyToOne

@@ -1,5 +1,6 @@
 package org.example.canicampusconnectapi.model.healthRecord;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.Getter;
@@ -32,5 +33,6 @@ public class DogWeight {
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    @JsonBackReference
     private Dog dog;
 }
