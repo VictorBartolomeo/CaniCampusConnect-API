@@ -1,5 +1,6 @@
 package org.example.canicampusconnectapi.model.healthRecord;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,9 +32,11 @@ public class Vaccination {
 
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
+    @JsonBackReference("dog-vaccinations")
     private Dog dog;
 
     @ManyToOne
     @JoinColumn(name = "vaccine_id", nullable = false)
+    @JsonBackReference("vaccine-vaccinations")
     protected Vaccine vaccine;
 }

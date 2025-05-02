@@ -1,4 +1,4 @@
-package org.example.canicampusconnectapi.service;
+package org.example.canicampusconnectapi.service.veterinary;
 
 import jakarta.persistence.EntityNotFoundException; // Utilisation d'une exception standard
 import org.example.canicampusconnectapi.dao.DogDao;

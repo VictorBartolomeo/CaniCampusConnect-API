@@ -1,5 +1,7 @@
 package org.example.canicampusconnectapi.model.dogRelated;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,31 +41,39 @@ public class Dog {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference("owner-dogs")
     private Owner owner;
 
-    @ManyToMany(fetch = FetchType.LAZY) // LAZY est généralement préférable pour les performances
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "dog_breed", // Nom de la table de jointure
-            joinColumns = @JoinColumn(name = "dog_id"), // Clé étrangère vers Dog
-            inverseJoinColumns = @JoinColumn(name = "breed_id") // Clé étrangère vers Breed
+            name = "dog_breed",
+            joinColumns = @JoinColumn(name = "dog_id"),
+            inverseJoinColumns = @JoinColumn(name = "breed_id")
     )
-    private Set<Breed> breeds; // Utilisation de Set pour représenter les races
+    @JsonBackReference("breed-dogs")
+    private Set<Breed> breeds;
 
 
     @OneToMany(mappedBy = "dog")
+    @JsonManagedReference("dog-registrations") // Nom ajouté
     private List<Registration> registrations;
 
     @OneToMany(mappedBy = "dog")
+    @JsonManagedReference("dog-vaccinations") // Nom ajouté
     private List<Vaccination> vaccinations;
 
     @OneToMany(mappedBy = "dog")
+    @JsonManagedReference("dog-veterinaryVisits") // Nom ajouté
     private List<VeterinaryVisit> veterinaryVisits;
 
     @OneToMany(mappedBy = "dog")
+    @JsonManagedReference("dog-medicationTreatments") // Nom ajouté
     private List<MedicationTreatment> medicationTreatments;
 
     @OneToMany(mappedBy = "dog")
+    @JsonManagedReference("dog-dogWeights") // Nom ajouté
     private List<DogWeight> dogWeights;
+
 
 
 }

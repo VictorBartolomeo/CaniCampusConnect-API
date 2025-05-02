@@ -3,7 +3,7 @@ package org.example.canicampusconnectapi.controller;
 // Imports inchangés sauf pour les DAOs qui ne sont plus directement utilisés ici
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
 import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
-import org.example.canicampusconnectapi.service.RegistrationService; // Importer le service
+import org.example.canicampusconnectapi.service.registration.RegistrationService; // Importer le service
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;

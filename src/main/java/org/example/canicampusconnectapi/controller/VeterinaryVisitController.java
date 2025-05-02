@@ -2,7 +2,7 @@ package org.example.canicampusconnectapi.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.example.canicampusconnectapi.model.healthRecord.VeterinaryVisit;
-import org.example.canicampusconnectapi.service.VeterinaryVisitService; // Importer le service
+import org.example.canicampusconnectapi.service.veterinary.VeterinaryVisitService; // Importer le service
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;

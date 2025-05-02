@@ -3,6 +3,8 @@ package org.example.canicampusconnectapi.model.courseRelated;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,10 +26,12 @@ public class CourseType {
     protected String description;
 
     @OneToMany(mappedBy = "courseType")
+    @JsonManagedReference("courseType-courses")
     protected List<Course> courses;
 
     @ManyToOne
     @JoinColumn(name = "age_range_id", nullable = false)
+    @JsonBackReference("ageRange-courseTypes")
     protected AgeRange ageRange;
 
 

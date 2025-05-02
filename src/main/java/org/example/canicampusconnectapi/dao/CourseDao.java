@@ -1,6 +1,6 @@
 package org.example.canicampusconnectapi.dao;
 
-import org.example.canicampusconnectapi.model.Club;
+import org.example.canicampusconnectapi.model.users.Club;
 import org.example.canicampusconnectapi.model.users.Coach;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
 import org.example.canicampusconnectapi.model.courseRelated.CourseType;

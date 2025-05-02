@@ -1,4 +1,4 @@
-package org.example.canicampusconnectapi.service;
+package org.example.canicampusconnectapi.service.registration;
 
 import org.example.canicampusconnectapi.dao.CourseDao;
 import org.example.canicampusconnectapi.dao.DogDao;

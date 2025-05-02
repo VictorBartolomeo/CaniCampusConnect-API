@@ -1,6 +1,7 @@
 package org.example.canicampusconnectapi.model.courseRelated;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,5 +26,6 @@ public class AgeRange {
     protected int maxAge;
 
     @OneToMany(mappedBy = "ageRange")
+    @JsonManagedReference("ageRange-courseTypes")
     protected List<CourseType> courseTypes;
 }

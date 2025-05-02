@@ -6,7 +6,7 @@ import org.example.canicampusconnectapi.dao.ClubDao;
 import org.example.canicampusconnectapi.dao.CoachDao;
 import org.example.canicampusconnectapi.dao.CourseDao;
 import org.example.canicampusconnectapi.dao.CourseTypeDao;
-import org.example.canicampusconnectapi.model.Club;
+import org.example.canicampusconnectapi.model.users.Club;
 import org.example.canicampusconnectapi.model.courseRelated.AgeRange;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
 import org.example.canicampusconnectapi.model.courseRelated.CourseType;

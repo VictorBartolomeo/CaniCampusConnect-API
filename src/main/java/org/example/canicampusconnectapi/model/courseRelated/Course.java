@@ -1,11 +1,13 @@
 package org.example.canicampusconnectapi.model.courseRelated;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.canicampusconnectapi.model.Club;
+import org.example.canicampusconnectapi.model.users.Club;
 import org.example.canicampusconnectapi.model.users.Coach;
 
 import java.time.LocalDateTime;
@@ -44,17 +46,21 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference("coach-courses")
     protected Coach coach;
 
     @ManyToOne
     @JoinColumn(name = "club_id", nullable = false)
+    @JsonBackReference("club-courses")
     protected Club club;
 
     @ManyToOne
     @JoinColumn(name = "course_type_id", nullable = false)
+    @JsonBackReference("courseType-courses")
     protected CourseType courseType;
 
     @OneToMany(mappedBy = "course")
+    @JsonManagedReference("course-registrations")
     protected List<Registration> registrations;
 
 }
