@@ -10,13 +10,13 @@ public class JwtUtils {
     public String generateToken(AppUserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
-                .signWith(SignatureAlgorithm.HS256, "secret")
+                .signWith(SignatureAlgorithm.HS256, "canicampus")
                 .compact();
     }
 
     public String getSubjectFromJwt(String jwt) {
         return Jwts.parser()
-                .setSigningKey("secret")
+                .setSigningKey("canicampus")
                 .parseClaimsJws(jwt)
                 .getBody()
                 .getSubject();

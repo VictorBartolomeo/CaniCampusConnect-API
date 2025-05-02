@@ -2,6 +2,8 @@ package org.example.canicampusconnectapi.controller;
 
 import jakarta.validation.Valid;
 import org.example.canicampusconnectapi.dao.UserDao;
+import org.example.canicampusconnectapi.dto.UserLoginDto;
+import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.model.users.User;
 import org.example.canicampusconnectapi.security.AppUserDetails;
 import org.example.canicampusconnectapi.security.JwtUtils;
@@ -34,24 +36,36 @@ public class AuthController {
         this.jwtUtils = jwtUtils;
     }
 
-//TODO Demander à Franck comment faire pour ajouter les informations d'un Owner directement par exemple, ou d'un coach
+//TODO Demander à Franck comment faire pour ajouter les informations d'un Owner directement
+    @PostMapping("/owner/register")
+    public ResponseEntity<Owner> register(@RequestBody @Valid Owner owner ) {
+        owner.setPassword(passwordEncoder.encode(owner.getPassword()));
+        userDao.save(owner);
+        //Masque le mot de passe dans la réponse
+        System.out.println(owner.getPassword());
+        owner.setPassword(null);
+        return new ResponseEntity<>(owner, HttpStatus.CREATED);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody @Valid User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.save(user);
         //Masque le mot de passe dans la réponse
+        System.out.println(user.getPassword());
         user.setPassword(null);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid User user) {
+    public ResponseEntity<String> login(@RequestBody @Valid UserLoginDto userLogin) {
         try {
             AppUserDetails userDetails = (AppUserDetails) authenticationProvider.authenticate(
                             new UsernamePasswordAuthenticationToken(
-                                    user.getEmail(),
-                                    user.getPassword()))
+                                    userLogin.getEmail(),
+                                    userLogin.getPassword()))
                     .getPrincipal();
+            System.out.println(jwtUtils.generateToken(userDetails));
             return new ResponseEntity<>(jwtUtils.generateToken(userDetails), HttpStatus.OK);
 
         } catch (AuthenticationException e) {
