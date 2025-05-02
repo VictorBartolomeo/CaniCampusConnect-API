@@ -1,9 +1,9 @@
 INSERT INTO user (firstname, lastname, email, password, phone)
-VALUES ('PrénomAdmin', 'NomAdmin', 'admin@admin.com', '$2a$10$5Gi.g2ZUgVd6PhLhE42QXeJxg5Ajy0h3UnxYFv5Lv9mzc6nXHPCme', '0611111111'),
-       ('PrénomCoach', 'NomCoach', 'coach@coach.com', '$2a$10$5Gi.g2ZUgVd6PhLhE42QXeJxg5Ajy0h3UnxYFv5Lv9mzc6nXHPCme', '0622222222'),
-       ('Propriétaire1', 'Utilisateur1', 'owner3@user.com', '$2a$10$5Gi.g2ZUgVd6PhLhE42QXeJxg5Ajy0h3UnxYFv5Lv9mzc6nXHPCme', '0633333333'),
-       ('Propriétaire2', 'Utilisateur2', 'owner4@user.com', '$2a$10$5Gi.g2ZUgVd6PhLhE42QXeJxg5Ajy0h3UnxYFv5Lv9mzc6nXHPCme', '0644444444'),
-       ('Propriétaire3', 'Utilisateur3', 'owner5@user.com', '$2a$10$5Gi.g2ZUgVd6PhLhE42QXeJxg5Ajy0h3UnxYFv5Lv9mzc6nXHPCme', '0655555555');
+VALUES ('PrénomAdmin', 'NomAdmin', 'admin@admin.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0611111111'),
+       ('PrénomCoach', 'NomCoach', 'coach@coach.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0622222222'),
+       ('Propriétaire1', 'Utilisateur1', 'owner3@user.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0633333333'),
+       ('Propriétaire2', 'Utilisateur2', 'owner4@user.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0644444444'),
+       ('Propriétaire3', 'Utilisateur3', 'owner5@user.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0655555555');
 
 INSERT INTO club_owner (user_id)
 VALUES (1);
