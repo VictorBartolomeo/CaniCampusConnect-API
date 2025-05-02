@@ -32,11 +32,11 @@ public class Vaccination {
 
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("dog-vaccinations")
     private Dog dog;
 
     @ManyToOne
     @JoinColumn(name = "vaccine_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("vaccine-vaccinations")
     protected Vaccine vaccine;
 }

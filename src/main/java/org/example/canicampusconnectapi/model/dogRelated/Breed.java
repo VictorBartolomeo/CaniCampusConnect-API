@@ -1,6 +1,7 @@
 package org.example.canicampusconnectapi.model.dogRelated;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,7 @@ public class Breed {
     private String name;
 
     @ManyToMany(mappedBy = "breeds", fetch = FetchType.LAZY)
-    @JsonBackReference("breed-dogs")
+    @JsonManagedReference("breed-dogs")
     private Set<Dog> dogs;
 
 

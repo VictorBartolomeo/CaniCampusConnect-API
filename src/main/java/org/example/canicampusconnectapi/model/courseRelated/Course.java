@@ -46,21 +46,21 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("coach-courses")
     protected Coach coach;
 
     @ManyToOne
     @JoinColumn(name = "club_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("club-courses")
     protected Club club;
 
     @ManyToOne
     @JoinColumn(name = "course_type_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("courseType-courses")
     protected CourseType courseType;
 
     @OneToMany(mappedBy = "course")
-    @JsonManagedReference
+    @JsonManagedReference("course-registrations")
     protected List<Registration> registrations;
 
 }

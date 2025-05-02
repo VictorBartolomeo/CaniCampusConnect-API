@@ -26,6 +26,6 @@ public class AgeRange {
     protected int maxAge;
 
     @OneToMany(mappedBy = "ageRange")
-    @JsonManagedReference
+    @JsonManagedReference("ageRange-courseTypes")
     protected List<CourseType> courseTypes;
 }

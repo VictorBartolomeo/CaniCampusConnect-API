@@ -1,5 +1,6 @@
 package org.example.canicampusconnectapi.model.users;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -29,10 +30,11 @@ public class Club {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference("club-clubOwner")
     protected ClubOwner clubOwner;
 
     @OneToMany
     @JoinColumn(name = "club_id")
-    @JsonManagedReference
+    @JsonManagedReference("club-courses")
     protected List<Course> courses;
 }

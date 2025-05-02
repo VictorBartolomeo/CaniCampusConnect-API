@@ -35,7 +35,7 @@ public class VeterinaryVisit {
 
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("dog-veterinaryVisits")
     private Dog dog;
 
 }

@@ -25,7 +25,7 @@ public class Vaccine {
     protected Date renewDelay;
 
     @OneToMany(mappedBy = "vaccine")
-    @JsonManagedReference
+    @JsonManagedReference("vaccine-vaccinations")
     private List<Vaccination> vaccinations;
 
 }

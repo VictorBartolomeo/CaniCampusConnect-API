@@ -29,13 +29,13 @@ public class Registration {
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     @NotNull(message = "Le cours ne peut pas être vide")
-    @JsonBackReference
+    @JsonBackReference("course-registrations")
     protected Course course;
 
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
     @NotNull(message = "Le chien ne peut pas être vide")
-    @JsonBackReference
+    @JsonBackReference("dog-registrations")
     protected Dog dog;
 
     @CreatedDate

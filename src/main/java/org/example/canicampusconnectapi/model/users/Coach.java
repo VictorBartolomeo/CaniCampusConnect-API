@@ -27,6 +27,6 @@ public class Coach extends User {
     protected LocalDate registrationDate;
 
     @OneToMany(mappedBy = "coach")
-    @JsonManagedReference
+    @JsonManagedReference("coach-courses")
     protected List<Course> course;
 }

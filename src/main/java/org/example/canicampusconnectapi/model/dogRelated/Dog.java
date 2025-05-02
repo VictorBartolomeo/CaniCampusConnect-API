@@ -50,29 +50,30 @@ public class Dog {
             joinColumns = @JoinColumn(name = "dog_id"),
             inverseJoinColumns = @JoinColumn(name = "breed_id")
     )
-    @JsonManagedReference("breed-dogs")
+    @JsonBackReference("breed-dogs")
     private Set<Breed> breeds;
 
 
     @OneToMany(mappedBy = "dog")
-    @JsonManagedReference
+    @JsonManagedReference("dog-registrations") // Nom ajouté
     private List<Registration> registrations;
 
     @OneToMany(mappedBy = "dog")
-    @JsonManagedReference
+    @JsonManagedReference("dog-vaccinations") // Nom ajouté
     private List<Vaccination> vaccinations;
 
     @OneToMany(mappedBy = "dog")
-    @JsonManagedReference
+    @JsonManagedReference("dog-veterinaryVisits") // Nom ajouté
     private List<VeterinaryVisit> veterinaryVisits;
 
     @OneToMany(mappedBy = "dog")
-    @JsonManagedReference
+    @JsonManagedReference("dog-medicationTreatments") // Nom ajouté
     private List<MedicationTreatment> medicationTreatments;
 
     @OneToMany(mappedBy = "dog")
-    @JsonManagedReference
+    @JsonManagedReference("dog-dogWeights") // Nom ajouté
     private List<DogWeight> dogWeights;
+
 
 
 }
