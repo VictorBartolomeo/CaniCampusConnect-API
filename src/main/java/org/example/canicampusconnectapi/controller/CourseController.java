@@ -1,8 +1,10 @@
 package org.example.canicampusconnectapi.controller;
 
 import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
+import org.example.canicampusconnectapi.dto.CourseCardDto;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
 import org.example.canicampusconnectapi.service.course.CourseService;
+import org.example.canicampusconnectapi.service.courseDto.CourseDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -18,10 +20,12 @@ import java.util.Optional;
 public class CourseController {
 
     private final CourseService courseService;
+    private final CourseDtoService courseDtoService;
 
     @Autowired
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseService courseService, CourseDtoService courseDtoService) {
         this.courseService = courseService;
+        this.courseDtoService = courseDtoService;
     }
 
     @GetMapping("/course/{id}")
@@ -36,6 +40,10 @@ public class CourseController {
     @GetMapping("/courses")
     public List<Course> getAllCourses() {
         return courseService.getAllCourses();
+    }
+    @GetMapping("/coursesdto")
+    public List<CourseCardDto> getAllCourses() {
+        return courseDtoService.getAllCourses();
     }
 
     @GetMapping("/coach/{coachId}/courses")
