@@ -1,4 +1,4 @@
-package org.example.canicampusconnectapi.model;
+package org.example.canicampusconnectapi.model.users;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
-import org.example.canicampusconnectapi.model.users.ClubOwner;
 
 import java.util.List;
 

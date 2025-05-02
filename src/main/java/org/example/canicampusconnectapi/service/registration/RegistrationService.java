@@ -1,5 +1,5 @@
 
-package org.example.canicampusconnectapi.service;
+package org.example.canicampusconnectapi.service.registration;
 
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
 import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;

@@ -1,4 +1,4 @@
-package org.example.canicampusconnectapi.service;
+package org.example.canicampusconnectapi.service.veterinary;
 
 import org.example.canicampusconnectapi.model.healthRecord.VeterinaryVisit;
 

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.canicampusconnectapi.model.Club;
+import org.example.canicampusconnectapi.model.users.Club;
 import org.example.canicampusconnectapi.model.users.Coach;
 
 import java.time.LocalDateTime;
