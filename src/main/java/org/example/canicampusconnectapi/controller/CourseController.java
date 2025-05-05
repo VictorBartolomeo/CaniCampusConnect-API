@@ -1,10 +1,8 @@
 package org.example.canicampusconnectapi.controller;
 
 import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
-import org.example.canicampusconnectapi.dto.CourseCardDto;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
 import org.example.canicampusconnectapi.service.course.CourseService;
-import org.example.canicampusconnectapi.service.courseDto.CourseDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -20,30 +18,24 @@ import java.util.Optional;
 public class CourseController {
 
     private final CourseService courseService;
-    private final CourseDtoService courseDtoService;
 
     @Autowired
-    public CourseController(CourseService courseService, CourseDtoService courseDtoService) {
+    public CourseController(CourseService courseService) {
         this.courseService = courseService;
-        this.courseDtoService = courseDtoService;
     }
 
     @GetMapping("/course/{id}")
     public ResponseEntity<Course> getCourse(@PathVariable Long id) {
-        Optional<Course> optionalCourse = courseService.getCourseById(id);
-        if (optionalCourse.isEmpty()) {
+        Optional<Course> course = courseService.getCourseById(id);
+        if (course.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(optionalCourse.get(), HttpStatus.OK);
+        return new ResponseEntity<>(course.get(), HttpStatus.OK);
     }
 
     @GetMapping("/courses")
     public List<Course> getAllCourses() {
         return courseService.getAllCourses();
-    }
-    @GetMapping("/coursesdto")
-    public List<CourseCardDto> getAllCourses() {
-        return courseDtoService.getAllCourses();
     }
 
     @GetMapping("/coach/{coachId}/courses")
