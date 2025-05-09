@@ -1,6 +1,8 @@
 package org.example.canicampusconnectapi.model.dogRelated;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -50,28 +52,29 @@ public class Dog {
             joinColumns = @JoinColumn(name = "dog_id"),
             inverseJoinColumns = @JoinColumn(name = "breed_id")
     )
-    @JsonBackReference("breed-dogs")
+    @JsonIgnoreProperties("dogs")
     private Set<Breed> breeds;
 
 
     @OneToMany(mappedBy = "dog")
-    @JsonManagedReference("dog-registrations") // Nom ajouté
+    @JsonIgnore
+//    @JsonManagedReference("dog-registrations")
     private List<Registration> registrations;
 
     @OneToMany(mappedBy = "dog")
-    @JsonManagedReference("dog-vaccinations") // Nom ajouté
+    @JsonManagedReference("dog-vaccinations")
     private List<Vaccination> vaccinations;
 
     @OneToMany(mappedBy = "dog")
-    @JsonManagedReference("dog-veterinaryVisits") // Nom ajouté
+    @JsonManagedReference("dog-veterinaryVisits")
     private List<VeterinaryVisit> veterinaryVisits;
 
     @OneToMany(mappedBy = "dog")
-    @JsonManagedReference("dog-medicationTreatments") // Nom ajouté
+    @JsonManagedReference("dog-medicationTreatments")
     private List<MedicationTreatment> medicationTreatments;
 
     @OneToMany(mappedBy = "dog")
-    @JsonManagedReference("dog-dogWeights") // Nom ajouté
+    @JsonManagedReference("dog-dogWeights")
     private List<DogWeight> dogWeights;
 
 

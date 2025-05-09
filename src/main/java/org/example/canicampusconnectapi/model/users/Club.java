@@ -30,11 +30,11 @@ public class Club {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference("club-clubOwner")
+    @JsonManagedReference("club-clubOwner")
     protected ClubOwner clubOwner;
 
     @OneToMany
     @JoinColumn(name = "club_id")
-    @JsonManagedReference("club-courses")
+    @JsonBackReference("club-courses")
     protected List<Course> courses;
 }

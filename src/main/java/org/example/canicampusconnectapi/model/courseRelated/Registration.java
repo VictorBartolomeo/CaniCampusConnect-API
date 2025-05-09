@@ -2,6 +2,7 @@ package org.example.canicampusconnectapi.model.courseRelated;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -35,7 +36,7 @@ public class Registration {
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
     @NotNull(message = "Le chien ne peut pas être vide")
-    @JsonBackReference("dog-registrations")
+    @JsonManagedReference("dog-registrations")
     protected Dog dog;
 
     @CreatedDate

@@ -1,5 +1,6 @@
 package org.example.canicampusconnectapi.model.users;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -27,6 +28,6 @@ public class Coach extends User {
     protected LocalDate registrationDate;
 
     @OneToMany(mappedBy = "coach")
-    @JsonManagedReference("coach-courses")
+    @JsonBackReference("coach-courses")
     protected List<Course> course;
 }

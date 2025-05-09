@@ -9,6 +9,7 @@ import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.enumeration.MassUnit;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -21,7 +22,7 @@ public class DogWeight {
     protected Long id;
 
     @Column(nullable = false)
-    protected Date measurementDate;
+    protected LocalDateTime measurementDate;
 
     @Column(precision = 5, scale = 2, nullable = false)
     @DecimalMin(value = "0.1")
