@@ -15,6 +15,4 @@ public interface VaccinationDao extends JpaRepository<Vaccination, Long> {
     List<Vaccination> findByVaccine(Vaccine vaccine);
     List<Vaccination> findByDogAndVaccine(Dog dog, Vaccine vaccine);
     List<Vaccination> findByVaccinationDateBetween(Date startDate, Date endDate);
-    List<Vaccination> findByReminderDateBefore(Date date);
-    List<Vaccination> findByDogAndReminderDateBefore(Dog dog, Date date);
 }

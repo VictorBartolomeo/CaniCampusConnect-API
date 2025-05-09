@@ -87,23 +87,7 @@ public class VaccinationController {
         return vaccinationDao.findByVaccinationDateBetween(startDate, endDate);
     }
 
-    @GetMapping("/vaccinations/due")
-    public List<Vaccination> getVaccinationsDue(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
-        return vaccinationDao.findByReminderDateBefore(date);
-    }
 
-    @GetMapping("/dog/{dogId}/vaccinations/due")
-    public ResponseEntity<List<Vaccination>> getVaccinationsDueForDog(
-            @PathVariable Long dogId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
-        Optional<Dog> optionalDog = dogDao.findById(dogId);
-        if (optionalDog.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        List<Vaccination> vaccinations = vaccinationDao.findByDogAndReminderDateBefore(optionalDog.get(), date);
-        return new ResponseEntity<>(vaccinations, HttpStatus.OK);
-    }
 
     @PostMapping("/vaccination")
     public ResponseEntity<Vaccination> createVaccination(@RequestBody Vaccination vaccination) {
