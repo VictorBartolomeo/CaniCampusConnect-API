@@ -48,13 +48,13 @@ public class VaccineController {
 
     @GetMapping("/vaccines/renew-before")
     public List<Vaccine> getVaccinesRenewBefore(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) short date) {
         return vaccineDao.findByRenewDelayLessThan(date);
     }
 
     @GetMapping("/vaccines/renew-after")
     public List<Vaccine> getVaccinesRenewAfter(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) short date) {
         return vaccineDao.findByRenewDelayGreaterThan(date);
     }
 
