@@ -1,12 +1,11 @@
 package org.example.canicampusconnectapi.model.users;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.canicampusconnectapi.model.users.Club;
 
 import java.util.List;
 
@@ -17,6 +16,6 @@ import java.util.List;
 public class ClubOwner extends User {
 
     @OneToMany(mappedBy = "clubOwner")
-    @JsonManagedReference("club-clubOwner")
+    @JsonBackReference("club-clubOwner")
     protected List<Club> clubs;
 }

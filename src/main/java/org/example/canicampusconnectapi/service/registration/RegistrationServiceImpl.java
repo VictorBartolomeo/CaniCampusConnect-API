@@ -171,7 +171,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    @Transactional // Transactionnel car c'est une opération d'écriture
+    @Transactional
     public Optional<Registration> update(Long id, Registration registrationDetails) {
         return registrationDao.findById(id)
                 .map(existingRegistration -> {

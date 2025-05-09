@@ -26,11 +26,11 @@ public class CourseController {
 
     @GetMapping("/course/{id}")
     public ResponseEntity<Course> getCourse(@PathVariable Long id) {
-        Optional<Course> optionalCourse = courseService.getCourseById(id);
-        if (optionalCourse.isEmpty()) {
+        Optional<Course> course = courseService.getCourseById(id);
+        if (course.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(optionalCourse.get(), HttpStatus.OK);
+        return new ResponseEntity<>(course.get(), HttpStatus.OK);
     }
 
     @GetMapping("/courses")

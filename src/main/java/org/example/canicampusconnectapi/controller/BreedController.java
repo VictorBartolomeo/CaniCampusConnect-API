@@ -23,7 +23,7 @@ public class BreedController {
 
     @GetMapping("/breed/{id}")
     public ResponseEntity<Breed> getBreed(@PathVariable Short id) {
-        Optional<Breed> optionalBreed = breedDao.findById(id);
+        Optional<Breed> optionalBreed = breedDao.findByIdWithDogs(id);
         if (optionalBreed.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -32,7 +32,7 @@ public class BreedController {
 
     @GetMapping("/breeds")
     public List<Breed> getAll() {
-        return breedDao.findAll();
+        return breedDao.findAllWithDogs();
     }
 
     @PostMapping("/breed")

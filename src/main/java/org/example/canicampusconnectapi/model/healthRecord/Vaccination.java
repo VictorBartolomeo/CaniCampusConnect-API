@@ -1,6 +1,7 @@
 package org.example.canicampusconnectapi.model.healthRecord;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,9 +22,6 @@ public class Vaccination {
     @Column(nullable = false)
     protected Date vaccinationDate;
 
-    @Column(nullable = true)
-    protected Date reminderDate;
-
     @Column(length = 255, nullable = true)
     protected String batchNumber;
 
@@ -37,6 +35,6 @@ public class Vaccination {
 
     @ManyToOne
     @JoinColumn(name = "vaccine_id", nullable = false)
-    @JsonBackReference("vaccine-vaccinations")
+    @JsonManagedReference("vaccine-vaccinations")
     protected Vaccine vaccine;
 }

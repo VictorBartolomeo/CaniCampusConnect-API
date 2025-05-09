@@ -26,12 +26,12 @@ public class CourseType {
     protected String description;
 
     @OneToMany(mappedBy = "courseType")
-    @JsonManagedReference("courseType-courses")
+    @JsonBackReference("courseType-courses")
     protected List<Course> courses;
 
     @ManyToOne
     @JoinColumn(name = "age_range_id", nullable = false)
-    @JsonBackReference("ageRange-courseTypes")
+    @JsonManagedReference("ageRange-courseTypes")
     protected AgeRange ageRange;
 
 

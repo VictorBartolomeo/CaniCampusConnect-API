@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface VaccineDao extends JpaRepository<Vaccine, Integer> {
     Optional<Vaccine> findByName(String name);
-    List<Vaccine> findByRenewDelayLessThan(Date date);
-    List<Vaccine> findByRenewDelayGreaterThan(Date date);
+    List<Vaccine> findByRenewDelayLessThan(short date);
+    List<Vaccine> findByRenewDelayGreaterThan(short date);
 }
