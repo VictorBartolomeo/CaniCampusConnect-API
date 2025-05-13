@@ -2,6 +2,7 @@ package org.example.canicampusconnectapi.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,8 @@ import java.util.Map;
 @Service
 public class SecurityUtils implements ISecurityUtils {
 
-    String jwtSecret="password";
+    @Value("${jwt.secret}")
+    String jwtSecret;
 
     @Override
     public String getRole(AppUserDetails userDetails) {
