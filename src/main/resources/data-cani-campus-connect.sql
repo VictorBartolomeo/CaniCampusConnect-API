@@ -481,15 +481,15 @@ VALUES
 ############################ VIEWS ############################
 
 create view OwnersV as
-select `o`.`is_active`         AS `is_active`,
-       `o`.`registration_date` AS `registration_date`,
-       `o`.`user_id`           AS `user_id`,
-       `o`.`address`           AS `address`,
-       `u`.`email`             AS `email`,
-       `u`.`firstname`         AS `firstname`,
-       `u`.`lastname`          AS `lastname`,
-       `u`.`phone`             AS `phone`
-from (`CaniCampusConnect`.`owner` `o` left join `CaniCampusConnect`.`user` `u` on ((`u`.`user_id` = `o`.`user_id`)));
+select o.is_active         AS is_active,
+       o.registration_date AS registration_date,
+       o.user_id           AS user_id,
+       o.address           AS address,
+       u.email             AS email,
+       u.firstname         AS firstname,
+       u.lastname          AS lastname,
+       u.phone             AS phone
+from owner o left join CaniCampusConnect.user u on u.user_id = o.user_id;
 
 
 CREATE VIEW CoachesV AS
