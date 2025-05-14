@@ -1,11 +1,13 @@
 package org.example.canicampusconnectapi.model.users;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
+import org.example.canicampusconnectapi.view.admin.AdminView;
+import org.example.canicampusconnectapi.view.coach.CoachView;
+import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
@@ -28,6 +30,6 @@ public class Coach extends User {
     protected LocalDate registrationDate;
 
     @OneToMany(mappedBy = "coach")
-    @JsonBackReference("coach-courses")
+    @JsonView(CoachView.class)
     protected List<Course> course;
 }
