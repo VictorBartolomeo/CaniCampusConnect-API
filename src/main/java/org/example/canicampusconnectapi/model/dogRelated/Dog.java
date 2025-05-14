@@ -16,6 +16,7 @@ import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.view.admin.AdminView;
 import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
+import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -32,25 +33,25 @@ public class Dog {
     protected Long id;
 
     @Column(nullable = false, length = 255)
-    @JsonView(OwnerView.class)
+    @JsonView(OwnerViewDog.class)
     protected String name;
 
     @Column(nullable = false)
-    @JsonView(OwnerView.class)
+    @JsonView(OwnerViewDog.class)
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @JsonView(OwnerView.class)
+    @JsonView(OwnerViewDog.class)
     protected Gender gender;
 
     @Column(unique = true, length = 50)
-    @JsonView(CoachView.class)
+    @JsonView(OwnerViewDog.class)
     protected String chipNumber;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonView(OwnerView.class)
+    @JsonView(OwnerViewDog.class)
     private Owner owner;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -60,29 +61,28 @@ public class Dog {
             inverseJoinColumns = @JoinColumn(name = "breed_id")
     )
     @JsonIgnoreProperties("dogs")
-    @JsonView(OwnerView.class)
+    @JsonView(OwnerViewDog.class)
     private Set<Breed> breeds;
 
 
     @OneToMany(mappedBy = "dog")
-    @JsonIgnore
-//    @JsonManagedReference("dog-registrations")
+    @JsonView(OwnerViewDog.class)
     private List<Registration> registrations;
 
     @OneToMany(mappedBy = "dog")
-    @JsonView(OwnerView.class)
+    @JsonView(OwnerViewDog.class)
     private List<Vaccination> vaccinations;
 
     @OneToMany(mappedBy = "dog")
-    @JsonView(OwnerView.class)
+    @JsonView(OwnerViewDog.class)
     private List<VeterinaryVisit> veterinaryVisits;
 
     @OneToMany(mappedBy = "dog")
-    @JsonView(OwnerView.class)
+    @JsonView(OwnerViewDog.class)
     private List<MedicationTreatment> medicationTreatments;
 
     @OneToMany(mappedBy = "dog")
-    @JsonView(OwnerView.class)
+    @JsonView(OwnerViewDog.class)
     private List<DogWeight> dogWeights;
 
 

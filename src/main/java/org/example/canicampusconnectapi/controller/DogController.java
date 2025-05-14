@@ -15,6 +15,7 @@ import org.example.canicampusconnectapi.service.dogweight.DogWeightService;
 import org.example.canicampusconnectapi.service.veterinary.VeterinaryVisitService;
 import org.example.canicampusconnectapi.view.admin.AdminViewDog;
 import org.example.canicampusconnectapi.view.coach.CoachView;
+import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -80,8 +81,10 @@ public class DogController {
         return new ResponseEntity<>(optionalDog.get(), HttpStatus.OK);
     }
 
-    @IsOwner
+//    @IsOwner
+    //TODO Demander à Franck pourquoi le role est bloquant alors que je l'ai bien dans le jwt
     @GetMapping("/owner/{ownerId}/dogs")
+    // TODO Demander pourquoi j'ai un JSON infini alors que j'ai des JsonView sur les éléments
     @JsonView(OwnerViewDog.class)
     public ResponseEntity<List<Dog>> getDogsByOwner(@PathVariable Long ownerId) {
         try {

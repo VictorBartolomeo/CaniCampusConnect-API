@@ -1,5 +1,6 @@
 package org.example.canicampusconnectapi.model.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.view.admin.AdminView;
 import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
+import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -33,7 +35,8 @@ public class Owner extends User {
     protected String address;
 
     @OneToMany(mappedBy ="owner")
-    @JsonView(OwnerView.class)
+    @JsonView(OwnerViewDog.class)
+    //TODO Ici récursivité, comment l'éviter ?
     protected List<Dog> dogs;
 
 }
