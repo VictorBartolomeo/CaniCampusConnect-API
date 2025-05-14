@@ -1,14 +1,16 @@
 package org.example.canicampusconnectapi.model.courseRelated;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
+import org.example.canicampusconnectapi.view.admin.AdminView;
+import org.example.canicampusconnectapi.view.coach.CoachView;
+import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -30,13 +32,13 @@ public class Registration {
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     @NotNull(message = "Le cours ne peut pas être vide")
-    @JsonBackReference("course-registrations")
+    @JsonView(OwnerView.class)
     protected Course course;
 
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
     @NotNull(message = "Le chien ne peut pas être vide")
-    @JsonManagedReference("dog-registrations")
+    @JsonView(OwnerView.class)
     protected Dog dog;
 
     @CreatedDate
