@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAnyRole('ROLE_OWNER', 'ROLE_CLUB_OWNER')")
+@PreAuthorize("hasAnyRole('ROLE_OWNER', 'ROLE_CLUB_OWNER', 'ROLE_COACH')")
 public @interface IsOwner {
 
 }
