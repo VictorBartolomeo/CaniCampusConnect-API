@@ -1,4 +1,4 @@
-package org.example.canicampusconnectapi.security.annotation;
+package org.example.canicampusconnectapi.security.annotation.role;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 
