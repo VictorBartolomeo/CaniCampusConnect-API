@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.canicampusconnectapi.view.owner.OwnerView;
 
 @Getter
 @Setter
@@ -26,7 +27,7 @@ public class User {
     @Column(nullable = false, unique = true, length = 150)
     @NotBlank(message = "L'email ne peut pas être vide")
     @Email(message = "L'email n'est pas au format valide")
-    @JsonView(O)
+    @JsonView(OwnerView.class)
     protected String email;
 
     @Column(nullable = false, length = 100)
