@@ -24,6 +24,7 @@ public class SecurityUtils implements ISecurityUtils {
     public String generateToken(AppUserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
+                .claim("userId", userDetails.getUserId())
                 .addClaims(Map.of("role", getRole(userDetails)))
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)
                 .compact();

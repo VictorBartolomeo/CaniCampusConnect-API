@@ -47,4 +47,8 @@ public class AppUserDetails implements UserDetails {
     public String getUsername() {
         return user.getEmail();
     }
+    public Long getUserId() {
+        return user.getId(); // Assurez-vous que votre classe User a une méthode getId()
+    }
+
 }
