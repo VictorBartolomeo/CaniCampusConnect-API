@@ -5,9 +5,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.canicampusconnectapi.view.admin.AdminView;
+import org.example.canicampusconnectapi.view.owner.OwnerView;
 
 @Getter
 @Setter
@@ -17,21 +20,24 @@ public class CourseType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_type_id")
+    @JsonView(AdminView.class)
     protected Long id;
 
     @Column(nullable = false, length = 255)
+    @JsonView(OwnerView.class)
     protected String name;
 
     @Column(columnDefinition = "TEXT")
+    @JsonView(OwnerView.class)
     protected String description;
 
     @OneToMany(mappedBy = "courseType")
-    @JsonBackReference("courseType-courses")
+@JsonView(OwnerView.class)
     protected List<Course> courses;
 
     @ManyToOne
     @JoinColumn(name = "age_range_id", nullable = false)
-    @JsonManagedReference("ageRange-courseTypes")
+@JsonView(OwnerView.class)
     protected AgeRange ageRange;
 
 

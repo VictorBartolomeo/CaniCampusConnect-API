@@ -1,12 +1,14 @@
 package org.example.canicampusconnectapi.model.users;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
+import org.example.canicampusconnectapi.view.admin.AdminView;
+import org.example.canicampusconnectapi.view.coach.CoachView;
+import org.example.canicampusconnectapi.view.owner.OwnerView;
 
 import java.util.List;
 
@@ -30,11 +32,11 @@ public class Club {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonManagedReference("club-clubOwner")
+    @JsonView(AdminView.class)
     protected ClubOwner clubOwner;
 
     @OneToMany
     @JoinColumn(name = "club_id")
-    @JsonBackReference("club-courses")
+    @JsonView(AdminView.class)
     protected List<Course> courses;
 }

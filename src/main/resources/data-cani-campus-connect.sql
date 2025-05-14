@@ -480,185 +480,185 @@ VALUES
 
 ############################ VIEWS ############################
 
-create view OwnersV as
-select o.is_active         AS is_active,
-       o.registration_date AS registration_date,
-       o.user_id           AS user_id,
-       o.address           AS address,
-       u.email             AS email,
-       u.firstname         AS firstname,
-       u.lastname          AS lastname,
-       u.phone             AS phone
-from owner o left join CaniCampusConnect.user u on u.user_id = o.user_id;
-
-
-CREATE VIEW CoachesV AS
-SELECT c.acaced_number     AS acaced_number,
-       c.is_active         AS is_active,
-       c.registration_date AS registration_date,
-       c.user_id           AS user_id,
-       u.email             AS email,
-       u.firstname         AS firstname,
-       u.lastname          AS lastname,
-       u.phone             AS phone
-FROM coach c
-         LEFT JOIN CaniCampusConnect.user u ON u.user_id = c.user_id;
-
-CREATE VIEW ClubOwnersV AS
-SELECT co.user_id  AS user_id,
-       u.email     AS email,
-       u.firstname AS firstname,
-       u.lastname  AS lastname,
-       u.phone     AS phone
-FROM club_owner co
-         LEFT JOIN CaniCampusConnect.user u ON u.user_id = co.user_id;
-
--- Create view for dogs with their breeds
-CREATE VIEW DogsWithBreedsV AS
-SELECT d.id          AS dog_id,
-       d.name        AS dog_name,
-       d.birth_date  AS birth_date,
-       d.gender      AS gender,
-       d.chip_number AS chip_number,
-       d.user_id     AS owner_id,
-       o.firstname   AS owner_firstname,
-       o.lastname    AS owner_lastname,
-       b.id          AS breed_id,
-       b.name        AS breed_name
-FROM dog d
-         JOIN dog_breed db ON d.id = db.dog_id
-         JOIN breed b ON db.breed_id = b.id
-         JOIN owner ow ON d.user_id = ow.user_id
-         JOIN user o ON ow.user_id = o.user_id;
-
--- Create view for dogs with their weights
-CREATE VIEW DogsWithWeightsV AS
-SELECT d.id                AS dog_id,
-       d.name              AS dog_name,
-       d.birth_date        AS birth_date,
-       d.gender            AS gender,
-       d.chip_number       AS chip_number,
-       d.user_id           AS owner_id,
-       o.firstname         AS owner_firstname,
-       o.lastname          AS owner_lastname,
-       dw.id               AS weight_id,
-       dw.measurement_date AS measurement_date,
-       dw.weight_value     AS weight_value,
-       dw.unit             AS weight_unit
-FROM dog d
-         JOIN dog_weight dw ON d.id = dw.dog_id
-         JOIN owner ow ON d.user_id = ow.user_id
-         JOIN user o ON ow.user_id = o.user_id;
-
--- Create view for dogs with complete information (breeds and latest weight)
-CREATE VIEW DogsCompleteV AS
-SELECT d.id                                         AS dog_id,
-       d.name                                       AS dog_name,
-       d.birth_date                                 AS birth_date,
-       d.gender                                     AS gender,
-       d.chip_number                                AS chip_number,
-       d.user_id                                    AS owner_id,
-       o.firstname                                  AS owner_firstname,
-       o.lastname                                   AS owner_lastname,
-       GROUP_CONCAT(DISTINCT b.name SEPARATOR ', ') AS breeds,
-       lw.weight_value                              AS latest_weight_value,
-       lw.unit                                      AS latest_weight_unit,
-       lw.measurement_date                          AS latest_weight_date
-FROM dog d
-         JOIN owner ow ON d.user_id = ow.user_id
-         JOIN user o ON ow.user_id = o.user_id
-         LEFT JOIN dog_breed db ON d.id = db.dog_id
-         LEFT JOIN breed b ON db.breed_id = b.id
-         LEFT JOIN (SELECT dw.dog_id, dw.weight_value, dw.unit, dw.measurement_date
-                    FROM dog_weight dw
-                             INNER JOIN (SELECT dog_id, MAX(measurement_date) as max_date
-                                         FROM dog_weight
-                                         GROUP BY dog_id) latest
-                                        ON dw.dog_id = latest.dog_id AND dw.measurement_date = latest.max_date) lw
-                   ON d.id = lw.dog_id
-GROUP BY d.id, d.name, d.birth_date, d.gender, d.chip_number, d.user_id,
-         o.firstname, o.lastname, lw.weight_value, lw.unit, lw.measurement_date;
-
--- Create view for dogs with health records (vaccinations, veterinary visits, medication treatments)
-CREATE VIEW DogsHealthRecordsV AS
-SELECT d.id            AS dog_id,
-       d.name          AS dog_name,
-       d.birth_date    AS birth_date,
-       d.gender        AS gender,
-       d.chip_number   AS chip_number,
-       d.user_id       AS owner_id,
-       o.firstname     AS owner_firstname,
-       o.lastname      AS owner_lastname,
-
-       -- Vaccination information
-       v.vaccination_id,
-       v.vaccination_date,
-       v.batch_number,
-       v.veterinarian  AS vaccination_veterinarian,
-       vac.vaccine_name,
-
-       -- Veterinary visit information
-       vv.visit_id,
-       vv.visit_date,
-       vv.diagnosis,
-       vv.reason_for_visit,
-       vv.treatment,
-       vv.veterinarian AS visit_veterinarian,
-
-       -- Medication treatment information
-       mt.treatment_id,
-       mt.medication_name,
-       mt.dosage,
-       mt.frequency,
-       mt.start_date,
-       mt.end_date,
-       mt.treatment_reason
-FROM dog d
-         JOIN owner ow ON d.user_id = ow.user_id
-         JOIN user o ON ow.user_id = o.user_id
-         LEFT JOIN vaccination v ON d.id = v.dog_id
-         LEFT JOIN vaccine vac ON v.vaccine_id = vac.vaccine_id
-         LEFT JOIN veterinary_visit vv ON d.id = vv.dog_id
-         LEFT JOIN medication_treatment mt ON d.id = mt.dog_id;
-
--- Create view for dogs with their course registrations
-CREATE VIEW DogsRegistrationsV AS
-SELECT d.id                 AS dog_id,
-       d.name               AS dog_name,
-       d.birth_date         AS birth_date,
-       d.gender             AS gender,
-       d.chip_number        AS chip_number,
-       d.user_id            AS owner_id,
-       o.firstname          AS owner_firstname,
-       o.lastname           AS owner_lastname,
-
-       -- Registration information
-       r.registration_id,
-       r.registration_date,
-       r.status,
-
-       -- Course information
-       c.course_id,
-       c.title              AS course_title,
-       c.description        AS course_description,
-       c.start_datetime     AS course_start,
-       c.end_datetime       AS course_end,
-       c.max_capacity       AS course_max_capacity,
-
-       -- Course type information
-       ct.course_type_id,
-       ct.name              AS course_type_name,
-       ct.description       AS course_type_description,
-
-       -- Coach information
-       coach.user_id        AS coach_id,
-       coach_user.firstname AS coach_firstname,
-       coach_user.lastname  AS coach_lastname
-FROM dog d
-         JOIN owner ow ON d.user_id = ow.user_id
-         JOIN user o ON ow.user_id = o.user_id
-         LEFT JOIN registration r ON d.id = r.dog_id
-         LEFT JOIN course c ON r.course_id = c.course_id
-         LEFT JOIN course_type ct ON c.course_type_id = ct.course_type_id
-         LEFT JOIN coach ON c.user_id = coach.user_id
-         LEFT JOIN user coach_user ON coach.user_id = coach_user.user_id;
+# create view OwnersV as
+# select o.is_active         AS is_active,
+#        o.registration_date AS registration_date,
+#        o.user_id           AS user_id,
+#        o.address           AS address,
+#        u.email             AS email,
+#        u.firstname         AS firstname,
+#        u.lastname          AS lastname,
+#        u.phone             AS phone
+# from owner o left join CaniCampusConnect.user u on u.user_id = o.user_id;
+#
+#
+# CREATE VIEW CoachesV AS
+# SELECT c.acaced_number     AS acaced_number,
+#        c.is_active         AS is_active,
+#        c.registration_date AS registration_date,
+#        c.user_id           AS user_id,
+#        u.email             AS email,
+#        u.firstname         AS firstname,
+#        u.lastname          AS lastname,
+#        u.phone             AS phone
+# FROM coach c
+#          LEFT JOIN CaniCampusConnect.user u ON u.user_id = c.user_id;
+#
+# CREATE VIEW ClubOwnersV AS
+# SELECT co.user_id  AS user_id,
+#        u.email     AS email,
+#        u.firstname AS firstname,
+#        u.lastname  AS lastname,
+#        u.phone     AS phone
+# FROM club_owner co
+#          LEFT JOIN CaniCampusConnect.user u ON u.user_id = co.user_id;
+#
+# -- Create view for dogs with their breeds
+# CREATE VIEW DogsWithBreedsV AS
+# SELECT d.id          AS dog_id,
+#        d.name        AS dog_name,
+#        d.birth_date  AS birth_date,
+#        d.gender      AS gender,
+#        d.chip_number AS chip_number,
+#        d.user_id     AS owner_id,
+#        o.firstname   AS owner_firstname,
+#        o.lastname    AS owner_lastname,
+#        b.id          AS breed_id,
+#        b.name        AS breed_name
+# FROM dog d
+#          JOIN dog_breed db ON d.id = db.dog_id
+#          JOIN breed b ON db.breed_id = b.id
+#          JOIN owner ow ON d.user_id = ow.user_id
+#          JOIN user o ON ow.user_id = o.user_id;
+#
+# -- Create view for dogs with their weights
+# CREATE VIEW DogsWithWeightsV AS
+# SELECT d.id                AS dog_id,
+#        d.name              AS dog_name,
+#        d.birth_date        AS birth_date,
+#        d.gender            AS gender,
+#        d.chip_number       AS chip_number,
+#        d.user_id           AS owner_id,
+#        o.firstname         AS owner_firstname,
+#        o.lastname          AS owner_lastname,
+#        dw.id               AS weight_id,
+#        dw.measurement_date AS measurement_date,
+#        dw.weight_value     AS weight_value,
+#        dw.unit             AS weight_unit
+# FROM dog d
+#          JOIN dog_weight dw ON d.id = dw.dog_id
+#          JOIN owner ow ON d.user_id = ow.user_id
+#          JOIN user o ON ow.user_id = o.user_id;
+#
+# -- Create view for dogs with complete information (breeds and latest weight)
+# CREATE VIEW DogsCompleteV AS
+# SELECT d.id                                         AS dog_id,
+#        d.name                                       AS dog_name,
+#        d.birth_date                                 AS birth_date,
+#        d.gender                                     AS gender,
+#        d.chip_number                                AS chip_number,
+#        d.user_id                                    AS owner_id,
+#        o.firstname                                  AS owner_firstname,
+#        o.lastname                                   AS owner_lastname,
+#        GROUP_CONCAT(DISTINCT b.name SEPARATOR ', ') AS breeds,
+#        lw.weight_value                              AS latest_weight_value,
+#        lw.unit                                      AS latest_weight_unit,
+#        lw.measurement_date                          AS latest_weight_date
+# FROM dog d
+#          JOIN owner ow ON d.user_id = ow.user_id
+#          JOIN user o ON ow.user_id = o.user_id
+#          LEFT JOIN dog_breed db ON d.id = db.dog_id
+#          LEFT JOIN breed b ON db.breed_id = b.id
+#          LEFT JOIN (SELECT dw.dog_id, dw.weight_value, dw.unit, dw.measurement_date
+#                     FROM dog_weight dw
+#                              INNER JOIN (SELECT dog_id, MAX(measurement_date) as max_date
+#                                          FROM dog_weight
+#                                          GROUP BY dog_id) latest
+#                                         ON dw.dog_id = latest.dog_id AND dw.measurement_date = latest.max_date) lw
+#                    ON d.id = lw.dog_id
+# GROUP BY d.id, d.name, d.birth_date, d.gender, d.chip_number, d.user_id,
+#          o.firstname, o.lastname, lw.weight_value, lw.unit, lw.measurement_date;
+#
+# -- Create view for dogs with health records (vaccinations, veterinary visits, medication treatments)
+# CREATE VIEW DogsHealthRecordsV AS
+# SELECT d.id            AS dog_id,
+#        d.name          AS dog_name,
+#        d.birth_date    AS birth_date,
+#        d.gender        AS gender,
+#        d.chip_number   AS chip_number,
+#        d.user_id       AS owner_id,
+#        o.firstname     AS owner_firstname,
+#        o.lastname      AS owner_lastname,
+#
+#        -- Vaccination information
+#        v.vaccination_id,
+#        v.vaccination_date,
+#        v.batch_number,
+#        v.veterinarian  AS vaccination_veterinarian,
+#        vac.vaccine_name,
+#
+#        -- Veterinary visit information
+#        vv.visit_id,
+#        vv.visit_date,
+#        vv.diagnosis,
+#        vv.reason_for_visit,
+#        vv.treatment,
+#        vv.veterinarian AS visit_veterinarian,
+#
+#        -- Medication treatment information
+#        mt.treatment_id,
+#        mt.medication_name,
+#        mt.dosage,
+#        mt.frequency,
+#        mt.start_date,
+#        mt.end_date,
+#        mt.treatment_reason
+# FROM dog d
+#          JOIN owner ow ON d.user_id = ow.user_id
+#          JOIN user o ON ow.user_id = o.user_id
+#          LEFT JOIN vaccination v ON d.id = v.dog_id
+#          LEFT JOIN vaccine vac ON v.vaccine_id = vac.vaccine_id
+#          LEFT JOIN veterinary_visit vv ON d.id = vv.dog_id
+#          LEFT JOIN medication_treatment mt ON d.id = mt.dog_id;
+#
+# -- Create view for dogs with their course registrations
+# CREATE VIEW DogsRegistrationsV AS
+# SELECT d.id                 AS dog_id,
+#        d.name               AS dog_name,
+#        d.birth_date         AS birth_date,
+#        d.gender             AS gender,
+#        d.chip_number        AS chip_number,
+#        d.user_id            AS owner_id,
+#        o.firstname          AS owner_firstname,
+#        o.lastname           AS owner_lastname,
+#
+#        -- Registration information
+#        r.registration_id,
+#        r.registration_date,
+#        r.status,
+#
+#        -- Course information
+#        c.course_id,
+#        c.title              AS course_title,
+#        c.description        AS course_description,
+#        c.start_datetime     AS course_start,
+#        c.end_datetime       AS course_end,
+#        c.max_capacity       AS course_max_capacity,
+#
+#        -- Course type information
+#        ct.course_type_id,
+#        ct.name              AS course_type_name,
+#        ct.description       AS course_type_description,
+#
+#        -- Coach information
+#        coach.user_id        AS coach_id,
+#        coach_user.firstname AS coach_firstname,
+#        coach_user.lastname  AS coach_lastname
+# FROM dog d
+#          JOIN owner ow ON d.user_id = ow.user_id
+#          JOIN user o ON ow.user_id = o.user_id
+#          LEFT JOIN registration r ON d.id = r.dog_id
+#          LEFT JOIN course c ON r.course_id = c.course_id
+#          LEFT JOIN course_type ct ON c.course_type_id = ct.course_type_id
+#          LEFT JOIN coach ON c.user_id = coach.user_id
+#          LEFT JOIN user coach_user ON coach.user_id = coach_user.user_id;

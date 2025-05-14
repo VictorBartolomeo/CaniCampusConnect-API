@@ -1,4 +1,4 @@
-package org.example.canicampusconnectapi.security.annotation;
+package org.example.canicampusconnectapi.security.annotation.role;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAnyRole('ROLE_CLUB_OWNER')")
-public @interface IsClubOwner {
+@PreAuthorize("hasAnyRole('ROLE_CLUB_OWNER', 'ROLE_COACH')")
+public @interface IsCoach {
 
 }
