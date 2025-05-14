@@ -28,7 +28,6 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api")
 public class DogController {
 
     private final DogService dogService;
