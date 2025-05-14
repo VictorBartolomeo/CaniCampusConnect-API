@@ -1,11 +1,13 @@
 package org.example.canicampusconnectapi.model.users;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
+import org.example.canicampusconnectapi.view.admin.AdminView;
+import org.example.canicampusconnectapi.view.coach.CoachView;
+import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -31,8 +33,7 @@ public class Owner extends User {
     protected String address;
 
     @OneToMany(mappedBy ="owner")
-    @JsonManagedReference("owner-dogs")
+    @JsonView(OwnerView.class)
     protected List<Dog> dogs;
 
 }
-
