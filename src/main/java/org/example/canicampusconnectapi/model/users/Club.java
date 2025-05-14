@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
 import org.example.canicampusconnectapi.view.admin.AdminView;
-import org.example.canicampusconnectapi.view.coach.CoachView;
-import org.example.canicampusconnectapi.view.owner.OwnerView;
 
 import java.util.List;
 
