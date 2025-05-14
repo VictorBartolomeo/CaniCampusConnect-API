@@ -1,11 +1,13 @@
 package org.example.canicampusconnectapi.model.healthRecord;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
+import org.example.canicampusconnectapi.view.admin.AdminView;
+import org.example.canicampusconnectapi.view.coach.CoachView;
+import org.example.canicampusconnectapi.view.owner.OwnerView;
 
 import java.util.Date;
 
@@ -30,11 +32,11 @@ public class Vaccination {
 
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
-    @JsonBackReference("dog-vaccinations")
+    @JsonView(OwnerView.class)
     private Dog dog;
 
     @ManyToOne
     @JoinColumn(name = "vaccine_id", nullable = false)
-    @JsonManagedReference("vaccine-vaccinations")
+    @JsonView(OwnerView.class)
     protected Vaccine vaccine;
 }
