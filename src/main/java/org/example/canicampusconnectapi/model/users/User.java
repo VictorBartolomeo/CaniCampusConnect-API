@@ -1,5 +1,6 @@
 package org.example.canicampusconnectapi.model.users;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -25,6 +26,7 @@ public class User {
     @Column(nullable = false, unique = true, length = 150)
     @NotBlank(message = "L'email ne peut pas être vide")
     @Email(message = "L'email n'est pas au format valide")
+    @JsonView(O)
     protected String email;
 
     @Column(nullable = false, length = 100)

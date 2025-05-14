@@ -1,26 +1,42 @@
 package org.example.canicampusconnectapi.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
+import org.example.canicampusconnectapi.dto.DogDashboardDTO;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
+import org.example.canicampusconnectapi.model.healthRecord.DogWeight;
+import org.example.canicampusconnectapi.model.healthRecord.VeterinaryVisit;
 import org.example.canicampusconnectapi.service.dog.DogService;
+import org.example.canicampusconnectapi.service.dogweight.DogWeightService;
+import org.example.canicampusconnectapi.service.veterinary.VeterinaryVisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
+
 @CrossOrigin
 @RestController
+@RequestMapping("/api")
 public class DogController {
 
     private final DogService dogService;
+    private final VeterinaryVisitService veterinaryVisitService;
+    private final DogWeightService dogWeightService;
 
     @Autowired
-    public DogController(DogService dogService) {
+    public DogController(DogService dogService,
+                         VeterinaryVisitService veterinaryVisitService,
+                         DogWeightService dogWeightService) {
         this.dogService = dogService;
+        this.veterinaryVisitService = veterinaryVisitService;
+        this.dogWeightService = dogWeightService;
     }
+
 
     @GetMapping("/dog/{id}")
     public ResponseEntity<Dog> getDog(@PathVariable Long id) {
@@ -91,4 +107,34 @@ public class DogController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/dogs/{dogId}/dashboard")
+    public ResponseEntity<DogDashboardDTO> getDogDashboard(@PathVariable Long dogId) {
+        try {
+            Dog dogInfo = dogService.findById(dogId) // Assurez-vous que findById retourne Dog ou Optional<Dog>
+                    .orElseThrow(() -> new EntityNotFoundException("Dog not found with id: " + dogId));
+
+            // Récupérer les 5 visites les plus récentes, par exemple
+            // Vous devrez peut-être ajouter une méthode à votre service/repository pour cela
+            // Ex: findByDogIdOrderByVisitDateDesc avec une limite
+            List<VeterinaryVisit> recentVisits = veterinaryVisitService.findTopNByDogIdOrderByDateDesc(dogId, 5);
+
+            // Récupérer les 5 poids les plus récents, par exemple
+            // Ex: findByDogIdOrderByDateDesc avec une limite
+            List<DogWeight> recentWeights = dogWeightService.findTopNByDogIdOrderByDateDesc(dogId, 5);
+
+
+            DogDashboardDTO dashboardData = new DogDashboardDTO();
+            dashboardData.setDogInfo(dogInfo);
+            dashboardData.setRecentVeterinaryVisits(recentVisits);
+            dashboardData.setRecentWeights(recentWeights);
+            // Remplissez d'autres données si nécessaire
+
+            return ResponseEntity.ok(dashboardData);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+        // Gérez d'autres exceptions potentielles (ex: erreurs de service)
+    }
+
 }
