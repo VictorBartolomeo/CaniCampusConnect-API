@@ -5,9 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
-import org.example.canicampusconnectapi.view.admin.AdminView;
-import org.example.canicampusconnectapi.view.coach.CoachView;
-import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
 import java.util.Date;
@@ -40,5 +37,6 @@ public class Vaccination {
 
     @ManyToOne
     @JoinColumn(name = "vaccine_id", nullable = false)
+    @JsonView(OwnerViewDog.class)
     protected Vaccine vaccine;
 }
