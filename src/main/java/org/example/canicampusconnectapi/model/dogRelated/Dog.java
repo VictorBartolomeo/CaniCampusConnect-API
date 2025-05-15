@@ -1,7 +1,5 @@
 package org.example.canicampusconnectapi.model.dogRelated;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,9 +11,6 @@ import org.example.canicampusconnectapi.model.healthRecord.MedicationTreatment;
 import org.example.canicampusconnectapi.model.healthRecord.Vaccination;
 import org.example.canicampusconnectapi.model.healthRecord.VeterinaryVisit;
 import org.example.canicampusconnectapi.model.users.Owner;
-import org.example.canicampusconnectapi.view.admin.AdminView;
-import org.example.canicampusconnectapi.view.coach.CoachView;
-import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
 import java.time.LocalDate;
@@ -29,7 +24,7 @@ public class Dog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(AdminView.class)
+    @JsonView(OwnerViewDog.class)
     protected Long id;
 
     @Column(nullable = false, length = 255)
