@@ -22,7 +22,6 @@ public class OwnerController {
     }
 
     @GetMapping("/owner/{id}")
-
     public ResponseEntity<Owner> getOwner(@PathVariable Long id) {
 
         Optional<Owner> optionalOwner = ownerDao.findById(id);
