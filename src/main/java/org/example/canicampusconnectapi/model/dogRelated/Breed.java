@@ -1,6 +1,5 @@
 package org.example.canicampusconnectapi.model.dogRelated;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,7 +18,7 @@ public class Breed {
     protected Short id;
 
     @Column(length = 100, unique = true, nullable = false)
-    @JsonView(OwnerViewDog.class)
+    @JsonView({OwnerViewDog.class})
     protected String name;
 
     @ManyToMany(mappedBy = "breeds", fetch = FetchType.LAZY)
