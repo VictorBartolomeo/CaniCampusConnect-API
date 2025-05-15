@@ -30,8 +30,6 @@ public class AppUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
-        System.out.println("Tentative de chargement de l'utilisateur avec email : {$email}"); // Log l'email reçu
         Optional<Owner> optionalOwner = ownerDao.findByEmail(email);
 
         if (optionalOwner.isEmpty()) {

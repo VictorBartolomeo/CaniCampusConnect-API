@@ -24,7 +24,6 @@ public class AppUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
             if (user instanceof Owner) {
-
                 return List.of(new SimpleGrantedAuthority("ROLE_OWNER"));
             }
             else if (user instanceof ClubOwner) {
@@ -48,7 +47,7 @@ public class AppUserDetails implements UserDetails {
         return user.getEmail();
     }
     public Long getUserId() {
-        return user.getId(); // Assurez-vous que votre classe User a une méthode getId()
+        return user.getId();
     }
 
 }
