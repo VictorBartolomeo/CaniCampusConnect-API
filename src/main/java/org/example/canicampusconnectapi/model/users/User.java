@@ -9,9 +9,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.canicampusconnectapi.view.admin.AdminView;
-import org.example.canicampusconnectapi.view.coach.CoachView;
-import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
 @Getter
@@ -31,7 +28,7 @@ public class User {
     @Column(nullable = false, unique = true, length = 150)
     @NotBlank(message = "L'email ne peut pas être vide")
     @Email(message = "L'email n'est pas au format valide")
-    @JsonView(OwnerViewDog.class)
+    @JsonView({OwnerViewDog.class})
     protected String email;
 
     @Column(nullable = false, length = 100)
