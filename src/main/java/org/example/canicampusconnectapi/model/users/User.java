@@ -26,7 +26,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    @JsonView(OwnerViewDog.class)
     protected Long id;
 
     @Column(nullable = false, unique = true, length = 150)

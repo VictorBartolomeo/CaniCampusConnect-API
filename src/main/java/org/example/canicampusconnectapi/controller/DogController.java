@@ -32,16 +32,11 @@ import java.util.Optional;
 public class DogController {
 
     private final DogService dogService;
-    private final VeterinaryVisitService veterinaryVisitService;
-    private final DogWeightService dogWeightService;
+
 
     @Autowired
-    public DogController(DogService dogService,
-                         VeterinaryVisitService veterinaryVisitService,
-                         DogWeightService dogWeightService) {
+    public DogController(DogService dogService) {
         this.dogService = dogService;
-        this.veterinaryVisitService = veterinaryVisitService;
-        this.dogWeightService = dogWeightService;
     }
 
 
@@ -63,25 +58,8 @@ public class DogController {
         return dogService.getAllDogs();
     }
 
-    @IsCoach
-    @GetMapping("/dogs/name/{name}")
-    @JsonView(CoachView.class)
-    public List<Dog> getDogsByName(@PathVariable String name) {
-        return dogService.getDogsByName(name);
-    }
 
-    @IsCoach
-    @GetMapping("/dog/chip/{chipNumber}")
-    @JsonView(CoachView.class)
-    public ResponseEntity<Dog> getDogByChipNumber(@PathVariable String chipNumber) {
-        Optional<Dog> optionalDog = dogService.getDogByChipNumber(chipNumber);
-        if (optionalDog.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(optionalDog.get(), HttpStatus.OK);
-    }
-
-//    @IsOwner
+    @IsOwner
     //TODO Demander à Franck pourquoi le role est bloquant alors que je l'ai bien dans le jwt
     @GetMapping("/owner/{ownerId}/dogs")
     // TODO Demander pourquoi j'ai un JSON infini alors que j'ai des JsonView sur les éléments
@@ -94,6 +72,19 @@ public class DogController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @IsOwner
+    @GetMapping("/owner/{ownerId}/dog/{dogId}")
+    @JsonView(OwnerViewDog.class)
+    public ResponseEntity<Dog> getDogByOwnerAndDogId(@PathVariable Long ownerId, @PathVariable Long dogId) {
+        try {
+            Dog dog = dogService.getDogByOwnerIdAndDogId(ownerId, dogId);
+            return new ResponseEntity<>(dog, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @IsOwner
     @PostMapping("/dog")
@@ -131,34 +122,5 @@ public class DogController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-//    @GetMapping("/dogs/{dogId}/dashboard")
-//    public ResponseEntity<DogDashboardDTO> getDogDashboard(@PathVariable Long dogId) {
-//        try {
-//            Dog dogInfo = dogService.findById(dogId) // Assurez-vous que findById retourne Dog ou Optional<Dog>
-//                    .orElseThrow(() -> new EntityNotFoundException("Dog not found with id: " + dogId));
-//
-//            // Récupérer les 5 visites les plus récentes, par exemple
-//            // Vous devrez peut-être ajouter une méthode à votre service/repository pour cela
-//            // Ex: findByDogIdOrderByVisitDateDesc avec une limite
-//            List<VeterinaryVisit> recentVisits = veterinaryVisitService.findTopNByDogIdOrderByDateDesc(dogId, 5);
-//
-//            // Récupérer les 5 poids les plus récents, par exemple
-//            // Ex: findByDogIdOrderByDateDesc avec une limite
-//            List<DogWeight> recentWeights = dogWeightService.findTopNByDogIdOrderByDateDesc(dogId, 5);
-//
-//
-//            DogDashboardDTO dashboardData = new DogDashboardDTO();
-//            dashboardData.setDogInfo(dogInfo);
-//            dashboardData.setRecentVeterinaryVisits(recentVisits);
-//            dashboardData.setRecentWeights(recentWeights);
-//            // Remplissez d'autres données si nécessaire
-//
-//            return ResponseEntity.ok(dashboardData);
-//        } catch (EntityNotFoundException e) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-//        }
-//        // Gérez d'autres exceptions potentielles (ex: erreurs de service)
-//    }
 
 }

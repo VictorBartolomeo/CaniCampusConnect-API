@@ -26,16 +26,17 @@ public class Owner extends User {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
+    @JsonView(OwnerViewDog.class)
     protected LocalDate registrationDate;
 
     @ColumnDefault("TRUE")
     @Column(nullable = false)
     protected boolean isActive;
 
+    @JsonView(OwnerViewDog.class)
     protected String address;
 
     @OneToMany(mappedBy ="owner")
-    @JsonView(OwnerViewDog.class)
     //TODO Ici récursivité, comment l'éviter ?
     protected List<Dog> dogs;
 

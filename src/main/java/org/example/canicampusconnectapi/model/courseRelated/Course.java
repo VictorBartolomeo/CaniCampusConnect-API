@@ -55,17 +55,14 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonView(OwnerViewCourse.class)
     protected Coach coach;
 
     @ManyToOne
     @JoinColumn(name = "club_id", nullable = false)
-    @JsonView(OwnerViewCourse.class)
     protected Club club;
 
     @ManyToOne
     @JoinColumn(name = "course_type_id", nullable = false)
-    @JsonView(OwnerViewCourse.class)
     protected CourseType courseType;
 
     @OneToMany(mappedBy = "course")

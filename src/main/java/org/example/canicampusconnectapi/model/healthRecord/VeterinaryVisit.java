@@ -8,6 +8,7 @@ import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.view.admin.AdminView;
 import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
+import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
 import java.util.Date;
 
@@ -22,23 +23,27 @@ public class VeterinaryVisit {
     protected Long id;
 
     @Column(name = "visit_date", nullable = false)
+    @JsonView(OwnerViewDog.class)
     protected Date visitDate;
 
     @Column(columnDefinition = "TEXT")
+    @JsonView(OwnerViewDog.class)
     protected String diagnosis;
 
     @Column(length = 255)
+    @JsonView(OwnerViewDog.class)
     protected String reasonForVisit;
 
     @Column(columnDefinition = "TEXT")
+    @JsonView(OwnerViewDog.class)
     protected String treatment;
 
     @Column(length = 255)
+    @JsonView(OwnerViewDog.class)
     protected String veterinarian;
 
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
-    @JsonView(OwnerView.class)
     private Dog dog;
 
 }

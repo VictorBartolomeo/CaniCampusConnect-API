@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.example.canicampusconnectapi.view.admin.AdminView;
 import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
+import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
 import java.util.Date;
 import java.util.List;
@@ -22,13 +23,14 @@ public class Vaccine {
     protected Integer id;
 
     @Column(name = "vaccine_name", nullable = false, length = 255)
+    @JsonView(OwnerViewDog.class)
     protected String name;
 
     @Column(nullable = false)
+    @JsonView(OwnerViewDog.class)
     protected short renewDelay;
 
     @OneToMany(mappedBy = "vaccine")
-    @JsonView(AdminView.class)
     private List<Vaccination> vaccinations;
 
 }

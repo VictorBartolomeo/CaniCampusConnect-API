@@ -30,11 +30,9 @@ public class Club {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonView(AdminView.class)
     protected ClubOwner clubOwner;
 
     @OneToMany
     @JoinColumn(name = "club_id")
-    @JsonView(AdminView.class)
     protected List<Course> courses;
 }

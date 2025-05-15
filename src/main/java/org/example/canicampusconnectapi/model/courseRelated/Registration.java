@@ -11,6 +11,7 @@ import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
 import org.example.canicampusconnectapi.view.admin.AdminView;
 import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
+import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -32,22 +33,22 @@ public class Registration {
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     @NotNull(message = "Le cours ne peut pas être vide")
-    @JsonView(OwnerView.class)
     protected Course course;
 
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
     @NotNull(message = "Le chien ne peut pas être vide")
-    @JsonView(OwnerView.class)
     protected Dog dog;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
+    @JsonView(OwnerViewDog.class)
     protected LocalDateTime registrationDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 255)
     @NotNull(message = "Le statut ne peut pas être vide")
+    @JsonView(OwnerViewDog.class)
     protected RegistrationStatus status;
 
 }
