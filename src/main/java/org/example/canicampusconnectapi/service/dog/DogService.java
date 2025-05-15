@@ -29,7 +29,7 @@ public interface DogService {
      *
      * @param ownerId The ID of the owner.
      * @return A list of dogs belonging to the owner.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFoundException if the owner is not found.
+     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the owner is not found.
      */
     List<Dog> getDogsByOwner(Long ownerId);
 
@@ -38,7 +38,7 @@ public interface DogService {
      *
      * @param dog The dog object to create. Must have a valid owner ID set.
      * @return The created dog with its generated ID.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFoundException if the specified owner does not exist.
+     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the specified owner does not exist.
      * @throws IllegalArgumentException if the owner information is missing.
      */
     Dog createDog(Dog dog);
@@ -47,7 +47,7 @@ public interface DogService {
      * Deletes a dog by its ID.
      *
      * @param id The ID of the dog to delete.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFoundException if the dog with the given ID does not exist.
+     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the dog with the given ID does not exist.
      */
     void deleteDog(Long id);
 
@@ -57,7 +57,7 @@ public interface DogService {
      * @param id The ID of the dog to update.
      * @param dog The dog data to update. Owner can be updated if provided.
      * @return The updated dog.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFoundException if the dog or the specified new owner does not exist.
+     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the dog or the specified new owner does not exist.
      */
     Dog updateDog(Long id, Dog dog);
 
