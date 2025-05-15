@@ -1,6 +1,7 @@
 package org.example.canicampusconnectapi.service.dog;
 
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
+import org.example.canicampusconnectapi.model.users.Owner;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,22 +23,6 @@ public interface DogService {
      * @return A list of all dogs.
      */
     List<Dog> getAllDogs();
-
-    /**
-     * Finds dogs by their name.
-     *
-     * @param name The name to search for.
-     * @return A list of dogs matching the name.
-     */
-    List<Dog> getDogsByName(String name);
-
-    /**
-     * Finds a dog by its chip number.
-     *
-     * @param chipNumber The chip number of the dog.
-     * @return An Optional containing the dog if found, otherwise empty.
-     */
-    Optional<Dog> getDogByChipNumber(String chipNumber);
 
     /**
      * Retrieves all dogs belonging to a specific owner.
@@ -84,8 +69,6 @@ public interface DogService {
      */
     long calculateAgeInMonths(LocalDate birthDate);
 
-    // You might add an eligibility check method here later,
-    // possibly taking a Dog ID and a Course ID/AgeRange ID as parameters.
-    // boolean isDogEligibleForCourse(Long dogId, Long courseTypeId);
+    Dog getDogByOwnerIdAndDogId (Long ownerId, Long dogId);
 
 }

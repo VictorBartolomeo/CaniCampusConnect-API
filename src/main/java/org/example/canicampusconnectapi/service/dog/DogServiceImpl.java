@@ -37,20 +37,19 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public List<Dog> getDogsByName(String name) {
-        return dogDao.findByName(name);
-    }
-
-    @Override
-    public Optional<Dog> getDogByChipNumber(String chipNumber) {
-        return dogDao.findByChipNumber(chipNumber);
-    }
-
-    @Override
     public List<Dog> getDogsByOwner(Long ownerId) {
         Owner owner = ownerDao.findById(ownerId)
                 .orElseThrow(() -> new ResourceNotFound("Owner not found with id: " + ownerId));
         return dogDao.findByOwner(owner);
+    }
+
+    @Override
+    public Dog getDogByOwnerIdAndDogId(Long ownerId, Long dogId) {
+        Owner owner = ownerDao.findById(ownerId)
+                .orElseThrow(() -> new ResourceNotFound("Owner not found with id: " + ownerId));
+        Dog dog = dogDao.findById(dogId)
+                .orElseThrow(() -> new ResourceNotFound("Owner not found with id: " + ownerId));
+        return dogDao.findUniqueByOwner(dog);
     }
 
     @Override

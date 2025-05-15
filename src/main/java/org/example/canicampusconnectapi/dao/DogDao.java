@@ -13,5 +13,6 @@ public interface DogDao extends JpaRepository<Dog, Long> {
     List<Dog> findByName(String name);
     Optional<Dog> findByChipNumber(String chipNumber);
     List<Dog> findByOwner(Owner owner);
+    Dog findUniqueByOwner(Dog dog);
     List<Dog> findByOwnerId(Long ownerId);
 }
