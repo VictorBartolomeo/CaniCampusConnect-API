@@ -1,27 +1,17 @@
 package org.example.canicampusconnectapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import jakarta.persistence.EntityNotFoundException;
 import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
-import org.example.canicampusconnectapi.dto.DogDashboardDTO;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
-import org.example.canicampusconnectapi.model.healthRecord.DogWeight;
-import org.example.canicampusconnectapi.model.healthRecord.VeterinaryVisit;
 import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
-import org.example.canicampusconnectapi.security.annotation.role.IsCoach;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
 import org.example.canicampusconnectapi.service.dog.DogService;
-import org.example.canicampusconnectapi.service.dogweight.DogWeightService;
-import org.example.canicampusconnectapi.service.veterinary.VeterinaryVisitService;
 import org.example.canicampusconnectapi.view.admin.AdminViewDog;
-import org.example.canicampusconnectapi.view.coach.CoachView;
-import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,9 +50,7 @@ public class DogController {
 
 
     @IsOwner
-    //TODO Demander à Franck pourquoi le role est bloquant alors que je l'ai bien dans le jwt
     @GetMapping("/owner/{ownerId}/dogs")
-    // TODO Demander pourquoi j'ai un JSON infini alors que j'ai des JsonView sur les éléments
     @JsonView(OwnerViewDog.class)
     public ResponseEntity<List<Dog>> getDogsByOwner(@PathVariable Long ownerId) {
         try {
@@ -84,7 +72,6 @@ public class DogController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 
     @IsOwner
     @PostMapping("/dog")
