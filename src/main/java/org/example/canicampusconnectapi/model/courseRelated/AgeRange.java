@@ -22,10 +22,12 @@ public class AgeRange {
 
     // En mois
     @Column(nullable = false)
+    @JsonView(OwnerView.class)
     protected int minAge;
 
     //En mois
     @Column(nullable = false)
+    @JsonView(OwnerView.class)
     protected int maxAge;
 
     @OneToMany(mappedBy = "ageRange")

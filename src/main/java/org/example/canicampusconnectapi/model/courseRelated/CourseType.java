@@ -37,6 +37,7 @@ public class CourseType {
 
     @ManyToOne
     @JoinColumn(name = "age_range_id", nullable = false)
+    @JsonView(OwnerViewDog.class)
     protected AgeRange ageRange;
 
 

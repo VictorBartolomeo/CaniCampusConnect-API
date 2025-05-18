@@ -11,6 +11,7 @@ import org.example.canicampusconnectapi.model.healthRecord.MedicationTreatment;
 import org.example.canicampusconnectapi.model.healthRecord.Vaccination;
 import org.example.canicampusconnectapi.model.healthRecord.VeterinaryVisit;
 import org.example.canicampusconnectapi.model.users.Owner;
+import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
 import java.time.LocalDate;
@@ -28,25 +29,25 @@ public class Dog {
     protected Long id;
 
     @Column(nullable = false, length = 255)
-    @JsonView(OwnerViewDog.class)
+    @JsonView({OwnerViewDog.class, OwnerView.class})
     protected String name;
 
     @Column(nullable = false)
-    @JsonView(OwnerViewDog.class)
+    @JsonView({OwnerViewDog.class,OwnerView.class})
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @JsonView(OwnerViewDog.class)
+    @JsonView({OwnerViewDog.class,OwnerView.class})
     protected Gender gender;
 
     @Column(unique = true, length = 50)
-    @JsonView(OwnerViewDog.class)
+    @JsonView({OwnerViewDog.class,OwnerView.class})
     protected String chipNumber;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonView(OwnerViewDog.class)
+    @JsonView({OwnerViewDog.class,OwnerView.class})
     private Owner owner;
 
     @ManyToMany(fetch = FetchType.LAZY)

@@ -12,6 +12,7 @@ import org.example.canicampusconnectapi.model.users.Club;
 import org.example.canicampusconnectapi.model.users.Coach;
 import org.example.canicampusconnectapi.view.admin.AdminViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
+import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,29 +33,30 @@ public class Course {
 
     @Column(nullable = false, length = 255)
     @NotBlank(message = "Le titre ne peut pas être vide")
-    @JsonView(OwnerViewCourse.class)
+    @JsonView(OwnerViewDog.class)
     protected String title;
 
     @Column(columnDefinition = "TEXT")
-    @JsonView(OwnerViewCourse.class)
+    @JsonView(OwnerViewDog.class)
     protected String description;
 
     @Column(nullable = false)
     @NotNull(message = "La date et l'heure de début ne peuvent pas être vides")
-    @JsonView(OwnerViewCourse.class)
+    @JsonView(OwnerViewDog.class)
     protected LocalDateTime startDatetime;
 
     @Column(nullable = false)
     @NotNull(message = "La date et l'heure de fin ne peuvent pas être vides")
-    @JsonView(OwnerViewCourse.class)
+    @JsonView(OwnerViewDog.class)
     protected LocalDateTime endDatetime;
 
     @Column(nullable = false)
-    @JsonView(OwnerViewCourse.class)
+    @JsonView(OwnerViewDog.class)
     protected int maxCapacity;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonView(OwnerViewDog.class)
     protected Coach coach;
 
     @ManyToOne
@@ -63,6 +65,7 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "course_type_id", nullable = false)
+    @JsonView(OwnerViewDog.class)
     protected CourseType courseType;
 
     @OneToMany(mappedBy = "course")
