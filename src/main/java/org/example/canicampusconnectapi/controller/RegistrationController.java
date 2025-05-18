@@ -8,6 +8,7 @@ import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsCoach;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
 import org.example.canicampusconnectapi.service.registration.RegistrationService; // Importer le service
+import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.example.canicampusconnectapi.view.registration.AdminViewRegistration;
 import org.example.canicampusconnectapi.view.registration.CoachViewRegistration;
 import org.example.canicampusconnectapi.view.registration.OwnerViewRegistration;
@@ -172,7 +173,7 @@ public class RegistrationController {
     // Create a new registration
     @IsOwner
     @PostMapping("/registration")
-    @JsonView(OwnerViewRegistration.class)
+    @JsonView(OwnerViewDog.class)
     public ResponseEntity<Registration> createRegistration(@RequestBody Registration registration) {
         try {
             Registration createdRegistration = registrationService.create(registration);

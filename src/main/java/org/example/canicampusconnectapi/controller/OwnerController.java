@@ -1,10 +1,16 @@
 package org.example.canicampusconnectapi.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.example.canicampusconnectapi.dao.OwnerDao;
+import org.example.canicampusconnectapi.dao.UserDao;
 import org.example.canicampusconnectapi.model.users.Owner;
+import org.example.canicampusconnectapi.model.users.User;
+import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
+import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,13 +20,17 @@ import java.util.Optional;
 @RestController
 public class OwnerController {
 
+    private final UserDao userDao;
     protected OwnerDao ownerDao;
 
     @Autowired
-    public OwnerController(OwnerDao ownerDao) {
+    public OwnerController(OwnerDao ownerDao, UserDao userDao) {
         this.ownerDao = ownerDao;
+        this.userDao = userDao;
     }
 
+    @IsOwner
+    @JsonView(OwnerView.class)
     @GetMapping("/owner/{id}")
     public ResponseEntity<Owner> getOwner(@PathVariable Long id) {
 
@@ -39,8 +49,10 @@ public class OwnerController {
         return ownerDao.findAll();
     }
 
+    @IsOwner
+    @JsonView(OwnerView.class)
     @PostMapping("/owner")
-    public ResponseEntity<Owner> createOwner(@RequestBody Owner owner) {
+    public ResponseEntity<Owner> createOwner(@RequestBody @Validated(User.OnCreate.class) Owner owner) {
         ownerDao.save(owner);
         return new ResponseEntity<>(owner, HttpStatus.CREATED);
     }
@@ -57,18 +69,15 @@ public class OwnerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //Put change tout l'objet
     @PutMapping("/owner/{id}")
-    // Patch change une partie de l'objet
-//    @PatchMapping("/owner/{id}")
-    public ResponseEntity<Owner> updateOwner(@PathVariable Long id, @RequestBody Owner owner) {
-        Optional<Owner> optionalOwner = ownerDao.findById(id);
-        if (optionalOwner.isEmpty()) {
+    public ResponseEntity<User> updateOwner(@PathVariable Long id, @RequestBody @Validated(Owner.OnUpdateFromOwner.class) User owner) {
+        Optional<User> user = userDao.findById(id);
+        if (user.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         owner.setId(id);
-        ownerDao.save(owner);
+        userDao.save(owner);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
