@@ -73,14 +73,14 @@ public class OwnerController {
     // Il semble que Owner passe puisqu'il me dit bien que password en erreur donc comprend bien l'héritage, mais le validated ne passe pas,
     // j'ai déjà essayé de mettre l'interface dans Owner et dans user mais rien n'y fait il me demande le mot de passe à chaque fois
     @PutMapping("/owner/{id}")
-    public ResponseEntity<User> updateOwner(@PathVariable Long id, @RequestBody @Validated(Owner.OnUpdateFromOwner.class) User owner) {
-        Optional<User> user = userDao.findById(id);
-        if (user.isEmpty()) {
+    public ResponseEntity<Owner> updateOwner(@PathVariable Long id, @RequestBody @Validated(Owner.OnUpdateFromOwner.class) Owner owner) {
+        Optional<Owner> ownerOptional = ownerDao.findById(id);
+        if (ownerOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         owner.setId(id);
-        userDao.save(owner);
+        ownerDao.save(owner);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
