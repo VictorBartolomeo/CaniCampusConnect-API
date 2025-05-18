@@ -1,8 +1,11 @@
 package org.example.canicampusconnectapi.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
+import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
 import org.example.canicampusconnectapi.service.course.CourseService;
+import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -33,6 +36,8 @@ public class CourseController {
         return new ResponseEntity<>(course.get(), HttpStatus.OK);
     }
 
+    @IsOwner
+@JsonView(OwnerViewDog.class)
     @GetMapping("/courses")
     public List<Course> getAllCourses() {
         return courseService.getAllCourses();
