@@ -56,6 +56,7 @@ public class Dog {
             joinColumns = @JoinColumn(name = "dog_id"),
             inverseJoinColumns = @JoinColumn(name = "breed_id")
     )
+    @JsonView(OwnerViewDog.class)
     private Set<Breed> breeds;
 
 
