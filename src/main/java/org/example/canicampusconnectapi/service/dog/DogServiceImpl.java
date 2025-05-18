@@ -45,8 +45,6 @@ public class DogServiceImpl implements DogService {
 
     @Override
     public Dog getDogByOwnerIdAndDogId(Long ownerId, Long dogId) {
-        Owner owner = ownerDao.findById(ownerId)
-                .orElseThrow(() -> new ResourceNotFound("Owner not found with id: " + ownerId));
         Dog dog = dogDao.findById(dogId)
                 .orElseThrow(() -> new ResourceNotFound("Owner not found with id: " + ownerId));
         return dogDao.findUniqueByOwner(dog);
