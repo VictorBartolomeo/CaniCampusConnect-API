@@ -33,6 +33,7 @@ public class Registration {
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     @NotNull(message = "Le cours ne peut pas être vide")
+    @JsonView(OwnerViewDog.class)
     protected Course course;
 
     @ManyToOne
