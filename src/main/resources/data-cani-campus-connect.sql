@@ -11,10 +11,10 @@ VALUES (1);
 INSERT INTO coach (user_id, acaced_number, is_active, registration_date)
 VALUES (2, 'OEACHK90', true, '2025-04-16');
 
-INSERT INTO owner (user_id, is_active, address, registration_date)
-VALUES (3, false, '789 Rue des Pins', '2023-03-10'),
-       (4, true, '101 Avenue des Ormes', '2023-04-20'),
-       (5, true, '202 Boulevard des Érables', '2023-05-05');
+INSERT INTO owner (user_id, is_active, registration_date)
+VALUES (3, false, '2023-03-10'),
+       (4, true, '2023-04-20'),
+       (5, true, '2023-05-05');
 
 INSERT INTO club (name, address, user_id)
 VALUES ('Les moustaches Messines', '123 Rue des Chiens, Paris', 1);
@@ -40,6 +40,28 @@ VALUES ('Chiots - Éveil et Socialisation', 'On va apprendre à votre chiot les 
        ('Obéissance du quotidien',
         'Pour les chiens qui connaissent déjà quelques bases, on va travailler sur les situations de tous les jours', '2025-05-22 14:00:00',
         '2025-05-22 16:00:00', 10, 2, 1, 2),
+
+       -- 10 nouveaux cours pour chiots dans les 3 prochains mois (à partir du 16/05/2025)
+       ('Chiots - Premiers pas', 'Cours d''introduction pour les tout jeunes chiots, axé sur la socialisation de base et la découverte de l''environnement',
+        '2025-05-25 09:00:00', '2025-05-25 10:30:00', 8, 2, 1, 1),
+       ('Chiots - Jeux et apprentissage', 'Utilisation de jeux pour développer les capacités cognitives et la socialisation des chiots',
+        '2025-06-05 14:00:00', '2025-06-05 15:30:00', 8, 2, 1, 1),
+       ('Chiots - Communication canine', 'Apprendre à comprendre le langage corporel de votre chiot et à communiquer efficacement avec lui',
+        '2025-06-15 10:00:00', '2025-06-15 11:30:00', 8, 2, 1, 1),
+       ('Chiots - Obéissance de base', 'Introduction aux commandes de base comme assis, couché, reste et rappel',
+        '2025-06-25 09:00:00', '2025-06-25 10:30:00', 8, 2, 1, 1),
+       ('Chiots - Manipulation et soins', 'Habituer votre chiot à être manipulé pour les soins quotidiens et les visites vétérinaires',
+        '2025-07-05 14:00:00', '2025-07-05 15:30:00', 8, 2, 1, 1),
+       ('Chiots - Socialisation avancée', 'Exposition à différents environnements, personnes et autres animaux pour une socialisation complète',
+        '2025-07-15 10:00:00', '2025-07-15 11:30:00', 8, 2, 1, 1),
+       ('Chiots - Prévention des problèmes', 'Techniques pour prévenir les problèmes comportementaux courants chez les chiots',
+        '2025-07-25 09:00:00', '2025-07-25 10:30:00', 8, 2, 1, 1),
+       ('Chiots - Enrichissement mental', 'Activités et jeux pour stimuler mentalement votre chiot et prévenir l''ennui',
+        '2025-08-05 14:00:00', '2025-08-05 15:30:00', 8, 2, 1, 1),
+       ('Chiots - Autocontrôle', 'Apprendre à votre chiot à gérer ses émotions et à rester calme dans différentes situations',
+        '2025-08-10 10:00:00', '2025-08-10 11:30:00', 8, 2, 1, 1),
+       ('Chiots - Préparation à l''adolescence', 'Préparer les propriétaires aux changements comportementaux liés à l''adolescence canine',
+        '2025-08-15 09:00:00', '2025-08-15 10:30:00', 8, 2, 1, 1),
        ('Découverte de l''agilité', 'Venez vous amuser avec votre chien sur différents obstacles, parfait pour renforcer votre complicité',
         '2025-06-05 09:00:00', '2025-06-05 11:00:00', 6, 2, 1, 4),
        ('Trucs et astuces avancés', 'Une journée pour apprendre des techniques qui impressionneront vos amis et faciliteront votre vie',
@@ -54,13 +76,13 @@ VALUES ('Chiots - Éveil et Socialisation', 'On va apprendre à votre chiot les 
         'Pour les chiens qui ont déjà de bonnes bases, on va aller plus loin ensemble', '2025-09-05 14:00:00',
         '2025-09-05 17:00:00', 6, 2, 1, 3),
        ('Parcours d''agilité', 'On va travailler sur des parcours plus complexes pour les chiens qui ont déjà découvert l''agilité',
-        '2025-09-20 09:00:00', '2025-09-20 11:30:00', 5, 2, 1, 4),
+        '2025-06-20 09:00:00', '2025-06-20 11:30:00', 5, 2, 1, 4),
        ('Préparation concours', 'Vous voulez participer à des compétitions? On vous donne toutes les clés pour réussir',
-        '2025-10-15 13:00:00', '2025-10-15 16:00:00', 4, 2, 1, 3),
+        '2025-07-15 13:00:00', '2025-07-15 16:00:00', 4, 2, 1, 3),
        ('Jeux d''intelligence canine', 'Des activités ludiques pour stimuler le cerveau de votre chien et renforcer votre lien',
-        '2025-11-08 10:00:00', '2025-11-08 12:00:00', 8, 2, 1, 2),
+        '2025-07-28 10:00:00', '2025-07-28 12:00:00', 8, 2, 1, 2),
        ('Rappel en toutes situations', 'Fini les angoisses au parc! Apprenez à avoir un rappel fiable même avec des distractions',
-        '2025-12-06 14:00:00', '2025-12-06 16:00:00', 6, 2, 1, 2),
+        '2025-08-10 14:00:00', '2025-08-10 16:00:00', 6, 2, 1, 2),
        ('Balades éducatives', 'On sort en groupe pour mettre en pratique les apprentissages dans un environnement réel',
         '2026-01-18 13:30:00', '2026-01-18 15:30:00', 8, 2, 1, 2),
        ('Initiation au pistage', 'Découvrez comment utiliser le flair incroyable de votre chien pour des activités stimulantes',
@@ -381,36 +403,36 @@ VALUES
     ('2025-07-25 10:30:00', 'CONFIRMED', 1, 7), -- Rex inscrit à Chiots d'été
     ('2025-08-30 14:45:00', 'CONFIRMED', 1, 9), -- Rex inscrit à Parcours d'agilité
     ('2025-09-25 09:15:00', 'PENDING', 1, 10),  -- Rex en attente pour Préparation concours
-    ('2025-10-20 11:30:00', 'CONFIRMED', 1, 11), -- Rex inscrit à Jeux d'intelligence canine
-    ('2025-11-25 15:30:00', 'CONFIRMED', 1, 12), -- Rex inscrit à Rappel en toutes situations
+    ('2025-07-20 11:30:00', 'CONFIRMED', 1, 11), -- Rex inscrit à Jeux d'intelligence canine
+    ('2025-08-05 15:30:00', 'CONFIRMED', 1, 12), -- Rex inscrit à Rappel en toutes situations
     ('2026-01-05 11:00:00', 'CONFIRMED', 1, 13), -- Rex inscrit à Balades éducatives
-    ('2026-02-10 09:30:00', 'PENDING', 1, 14),  -- Rex en attente pour Initiation au pistage
-    ('2026-03-25 14:00:00', 'CONFIRMED', 1, 16), -- Rex inscrit à Sports canins ludiques
+    ('2025-08-10 09:30:00', 'PENDING', 1, 14),  -- Rex en attente pour Initiation au pistage
+    ('2025-08-15 14:00:00', 'CONFIRMED', 1, 16), -- Rex inscrit à Sports canins ludiques
 
     -- Inscriptions de Nala (dog_id 2) aux nouveaux cours
     ('2025-08-15 15:00:00', 'CONFIRMED', 2, 8), -- Nala inscrite à Perfectionnement obéissance
-    ('2025-10-25 13:45:00', 'CONFIRMED', 2, 11), -- Nala inscrite à Jeux d'intelligence canine
+    ('2025-07-25 13:45:00', 'CONFIRMED', 2, 11), -- Nala inscrite à Jeux d'intelligence canine
     ('2026-01-05 10:00:00', 'CONFIRMED', 2, 13), -- Nala inscrite à Balades éducatives
 
     -- Inscriptions d'Oscar (dog_id 3) aux nouveaux cours
-    ('2025-09-01 09:30:00', 'CONFIRMED', 3, 9), -- Oscar inscrit à Parcours d'agilité
-    ('2025-11-20 14:15:00', 'PENDING', 3, 12),  -- Oscar en attente pour Rappel en toutes situations
-    ('2026-02-10 11:00:00', 'CONFIRMED', 3, 14), -- Oscar inscrit à Initiation au pistage
+    ('2025-06-15 09:30:00', 'CONFIRMED', 3, 9), -- Oscar inscrit à Parcours d'agilité
+    ('2025-08-05 14:15:00', 'PENDING', 3, 12),  -- Oscar en attente pour Rappel en toutes situations
+    ('2025-08-10 11:00:00', 'CONFIRMED', 3, 14), -- Oscar inscrit à Initiation au pistage
 
     -- Inscriptions de Lola (dog_id 4) aux nouveaux cours
     ('2025-07-30 11:45:00', 'CONFIRMED', 4, 7), -- Lola inscrite à Chiots d'été
-    ('2025-10-30 10:00:00', 'CONFIRMED', 4, 11), -- Lola inscrite à Jeux d'intelligence canine
-    ('2026-03-01 09:30:00', 'CONFIRMED', 4, 15), -- Lola inscrite à Chiots d'hiver
+    ('2025-07-25 10:00:00', 'CONFIRMED', 4, 11), -- Lola inscrite à Jeux d'intelligence canine
+    ('2025-08-15 09:30:00', 'CONFIRMED', 4, 15), -- Lola inscrite à Chiots d'hiver
 
     -- Inscriptions de Filou (dog_id 5) aux nouveaux cours
-    ('2025-08-20 16:30:00', 'CONFIRMED', 5, 8), -- Filou inscrit à Perfectionnement obéissance
-    ('2025-10-01 13:00:00', 'CONFIRMED', 5, 10), -- Filou inscrit à Préparation concours
-    ('2026-03-25 14:30:00', 'CONFIRMED', 5, 16), -- Filou inscrit à Sports canins ludiques
+    ('2025-08-15 16:30:00', 'CONFIRMED', 5, 8), -- Filou inscrit à Perfectionnement obéissance
+    ('2025-07-10 13:00:00', 'CONFIRMED', 5, 10), -- Filou inscrit à Préparation concours
+    ('2025-08-15 14:30:00', 'CONFIRMED', 5, 16), -- Filou inscrit à Sports canins ludiques
 
     -- Inscriptions de Mia (dog_id 6) aux nouveaux cours
-    ('2025-09-10 10:15:00', 'CONFIRMED', 6, 9), -- Mia inscrite à Parcours d'agilité
-    ('2025-11-30 15:30:00', 'CONFIRMED', 6, 12), -- Mia inscrite à Rappel en toutes situations
-    ('2026-01-25 13:00:00', 'CONFIRMED', 6, 13); -- Mia inscrite à Balades éducatives
+    ('2025-06-15 10:15:00', 'CONFIRMED', 6, 9), -- Mia inscrite à Parcours d'agilité
+    ('2025-08-05 15:30:00', 'CONFIRMED', 6, 12), -- Mia inscrite à Rappel en toutes situations
+    ('2025-08-15 13:00:00', 'CONFIRMED', 6, 13); -- Mia inscrite à Balades éducatives
 
 
 INSERT INTO veterinary_visit (visit_date, diagnosis, reason_for_visit, treatment, veterinarian, dog_id)
