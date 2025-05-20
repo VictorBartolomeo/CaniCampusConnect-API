@@ -144,10 +144,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         return registrationDao.findByCourseId(courseId);
     }
 
-    @Override
-    public List<Registration> findByCourseTypeId(Long courseTypeId) {
-        return registrationDao.findByCourseTypeId(courseTypeId);
-    }
 
     @Override
     public List<Registration> findByStatus(RegistrationStatus status) {
