@@ -28,7 +28,7 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
-    @JsonView(AdminViewCourse.class)
+    @JsonView(OwnerViewDog.class)
     protected Long id;
 
     @Column(nullable = false, length = 255)
