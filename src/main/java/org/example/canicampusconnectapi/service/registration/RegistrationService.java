@@ -1,4 +1,3 @@
-
 package org.example.canicampusconnectapi.service.registration;
 
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
@@ -10,6 +9,12 @@ import java.util.Optional;
 
 public interface RegistrationService {
 
+    Registration create(Registration registration);
+
+    Optional<Registration> update(Long id, Registration registration);
+
+    Optional<Registration> updateStatus(Long id, RegistrationStatus status);
+
     Optional<Registration> findById(Long id);
 
     List<Registration> findAll();
@@ -18,7 +23,6 @@ public interface RegistrationService {
 
     List<Registration> findByCourseId(Long courseId);
 
-    List<Registration> findByCourseTypeId(Long courseTypeId);
 
     List<Registration> findByStatus(RegistrationStatus status);
 
@@ -40,10 +44,5 @@ public interface RegistrationService {
 
     long countByCourseId(Long courseId);
 
-    Registration create(Registration registration);
-
-    Optional<Registration> update(Long id, Registration registrationDetails);
-
     boolean deleteById(Long id);
 }
-

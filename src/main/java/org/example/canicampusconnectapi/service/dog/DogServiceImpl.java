@@ -3,27 +3,33 @@ package org.example.canicampusconnectapi.service.dog;
 import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
 import org.example.canicampusconnectapi.dao.DogDao;
 import org.example.canicampusconnectapi.dao.OwnerDao;
+import org.example.canicampusconnectapi.model.dogRelated.Breed;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.users.Owner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.example.canicampusconnectapi.dao.BreedDao;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class DogServiceImpl implements DogService {
 
     private final DogDao dogDao;
     private final OwnerDao ownerDao;
+    private final BreedDao breedDao;
 
     @Autowired // Constructor injection
-    public DogServiceImpl(DogDao dogDao, OwnerDao ownerDao) {
+    public DogServiceImpl(DogDao dogDao, OwnerDao ownerDao, BreedDao breedDao) {
         this.dogDao = dogDao;
         this.ownerDao = ownerDao;
+        this.breedDao = breedDao;
     }
 
     @Override
@@ -80,29 +86,51 @@ public class DogServiceImpl implements DogService {
     @Transactional
     public Dog updateDog(Long id, Dog dogDetails) {
         Dog existingDog = dogDao.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Dog not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFound("Chien non trouvé avec l'ID: " + id));
 
-        // Update basic fields
         existingDog.setName(dogDetails.getName());
         existingDog.setBirthDate(dogDetails.getBirthDate());
         existingDog.setGender(dogDetails.getGender());
         existingDog.setChipNumber(dogDetails.getChipNumber());
-        // Add other fields from Dog entity that should be updatable
 
-        // Handle owner update only if provided in the request
         if (dogDetails.getOwner() != null && dogDetails.getOwner().getId() != null) {
-            // Check if the owner is changing
-            if (!dogDetails.getOwner().getId().equals(existingDog.getOwner().getId())) {
-                Owner newOwner = ownerDao.findById(dogDetails.getOwner().getId())
-                        .orElseThrow(() -> new ResourceNotFound("Owner not found with id: " + dogDetails.getOwner().getId()));
-                existingDog.setOwner(newOwner);
-            }
-            // If the ID is the same, no need to fetch or update the owner relationship
+            Owner owner = ownerDao.findById(dogDetails.getOwner().getId())
+                    .orElseThrow(() -> new ResourceNotFound("Propriétaire non trouvé avec l'ID: " + dogDetails.getOwner().getId()));
+            existingDog.setOwner(owner);
         }
-        // If owner details are null in dogDetails, we keep the existing owner.
 
+        if (dogDetails.getBreeds() != null) {
+            if (dogDetails.getBreeds().isEmpty()) {
+                throw new IllegalArgumentException("Le chien doit avoir au moins une race");
+            }
+
+            if (dogDetails.getBreeds().size() > 3) {
+                throw new IllegalArgumentException("Le chien ne peut pas avoir plus de 3 races");
+            }
+            Set<Breed> newBreeds = new HashSet<>();
+
+            for (Breed breed : dogDetails.getBreeds()) {
+                if (breed.getId() != null) {
+                    Breed existingBreed = breedDao.findById(breed.getId())
+                            .orElseThrow(() -> new ResourceNotFound("Race non trouvée avec l'ID: " + breed.getId()));
+                    newBreeds.add(existingBreed);
+                }
+                // Sinon, si la race a un nom, essayer de la trouver par son nom
+                else if (breed.getName() != null && !breed.getName().isEmpty()) {
+                    Breed existingBreed = breedDao.findByName(breed.getName())
+                            .orElseThrow(() -> new ResourceNotFound("Race non trouvée avec le nom: " + breed.getName()));
+                    newBreeds.add(existingBreed);
+                }
+            }
+
+            // Remplacer l'ancien ensemble de races par le nouveau
+            existingDog.setBreeds(newBreeds);
+        }
+
+        // Sauvegarder et retourner le chien mis à jour
         return dogDao.save(existingDog);
     }
+
 
     @Override
     public long calculateAgeInMonths(LocalDate birthDate) {
@@ -116,4 +144,5 @@ public class DogServiceImpl implements DogService {
         // Calculate the period and return total months
         return Period.between(birthDate, today).toTotalMonths();
     }
+
 }

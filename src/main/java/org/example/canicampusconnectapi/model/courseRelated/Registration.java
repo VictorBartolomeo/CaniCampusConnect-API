@@ -1,16 +1,13 @@
 package org.example.canicampusconnectapi.model.courseRelated;
 
-
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.canicampusconnectapi.controller.RegistrationController.StatusUpdateValidation;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
-import org.example.canicampusconnectapi.view.admin.AdminView;
-import org.example.canicampusconnectapi.view.coach.CoachView;
-import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -24,6 +21,8 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 public class Registration {
+
+    public interface RegistrationStatusValidation{}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,8 +47,8 @@ public class Registration {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 255)
-    @NotNull(message = "Le statut ne peut pas être vide")
+    @NotNull(message = "Le statut ne peut pas être vide",
+            groups = {RegistrationStatusValidation.class})
     @JsonView(OwnerViewDog.class)
     protected RegistrationStatus status;
-
 }

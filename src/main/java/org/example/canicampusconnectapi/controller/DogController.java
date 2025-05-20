@@ -11,6 +11,7 @@ import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -101,7 +102,7 @@ public class DogController {
     @IsOwner
     @PutMapping("/dog/{id}")
     @JsonView(OwnerViewDog.class)
-    public ResponseEntity<Dog> updateDog(@PathVariable Long id, @RequestBody Dog dog) {
+    public ResponseEntity<Dog> updateDog(@PathVariable Long id, @RequestBody @Validated(Dog.updateFromOwner.class) Dog dog) {
         try {
             Dog updatedDog = dogService.updateDog(id, dog);
             return new ResponseEntity<>(updatedDog, HttpStatus.OK);

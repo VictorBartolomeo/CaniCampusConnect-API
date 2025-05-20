@@ -2,6 +2,7 @@ package org.example.canicampusconnectapi.model.dogRelated;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
@@ -23,6 +24,13 @@ import java.util.Set;
 @Entity
 public class Dog {
 
+    public interface updateFromOwner{
+
+    }
+    public interface CreateFromOwner{
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(OwnerViewDog.class)
@@ -37,6 +45,7 @@ public class Dog {
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(groups = {CreateFromOwner.class})
     @Column(nullable = false)
     @JsonView({OwnerViewDog.class,OwnerView.class})
     protected Gender gender;
@@ -56,6 +65,7 @@ public class Dog {
             joinColumns = @JoinColumn(name = "dog_id"),
             inverseJoinColumns = @JoinColumn(name = "breed_id")
     )
+    @NotNull(groups = {CreateFromOwner.class, updateFromOwner.class})
     @JsonView(OwnerViewDog.class)
     private Set<Breed> breeds;
 

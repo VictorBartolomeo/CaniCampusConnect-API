@@ -14,56 +14,34 @@ import java.util.List;
 
 @Repository
 public interface RegistrationDao extends JpaRepository<Registration, Long> {
-    // Find registrations by dog
-    List<Registration> findByDog(Dog dog);
     List<Registration> findByDogId(Long dogId);
 
-    // Find registrations by course
-    List<Registration> findByCourse(Course course);
     List<Registration> findByCourseId(Long courseId);
 
-    // Find registrations by course type
-    List<Registration> findByCourseCourseType(CourseType courseType);
-    List<Registration> findByCourseCourseTypeId(Long courseTypeId);
-
-    // Find registrations by status
     List<Registration> findByStatus(RegistrationStatus status);
 
-    // Find registrations by date
     List<Registration> findByRegistrationDate(LocalDateTime date);
-    List<Registration> findByRegistrationDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
-    // Find upcoming registrations (where course start date is in the future)
-    @Query("SELECT r FROM Registration r WHERE r.course.startDatetime > CURRENT_TIMESTAMP")
-    List<Registration> findUpcomingRegistrations();
+    List<Registration> findByRegistrationDateBetween(LocalDateTime start, LocalDateTime end);
 
-    // Find upcoming registrations for a specific dog
-    @Query("SELECT r FROM Registration r WHERE r.dog.id = ?1 AND r.course.startDatetime > CURRENT_TIMESTAMP")
-    List<Registration> findUpcomingRegistrationsByDogId(Long dogId);
+    List<Registration> findByCourseStartDatetimeAfter(LocalDateTime date);
 
-    // Find past registrations (where course end date is in the past)
-    @Query("SELECT r FROM Registration r WHERE r.course.endDatetime < CURRENT_TIMESTAMP")
-    List<Registration> findPastRegistrations();
+    List<Registration> findByDogIdAndCourseStartDatetimeAfter(Long dogId, LocalDateTime date);
 
-    // Find past registrations for a specific dog
-    @Query("SELECT r FROM Registration r WHERE r.dog.id = ?1 AND r.course.endDatetime < CURRENT_TIMESTAMP")
-    List<Registration> findPastRegistrationsByDogId(Long dogId);
+    List<Registration> findByCourseEndDatetimeBefore(LocalDateTime date);
 
-    // Find current registrations (where course is ongoing)
-    @Query("SELECT r FROM Registration r WHERE r.course.startDatetime <= CURRENT_TIMESTAMP AND r.course.endDatetime >= CURRENT_TIMESTAMP")
-    List<Registration> findCurrentRegistrations();
+    List<Registration> findByDogIdAndCourseEndDatetimeBefore(Long dogId, LocalDateTime date);
 
-    // Find current registrations for a specific dog
-    @Query("SELECT r FROM Registration r WHERE r.dog.id = ?1 AND r.course.startDatetime <= CURRENT_TIMESTAMP AND r.course.endDatetime >= CURRENT_TIMESTAMP")
-    List<Registration> findCurrentRegistrationsByDogId(Long dogId);
+    List<Registration> findByCourseStartDatetimeBeforeAndCourseEndDatetimeAfter(
+            LocalDateTime startBefore, LocalDateTime endAfter);
 
-    // Count registrations for a course
-    Long countByCourseId(Long courseId);
+    List<Registration> findByDogIdAndCourseStartDatetimeBeforeAndCourseEndDatetimeAfter(
+            Long dogId, LocalDateTime startBefore, LocalDateTime endAfter);
 
-    // Find registrations by course and status
-    List<Registration> findByCourseAndStatus(Course course, RegistrationStatus status);
-    List<Registration> findByCourseIdAndStatus(Long courseId, RegistrationStatus status);
+    long countByCourseId(Long courseId);
 
-    // Find registrations by dog and course
-    List<Registration> findByDogIdAndCourseId(Long dogId, Long courseId);
+    long countByCourseIdAndStatus(Long courseId, RegistrationStatus status);
+
+    boolean existsByCourseIdAndDogId(Long courseId, Long dogId);
+
 }
