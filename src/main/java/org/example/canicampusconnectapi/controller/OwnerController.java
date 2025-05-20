@@ -70,14 +70,15 @@ public class OwnerController {
     }
 
     @PutMapping("/owner/{id}")
-    public ResponseEntity<User> updateOwner(@PathVariable Long id, @RequestBody @Validated(Owner.OnUpdateFromOwner.class) User owner) {
-        Optional<User> user = userDao.findById(id);
-        if (user.isEmpty()) {
+    public ResponseEntity<Owner> updateOwner(@PathVariable Long id, @RequestBody @Validated(Owner.OnUpdateFromOwner.class) Owner owner) {
+        Optional<Owner> ownerOptional = ownerDao.findById(id);
+        if (ownerOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         owner.setId(id);
-        userDao.save(owner);
+        owner.setPassword(ownerOptional.get().getPassword());
+        ownerDao.save(owner);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
