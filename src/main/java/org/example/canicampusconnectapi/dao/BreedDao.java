@@ -12,9 +12,10 @@ import java.util.Optional;
 public interface BreedDao extends JpaRepository<Breed, Short> {
     Optional<Breed> findByName(String name);
 
-    @Query("SELECT b FROM Breed b LEFT JOIN FETCH b.dogs WHERE b.id = ?1")
+    @Query("SELECT b FROM Breed b LEFT JOIN FETCH b.dogs WHERE b.id = :id")
     Optional<Breed> findByIdWithDogs(Short id);
 
-    @Query("SELECT b FROM Breed b LEFT JOIN FETCH b.dogs")
+    @Query("SELECT DISTINCT b FROM Breed b LEFT JOIN FETCH b.dogs")
     List<Breed> findAllWithDogs();
+
 }

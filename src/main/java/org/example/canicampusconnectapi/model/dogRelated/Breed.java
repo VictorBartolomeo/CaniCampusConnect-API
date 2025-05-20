@@ -15,6 +15,7 @@ public class Breed {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(OwnerViewDog.class)
     protected Short id;
 
     @Column(length = 100, unique = true, nullable = false)

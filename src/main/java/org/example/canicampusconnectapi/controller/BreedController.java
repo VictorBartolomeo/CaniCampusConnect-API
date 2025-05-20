@@ -1,7 +1,10 @@
 package org.example.canicampusconnectapi.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.example.canicampusconnectapi.dao.BreedDao;
 import org.example.canicampusconnectapi.model.dogRelated.Breed;
+import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
+import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +33,9 @@ public class BreedController {
         return new ResponseEntity<>(optionalBreed.get(), HttpStatus.OK);
     }
 
+    @IsOwner
     @GetMapping("/breeds")
+    @JsonView(OwnerViewDog.class)
     public List<Breed> getAll() {
         return breedDao.findAllWithDogs();
     }
