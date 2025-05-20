@@ -69,9 +69,6 @@ public class OwnerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //TODO Je dois renvoyer un user ou un owner ?
-    // Il semble que Owner passe puisqu'il me dit bien que password en erreur donc comprend bien l'héritage, mais le validated ne passe pas,
-    // j'ai déjà essayé de mettre l'interface dans Owner et dans user mais rien n'y fait il me demande le mot de passe à chaque fois
     @PutMapping("/owner/{id}")
     public ResponseEntity<Owner> updateOwner(@PathVariable Long id, @RequestBody @Validated(Owner.OnUpdateFromOwner.class) Owner owner) {
         Optional<Owner> ownerOptional = ownerDao.findById(id);
@@ -80,6 +77,7 @@ public class OwnerController {
         }
 
         owner.setId(id);
+        owner.setPassword(ownerOptional.get().getPassword());
         ownerDao.save(owner);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
