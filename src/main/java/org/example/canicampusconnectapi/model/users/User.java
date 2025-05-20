@@ -34,18 +34,18 @@ public class User {
     protected Long id;
 
     @Column(nullable = false, unique = true, length = 150)
-    @NotBlank(message = "L'email ne peut pas être vide", groups = {OnCreate.class, Owner.OnUpdateFromOwner.class})
+    @NotBlank(message = "L'email ne peut pas être vide", groups = {OnCreate.class, OnUpdateFromOwner.class})
     @Email(message = "L'email n'est pas au format valide")
     @JsonView({OwnerViewDog.class, OwnerView.class})
     protected String email;
 
     @Column(nullable = false, length = 100)
-    @NotBlank(message = "Le prénom ne peut pas être vide", groups = {OnCreate.class, Owner.OnUpdateFromOwner.class})
+    @NotBlank(message = "Le prénom ne peut pas être vide", groups = {OnCreate.class, OnUpdateFromOwner.class})
     @JsonView({OwnerViewDog.class, OwnerView.class})
     protected String firstname;
 
     @Column(nullable = false, length = 100)
-    @NotBlank(message = "Le nom de famille ne peut pas être vide", groups = {OnCreate.class, Owner.OnUpdateFromOwner.class})
+    @NotBlank(message = "Le nom de famille ne peut pas être vide", groups = {OnCreate.class, OnUpdateFromOwner.class})
     @JsonView({OwnerViewDog.class, OwnerView.class})
     protected String lastname;
 
@@ -53,7 +53,6 @@ public class User {
     @NotBlank(message = "Le mot de passe ne peut pas être vide", groups = {OnCreate.class, OnUpdatePassword.class})
     @Size(min = 8, max = 64, message = "Le mot de passe doit contenir entre 8 et 64 caractères")
     @Pattern(regexp = REGEX_STRONG_PASSWORD, message = "Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial")
-    @JsonIgnore
     protected String password;
 
     @Column(nullable = true, length = 50)
