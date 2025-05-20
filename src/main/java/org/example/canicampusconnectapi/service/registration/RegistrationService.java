@@ -23,7 +23,6 @@ public interface RegistrationService {
 
     List<Registration> findByCourseId(Long courseId);
 
-    List<Registration> findByCourseTypeId(Long courseTypeId);
 
     List<Registration> findByStatus(RegistrationStatus status);
 
