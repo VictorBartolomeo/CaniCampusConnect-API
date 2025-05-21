@@ -2,10 +2,8 @@ package org.example.canicampusconnectapi.controller;
 
 import jakarta.validation.Valid;
 import org.example.canicampusconnectapi.dao.UserDao;
-import org.example.canicampusconnectapi.dto.OwnerRegisterDto;
 import org.example.canicampusconnectapi.dto.UserLoginDto;
 import org.example.canicampusconnectapi.model.users.Owner;
-import org.example.canicampusconnectapi.model.users.User;
 import org.example.canicampusconnectapi.security.AppUserDetails;
 import org.example.canicampusconnectapi.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,25 +36,20 @@ public class AuthController {
         this.securityUtils = securityUtils;
     }
 
-//TODO Demander à Franck comment faire pour ajouter les informations d'un Owner directement
+    //TODO Demander à Franck comment faire pour ajouter les informations d'un Owner directement
     @PostMapping("/owner/register")
-    public ResponseEntity<Owner> register(@RequestBody @Validated(Owner.onCreateOwner.class) Owner owner ) {
-        owner.setPassword(passwordEncoder.encode(owner.getPassword()));
-        userDao.save(owner);
-        //Masque le mot de passe dans la réponse
-        System.out.println(owner.getPassword());
-        owner.setPassword(null);
-        return new ResponseEntity<>(owner, HttpStatus.CREATED);
-    }
+    public ResponseEntity<Owner> register(@RequestBody @Validated(Owner.onCreateOwner.class) Owner owner) {
+        try {
+            owner.setPassword(passwordEncoder.encode(owner.getPassword()));
+            userDao.save(owner);
+            //Masque le mot de passe dans la réponse
+            System.out.println(owner.getPassword());
+            owner.setPassword(null);
+            return new ResponseEntity<>(owner, HttpStatus.CREATED);
 
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody @Valid User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userDao.save(user);
-        //Masque le mot de passe dans la réponse
-        System.out.println(user.getPassword());
-        user.setPassword(null);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     @PostMapping("/login")
