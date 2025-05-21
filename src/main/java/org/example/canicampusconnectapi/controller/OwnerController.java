@@ -69,6 +69,7 @@ public class OwnerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @IsOwner
     @PutMapping("/owner/{id}")
     public ResponseEntity<Owner> updateOwner(@PathVariable Long id, @RequestBody @Validated(Owner.OnUpdateFromOwner.class) Owner owner) {
         Optional<Owner> ownerOptional = ownerDao.findById(id);
