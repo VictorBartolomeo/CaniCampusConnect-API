@@ -2,6 +2,7 @@ package org.example.canicampusconnectapi.controller;
 
 import jakarta.validation.Valid;
 import org.example.canicampusconnectapi.dao.UserDao;
+import org.example.canicampusconnectapi.dto.OwnerRegisterDto;
 import org.example.canicampusconnectapi.dto.UserLoginDto;
 import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.model.users.User;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,7 +40,7 @@ public class AuthController {
 
 //TODO Demander à Franck comment faire pour ajouter les informations d'un Owner directement
     @PostMapping("/owner/register")
-    public ResponseEntity<Owner> register(@RequestBody @Valid Owner owner ) {
+    public ResponseEntity<Owner> register(@RequestBody @Validated(Owner.onCreateOwner.class) Owner owner ) {
         owner.setPassword(passwordEncoder.encode(owner.getPassword()));
         userDao.save(owner);
         //Masque le mot de passe dans la réponse
