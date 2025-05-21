@@ -2,9 +2,11 @@ package org.example.canicampusconnectapi.controller;
 
 import org.example.canicampusconnectapi.dao.UserDao;
 import org.example.canicampusconnectapi.model.users.User;
+import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,19 +58,20 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //Put change tout l'objet
+    @IsOwner
     @PutMapping("/user/{id}")
     // Patch change une partie de l'objet
 //    @PatchMapping("/user/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody @Validated(User.OnUpdateFromOwner.class) User user) {
         Optional<User> optionalUser = userDao.findById(id);
         if (optionalUser.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         user.setId(id);
         userDao.save(user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    //TODO créer un patch pour le password
 
 }
