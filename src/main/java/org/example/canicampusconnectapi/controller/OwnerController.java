@@ -49,14 +49,6 @@ public class OwnerController {
         return ownerDao.findAll();
     }
 
-    @IsOwner
-    @JsonView(OwnerView.class)
-    @PostMapping("/owner")
-    public ResponseEntity<Owner> createOwner(@RequestBody @Validated(User.OnCreate.class) Owner owner) {
-        ownerDao.save(owner);
-        return new ResponseEntity<>(owner, HttpStatus.CREATED);
-    }
-
     @DeleteMapping("owner/{id}")
     public ResponseEntity<Owner> deleteOwner(@PathVariable Long id) {
 

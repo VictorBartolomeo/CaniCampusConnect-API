@@ -11,6 +11,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,6 +22,8 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Owner extends User {
 
+    public interface onCreateOwner{
+    }
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -29,7 +32,7 @@ public class Owner extends User {
 
     @ColumnDefault("TRUE")
     @Column(nullable = false)
-    protected boolean isActive;
+    protected boolean isActive = isActive();
 
     @OneToMany(mappedBy ="owner")
     protected List<Dog> dogs;
