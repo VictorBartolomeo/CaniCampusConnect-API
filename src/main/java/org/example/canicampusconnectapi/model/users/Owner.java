@@ -32,7 +32,7 @@ public class Owner extends User {
 
     @ColumnDefault("TRUE")
     @Column(nullable = false)
-    protected boolean isActive;
+    protected boolean isActive = isActive();
 
     @OneToMany(mappedBy ="owner")
     protected List<Dog> dogs;
