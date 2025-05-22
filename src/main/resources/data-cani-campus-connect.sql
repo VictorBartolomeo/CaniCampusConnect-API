@@ -408,71 +408,66 @@ VALUES
 -- Insert registrations for dogs in courses
 INSERT INTO registration (registration_date, status, dog_id, course_id)
 VALUES
-    -- Inscriptions de Rex (dog_id 1)
-    ('2025-04-20 09:30:00', 'CONFIRMED', 1, 1), -- Rex inscrit à Chiots - Éveil et Socialisation
-    ('2025-05-10 14:15:00', 'CONFIRMED', 1, 3), -- Rex inscrit à Découverte de l'agilité
-    ('2025-06-01 10:45:00', 'PENDING', 1, 4),   -- Rex en attente pour Trucs et astuces avancés
+    -- Inscriptions de Rex (dog_id 1) - 2 cours passés (avant le 22 mai 2025)
+    ('2025-04-20 09:30:00', 'CONFIRMED', 1, 2), -- Rex inscrit à Chiots - Premiers pas (25 avril 2025)
+    ('2025-05-05 14:15:00', 'CONFIRMED', 1, 4), -- Rex inscrit à Chiots - Découverte sensorielle (8 mai 2025)
+
+    -- Inscriptions de Rex (dog_id 1) - 3 cours à venir (après le 22 mai 2025)
+    ('2025-05-25 10:45:00', 'CONFIRMED', 1, 6), -- Rex inscrit à Chiots - Communication canine (15 juin 2025)
+    ('2025-06-20 09:45:00', 'CONFIRMED', 1, 7), -- Rex inscrit à Chiots - Manipulation et soins (5 juillet 2025)
+    ('2025-07-25 14:30:00', 'CONFIRMED', 1, 8), -- Rex inscrit à Chiots - Socialisation avancée (10 août 2025)
 
     -- Inscriptions de Nala (dog_id 2)
-    ('2025-05-01 11:00:00', 'CONFIRMED', 2, 2), -- Nala inscrite à Obéissance du quotidien
-    ('2025-05-15 16:30:00', 'CANCELLED', 2, 3), -- Nala a annulé Découverte de l'agilité
-    ('2025-06-20 09:15:00', 'CONFIRMED', 2, 5), -- Nala inscrite à Formation chien visiteur
+    ('2025-05-01 11:00:00', 'CONFIRMED', 2, 5), -- Nala inscrite à Obéissance du quotidien
+    ('2025-05-15 16:30:00', 'CANCELLED', 2, 11), -- Nala a annulé Bien-être des seniors - Introduction
+    ('2025-06-20 09:15:00', 'CONFIRMED', 2, 17), -- Nala inscrite à Formation chien visiteur - Avancé
 
     -- Inscriptions d'Oscar (dog_id 3)
-    ('2025-05-05 10:00:00', 'CONFIRMED', 3, 2), -- Oscar inscrit à Obéissance du quotidien
-    ('2025-06-05 15:45:00', 'CONFIRMED', 3, 4), -- Oscar inscrit à Trucs et astuces avancés
+    ('2025-05-05 10:00:00', 'CONFIRMED', 3, 5), -- Oscar inscrit à Obéissance du quotidien
+    ('2025-06-05 15:45:00', 'CONFIRMED', 3, 15), -- Oscar inscrit à Trucs et astuces avancés
 
     -- Inscriptions de Lola (dog_id 4)
     ('2025-04-25 13:30:00', 'CONFIRMED', 4, 1), -- Lola inscrite à Chiots - Éveil et Socialisation
-    ('2025-06-25 11:15:00', 'PENDING', 4, 5),   -- Lola en attente pour Formation chien visiteur
+    ('2025-06-25 11:15:00', 'PENDING', 4, 17),   -- Lola en attente pour Formation chien visiteur - Avancé
 
     -- Inscriptions de Filou (dog_id 5)
-    ('2025-05-20 09:45:00', 'CONFIRMED', 5, 3), -- Filou inscrit à Découverte de l'agilité
-    ('2025-07-10 14:00:00', 'CONFIRMED', 5, 6), -- Filou inscrit à Bien-être des seniors
+    ('2025-05-20 09:45:00', 'CONFIRMED', 5, 11), -- Filou inscrit à Bien-être des seniors - Introduction
+    ('2025-07-10 14:00:00', 'CONFIRMED', 5, 19), -- Filou inscrit à Bien-être des seniors - Avancé
 
     -- Inscriptions de Mia (dog_id 6)
-    ('2025-05-10 10:30:00', 'CONFIRMED', 6, 2), -- Mia inscrite à Obéissance du quotidien
-    ('2025-06-01 13:45:00', 'CANCELLED', 6, 4), -- Mia a annulé Trucs et astuces avancés
-    ('2025-07-15 11:30:00', 'CONFIRMED', 6, 6), -- Mia inscrite à Bien-être des seniors
+    ('2025-05-10 10:30:00', 'CONFIRMED', 6, 5), -- Mia inscrite à Obéissance du quotidien
+    ('2025-06-01 13:45:00', 'CANCELLED', 6, 15), -- Mia a annulé Trucs et astuces avancés
+    ('2025-07-15 11:30:00', 'CONFIRMED', 6, 19), -- Mia inscrite à Bien-être des seniors - Avancé
 
-    -- Inscriptions pour les cours à venir (2025-2026)
+    -- Autres inscriptions pour les cours (2025-2026)
+    ('2025-05-18 10:30:00', 'CONFIRMED', 2, 3), -- Nala inscrite à Chiots - Jeux d'éveil
+    ('2025-06-25 09:45:00', 'CONFIRMED', 3, 6), -- Oscar inscrit à Chiots - Communication canine
+    ('2025-07-25 10:30:00', 'CONFIRMED', 4, 7), -- Lola inscrite à Chiots - Manipulation et soins
+    ('2025-08-30 14:45:00', 'CONFIRMED', 5, 8), -- Filou inscrit à Chiots - Socialisation avancée
+    ('2025-09-25 09:15:00', 'PENDING', 6, 9),  -- Mia en attente pour Chiots - Préparation à l'adolescence
 
-    -- Inscriptions de Rex (dog_id 1) aux nouveaux cours
-    ('2025-05-18 10:30:00', 'CONFIRMED', 1, 2), -- Rex inscrit à Obéissance du quotidien
-    ('2025-06-25 09:45:00', 'CONFIRMED', 1, 5), -- Rex inscrit à Formation chien visiteur
-    ('2025-07-25 10:30:00', 'CONFIRMED', 1, 7), -- Rex inscrit à Chiots d'été
-    ('2025-08-30 14:45:00', 'CONFIRMED', 1, 9), -- Rex inscrit à Parcours d'agilité
-    ('2025-09-25 09:15:00', 'PENDING', 1, 10),  -- Rex en attente pour Préparation concours
-    ('2025-07-20 11:30:00', 'CONFIRMED', 1, 11), -- Rex inscrit à Jeux d'intelligence canine
-    ('2025-08-05 15:30:00', 'CONFIRMED', 1, 12), -- Rex inscrit à Rappel en toutes situations
-    ('2026-01-05 11:00:00', 'CONFIRMED', 1, 13), -- Rex inscrit à Balades éducatives
-    ('2025-08-10 09:30:00', 'PENDING', 1, 14),  -- Rex en attente pour Initiation au pistage
-    ('2025-08-15 14:00:00', 'CONFIRMED', 1, 16), -- Rex inscrit à Sports canins ludiques
+    ('2025-07-20 11:30:00', 'CONFIRMED', 2, 12), -- Nala inscrite à Obéissance de base - Niveau 1
+    ('2025-08-05 15:30:00', 'CONFIRMED', 3, 13), -- Oscar inscrit à Obéissance de base - Niveau 2
+    ('2026-01-05 11:00:00', 'CONFIRMED', 4, 14), -- Lola inscrite à Marche en laisse sans traction
+    ('2025-08-10 09:30:00', 'PENDING', 5, 15),  -- Filou en attente pour Rappel efficace
+    ('2025-08-15 14:00:00', 'CONFIRMED', 6, 16), -- Mia inscrite à Découverte de l'agilité
 
-    -- Inscriptions de Nala (dog_id 2) aux nouveaux cours
-    ('2025-08-15 15:00:00', 'CONFIRMED', 2, 8), -- Nala inscrite à Perfectionnement obéissance
-    ('2025-07-25 13:45:00', 'CONFIRMED', 2, 11), -- Nala inscrite à Jeux d'intelligence canine
-    ('2026-01-05 10:00:00', 'CONFIRMED', 2, 13), -- Nala inscrite à Balades éducatives
+    ('2025-08-15 15:00:00', 'CONFIRMED', 2, 17), -- Nala inscrite à Parcours d'agilité
+    ('2025-07-25 13:45:00', 'CONFIRMED', 3, 18), -- Oscar inscrit à Jeux d'intelligence canine
+    ('2026-01-05 10:00:00', 'CONFIRMED', 4, 19), -- Lola inscrite à Rappel en toutes situations
+    ('2025-06-15 09:30:00', 'CONFIRMED', 5, 20), -- Filou inscrit à Balades éducatives
 
-    -- Inscriptions d'Oscar (dog_id 3) aux nouveaux cours
-    ('2025-06-15 09:30:00', 'CONFIRMED', 3, 9), -- Oscar inscrit à Parcours d'agilité
-    ('2025-08-05 14:15:00', 'PENDING', 3, 12),  -- Oscar en attente pour Rappel en toutes situations
-    ('2025-08-10 11:00:00', 'CONFIRMED', 3, 14), -- Oscar inscrit à Initiation au pistage
+    ('2025-08-05 14:15:00', 'PENDING', 2, 21),  -- Nala en attente pour Obéissance avancée - Niveau 1
+    ('2025-08-10 11:00:00', 'CONFIRMED', 3, 22), -- Oscar inscrit à Obéissance avancée - Niveau 2
+    ('2025-07-30 11:45:00', 'CONFIRMED', 4, 23), -- Lola inscrite à Préparation aux sports canins
+    ('2025-07-25 10:00:00', 'CONFIRMED', 5, 24), -- Filou inscrit à Techniques de concentration
+    ('2025-08-15 09:30:00', 'CONFIRMED', 6, 25), -- Mia inscrite à Formation chien visiteur - Introduction
 
-    -- Inscriptions de Lola (dog_id 4) aux nouveaux cours
-    ('2025-07-30 11:45:00', 'CONFIRMED', 4, 7), -- Lola inscrite à Chiots d'été
-    ('2025-07-25 10:00:00', 'CONFIRMED', 4, 11), -- Lola inscrite à Jeux d'intelligence canine
-    ('2025-08-15 09:30:00', 'CONFIRMED', 4, 15), -- Lola inscrite à Chiots d'hiver
-
-    -- Inscriptions de Filou (dog_id 5) aux nouveaux cours
-    ('2025-08-15 16:30:00', 'CONFIRMED', 5, 8), -- Filou inscrit à Perfectionnement obéissance
-    ('2025-07-10 13:00:00', 'CONFIRMED', 5, 10), -- Filou inscrit à Préparation concours
-    ('2025-08-15 14:30:00', 'CONFIRMED', 5, 16), -- Filou inscrit à Sports canins ludiques
-
-    -- Inscriptions de Mia (dog_id 6) aux nouveaux cours
-    ('2025-06-15 10:15:00', 'CONFIRMED', 6, 9), -- Mia inscrite à Parcours d'agilité
-    ('2025-08-05 15:30:00', 'CONFIRMED', 6, 12), -- Mia inscrite à Rappel en toutes situations
-    ('2025-08-15 13:00:00', 'CONFIRMED', 6, 13); -- Mia inscrite à Balades éducatives
+    ('2025-08-15 16:30:00', 'CONFIRMED', 2, 26), -- Nala inscrite à Trucs et astuces avancés
+    ('2025-07-10 13:00:00', 'CONFIRMED', 3, 27), -- Oscar inscrit à Formation chien visiteur - Avancé
+    ('2025-08-15 14:30:00', 'CONFIRMED', 4, 28), -- Lola inscrite à Préparation concours
+    ('2025-06-15 10:15:00', 'CONFIRMED', 5, 29), -- Filou inscrit à Perfectionnement obéissance
+    ('2025-08-05 15:30:00', 'CONFIRMED', 6, 30); -- Mia inscrite à Initiation au pistage
 
 
 INSERT INTO veterinary_visit (visit_date, diagnosis, reason_for_visit, treatment, veterinarian, dog_id)
