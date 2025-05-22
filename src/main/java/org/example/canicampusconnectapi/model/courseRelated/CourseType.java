@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.canicampusconnectapi.view.admin.AdminView;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
+import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
 @Getter
@@ -25,11 +26,11 @@ public class CourseType {
     protected Long id;
 
     @Column(nullable = false, length = 255)
-    @JsonView(OwnerViewDog.class)
+    @JsonView({OwnerViewDog.class, OwnerViewCourse.class})
     protected String name;
 
     @Column(columnDefinition = "TEXT")
-    @JsonView(OwnerViewDog.class)
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class})
     protected String description;
 
     @OneToMany(mappedBy = "courseType")
@@ -37,7 +38,7 @@ public class CourseType {
 
     @ManyToOne
     @JoinColumn(name = "age_range_id", nullable = false)
-    @JsonView(OwnerViewDog.class)
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class})
     protected AgeRange ageRange;
 
 

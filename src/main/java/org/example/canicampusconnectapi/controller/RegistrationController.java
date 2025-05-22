@@ -66,9 +66,9 @@ public class RegistrationController {
     }
 
     // Get registrations by course
-    @IsCoach
+    @IsOwner
+    @JsonView(OwnerViewDog.class)
     @GetMapping("/course/{courseId}/registrations")
-    @JsonView(CoachViewRegistration.class)
     public ResponseEntity<List<Registration>> getRegistrationsByCourse(@PathVariable Long courseId) {
         List<Registration> registrations = registrationService.findByCourseId(courseId);
         return ResponseEntity.ok(registrations);
@@ -153,7 +153,8 @@ public class RegistrationController {
     }
 
     // Count registrations for a course
-    @IsCoach
+    @IsOwner
+    @JsonView(OwnerViewDog.class)
     @GetMapping("/course/{courseId}/registrations/count")
     public ResponseEntity<Long> countRegistrationsByCourse(@PathVariable Long courseId) {
         long count = registrationService.countByCourseId(courseId);
