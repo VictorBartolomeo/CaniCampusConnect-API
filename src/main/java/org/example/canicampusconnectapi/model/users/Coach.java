@@ -32,6 +32,5 @@ public class Coach extends User {
     protected LocalDate registrationDate;
 
     @OneToMany(mappedBy = "coach")
-    @JsonView(CoachView.class)
     protected List<Course> course;
 }
