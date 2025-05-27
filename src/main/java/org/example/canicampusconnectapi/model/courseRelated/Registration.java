@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.example.canicampusconnectapi.controller.RegistrationController.StatusUpdateValidation;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
+import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.data.annotation.CreatedDate;
@@ -39,18 +40,18 @@ public class Registration {
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
     @NotNull(message = "Le chien ne peut pas être vide")
-    @JsonView({OwnerViewCourse.class})
+    @JsonView({OwnerViewCourse.class, CoachView.class})
     protected Dog dog;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    @JsonView({OwnerViewDog.class, OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class, OwnerViewCourse.class,CoachView.class})
     protected LocalDateTime registrationDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 255)
     @NotNull(message = "Le statut ne peut pas être vide",
             groups = {RegistrationStatusValidation.class})
-    @JsonView({OwnerViewDog.class, OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class, OwnerViewCourse.class,CoachView.class})
     protected RegistrationStatus status;
 }

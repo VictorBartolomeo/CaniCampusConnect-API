@@ -5,6 +5,7 @@ import org.example.canicampusconnectapi.dao.OwnerDao;
 import org.example.canicampusconnectapi.dao.UserDao;
 import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.model.users.User;
+import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class OwnerController {
 
     }
 
-
+@IsClubOwner
     @GetMapping("/owners")
     public List<Owner> getAll() {
         return ownerDao.findAll();

@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.example.canicampusconnectapi.model.users.Club;
 import org.example.canicampusconnectapi.model.users.Coach;
 import org.example.canicampusconnectapi.view.admin.AdminViewCourse;
+import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
@@ -28,45 +29,30 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
-    @JsonView({OwnerViewDog.class, OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class})
     protected Long id;
 
     @Column(nullable = false, length = 255)
     @NotBlank(message = "Le titre ne peut pas être vide")
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class})
     protected String title;
 
     @Column(columnDefinition = "TEXT")
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class})
     protected String description;
-
-    /**
-     * Gets the description with age range information appended.
-     * @return The description including age range information.
-     */
-    public String getDescription() {
-        if (description == null || courseType == null || courseType.getAgeRange() == null) {
-            return description;
-        }
-
-        AgeRange ageRange = courseType.getAgeRange();
-        String ageRangeInfo = String.format(" (Pour chiens de %d à %d mois)", ageRange.getMinAge(), ageRange.getMaxAge());
-
-        return description + ageRangeInfo;
-    }
 
     @Column(nullable = false)
     @NotNull(message = "La date et l'heure de début ne peuvent pas être vides")
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class, CoachView.class})
     protected LocalDateTime startDatetime;
 
     @Column(nullable = false)
     @NotNull(message = "La date et l'heure de fin ne peuvent pas être vides")
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class, CoachView.class})
     protected LocalDateTime endDatetime;
 
     @Column(nullable = false)
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class})
     protected int maxCapacity;
 
     @ManyToOne
@@ -80,11 +66,11 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "course_type_id", nullable = false)
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class})
     protected CourseType courseType;
 
     @OneToMany(mappedBy = "course")
-    @JsonView(OwnerViewCourse.class)
+    @JsonView({OwnerViewCourse.class,CoachView.class})
     protected List<Registration> registrations;
 
 }

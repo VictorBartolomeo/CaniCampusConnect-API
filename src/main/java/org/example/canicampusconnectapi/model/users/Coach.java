@@ -28,6 +28,7 @@ public class Coach extends User {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
+    @JsonView({CoachView.class})
     protected LocalDate registrationDate;
 
     @OneToMany(mappedBy = "coach")

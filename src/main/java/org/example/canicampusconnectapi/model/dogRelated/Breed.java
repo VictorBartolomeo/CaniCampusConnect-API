@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
 import java.util.Set;
@@ -19,7 +20,7 @@ public class Breed {
     protected Short id;
 
     @Column(length = 100, unique = true, nullable = false)
-    @JsonView({OwnerViewDog.class})
+    @JsonView({OwnerViewDog.class, CoachView.class})
     protected String name;
 
     @ManyToMany(mappedBy = "breeds", fetch = FetchType.LAZY)

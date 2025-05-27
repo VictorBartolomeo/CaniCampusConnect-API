@@ -25,12 +25,12 @@ public class AgeRange {
 
     // En mois
     @Column(nullable = false)
-    @JsonView({OwnerView.class, OwnerViewCourse.class})
+    @JsonView({OwnerView.class, OwnerViewCourse.class,CoachView.class})
     protected int minAge;
 
     //En mois
     @Column(nullable = false)
-    @JsonView({OwnerView.class,OwnerViewCourse.class})
+    @JsonView({OwnerView.class,OwnerViewCourse.class,CoachView.class})
     protected int maxAge;
 
     @OneToMany(mappedBy = "ageRange")

@@ -12,6 +12,7 @@ import org.example.canicampusconnectapi.model.healthRecord.MedicationTreatment;
 import org.example.canicampusconnectapi.model.healthRecord.Vaccination;
 import org.example.canicampusconnectapi.model.healthRecord.VeterinaryVisit;
 import org.example.canicampusconnectapi.model.users.Owner;
+import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
@@ -38,21 +39,21 @@ public class Dog {
     protected Long id;
 
     @Column(nullable = false, length = 255)
-    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class})
     protected String name;
 
     @Column(nullable = false)
-    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class,CoachView.class})
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     @NotNull(groups = {CreateFromOwner.class})
     @Column(nullable = false)
-    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class,CoachView.class})
     protected Gender gender;
 
     @Column(unique = true, length = 50)
-    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class,CoachView.class})
     protected String chipNumber;
 
     @ManyToOne
@@ -66,7 +67,7 @@ public class Dog {
             joinColumns = @JoinColumn(name = "dog_id"),
             inverseJoinColumns = @JoinColumn(name = "breed_id")
     )
-    @NotNull(groups = {CreateFromOwner.class, updateFromOwner.class})
+    @NotNull(groups = {CreateFromOwner.class, updateFromOwner.class,CoachView.class})
     @JsonView({OwnerViewDog.class})
     private Set<Breed> breeds;
 

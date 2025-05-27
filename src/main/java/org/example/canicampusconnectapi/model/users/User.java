@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
@@ -35,17 +36,17 @@ public class User {
     @Column(nullable = false, unique = true, length = 150)
     @NotBlank(message = "L'email ne peut pas être vide", groups = {Owner.onCreateOwner.class, OnUpdateFromOwner.class})
     @Email(message = "L'email n'est pas au format valide")
-    @JsonView({OwnerViewDog.class, OwnerView.class})
+    @JsonView({OwnerViewDog.class, OwnerView.class, CoachView.class})
     protected String email;
 
     @Column(nullable = false, length = 100)
     @NotBlank(message = "Le prénom ne peut pas être vide", groups = {Owner.onCreateOwner.class, OnUpdateFromOwner.class})
-    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class,CoachView.class})
     protected String firstname;
 
     @Column(nullable = false, length = 100)
     @NotBlank(message = "Le nom de famille ne peut pas être vide", groups = {Owner.onCreateOwner.class, OnUpdateFromOwner.class})
-    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class,CoachView.class})
     protected String lastname;
 
     @Column(nullable = false, length = 255) //taille de 255 caractères pour prévenir le mot de passe hashé
@@ -56,7 +57,7 @@ public class User {
     protected String password;
 
     @Column(nullable = true, length = 50)
-    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class,CoachView.class})
     protected String phone;
 
 }
