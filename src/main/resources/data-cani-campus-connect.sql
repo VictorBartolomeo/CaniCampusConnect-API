@@ -1,7 +1,8 @@
 INSERT INTO user (firstname, lastname, email, password, phone)
 VALUES ('PrénomAdmin', 'NomAdmin', 'admin@admin.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0611111111'),
-       ('PrénomCoach', 'NomCoach', 'coach@coach.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0622222222'),
-       ('Propriétaire1', 'Utilisateur1', 'owner3@user.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0633333333'),
+       ('Marin', 'Tintin', 'coach@coach.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0622222222'),
+       ('PrénomCoach2', 'NomCoach2', 'coach2@coach.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0633333333'),
+       ('Propriétaire1', 'Utilisateur1', 'owner3@user.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0677777777'),
        ('Propriétaire2', 'Utilisateur2', 'owner4@user.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0644444444'),
        ('Propriétaire3', 'Utilisateur3', 'owner5@user.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0655555555');
 
@@ -9,12 +10,13 @@ INSERT INTO club_owner (user_id)
 VALUES (1);
 
 INSERT INTO coach (user_id, acaced_number, is_active, registration_date)
-VALUES (2, 'OEACHK90', true, '2025-04-16');
+VALUES (2, 'OEACHK90', true, '2025-04-16'),
+       (3, 'PQRST123', true, '2025-04-16');
 
 INSERT INTO owner (user_id, is_active, registration_date)
-VALUES (3, false, '2023-03-10'),
-       (4, true, '2023-04-20'),
-       (5, true, '2023-05-05');
+VALUES (4, false, '2023-03-10'),
+       (5, true, '2023-04-20'),
+       (6, true, '2023-05-05');
 
 INSERT INTO club (name, address, user_id)
 VALUES ('Les moustaches Messines', '123 Rue des Chiens, Paris', 1);
@@ -62,27 +64,27 @@ VALUES
 
        -- Age Range 2 (Young dogs) - 5 courses before May 22, 2025
        ('Obéissance de base - Niveau 1', 'Apprentissage des commandes fondamentales pour jeunes chiens',
-        '2025-04-20 14:00:00', '2025-04-20 16:00:00', 10, 2, 1, 2),
+        '2025-04-20 14:00:00', '2025-04-20 16:00:00', 10, 3, 1, 2),
        ('Obéissance de base - Niveau 2', 'Renforcement des commandes de base et introduction à de nouvelles commandes',
-        '2025-04-27 14:00:00', '2025-04-27 16:00:00', 10, 2, 1, 2),
+        '2025-04-27 14:00:00', '2025-04-27 16:00:00', 10, 3, 1, 2),
        ('Marche en laisse sans traction', 'Techniques pour apprendre à votre jeune chien à marcher correctement en laisse',
-        '2025-05-04 09:00:00', '2025-05-04 11:00:00', 8, 2, 1, 2),
+        '2025-05-04 09:00:00', '2025-05-04 11:00:00', 8, 3, 1, 2),
        ('Rappel efficace', 'Méthodes pour obtenir un rappel fiable avec votre jeune chien',
-        '2025-05-11 14:00:00', '2025-05-11 16:00:00', 8, 2, 1, 2),
+        '2025-05-11 14:00:00', '2025-05-11 16:00:00', 8, 3, 1, 2),
        ('Obéissance du quotidien', 'Pour les chiens qui connaissent déjà quelques bases, on va travailler sur les situations de tous les jours',
-        '2025-05-18 14:00:00', '2025-05-18 16:00:00', 10, 2, 1, 2),
+        '2025-05-18 14:00:00', '2025-05-18 16:00:00', 10, 3, 1, 2),
 
        -- Age Range 2 (Young dogs) - 5 courses after May 22, 2025
        ('Découverte de l''agilité', 'Venez vous amuser avec votre chien sur différents obstacles, parfait pour renforcer votre complicité',
-        '2025-06-05 09:00:00', '2025-06-05 11:00:00', 6, 2, 1, 4),
+        '2025-06-05 09:00:00', '2025-06-05 11:00:00', 6, 3, 1, 4),
        ('Parcours d''agilité', 'On va travailler sur des parcours plus complexes pour les chiens qui ont déjà découvert l''agilité',
-        '2025-07-20 09:00:00', '2025-07-20 11:30:00', 5, 2, 1, 4),
+        '2025-07-20 09:00:00', '2025-07-20 11:30:00', 5, 3, 1, 4),
        ('Jeux d''intelligence canine', 'Des activités ludiques pour stimuler le cerveau de votre chien et renforcer votre lien',
-        '2025-08-28 10:00:00', '2025-08-28 12:00:00', 8, 2, 1, 2),
+        '2025-08-28 10:00:00', '2025-08-28 12:00:00', 8, 3, 1, 2),
        ('Rappel en toutes situations', 'Fini les angoisses au parc! Apprenez à avoir un rappel fiable même avec des distractions',
-        '2025-10-10 14:00:00', '2025-10-10 16:00:00', 6, 2, 1, 2),
+        '2025-10-10 14:00:00', '2025-10-10 16:00:00', 6, 3, 1, 2),
        ('Balades éducatives', 'On sort en groupe pour mettre en pratique les apprentissages dans un environnement réel',
-        '2026-01-18 13:30:00', '2026-01-18 15:30:00', 8, 2, 1, 2),
+        '2026-01-18 13:30:00', '2026-01-18 15:30:00', 8, 3, 1, 2),
 
        -- Age Range 3 (Adults) - 5 courses before May 22, 2025
        ('Obéissance avancée - Niveau 1', 'Perfectionnement des commandes et travail sans laisse pour chiens adultes',
@@ -110,33 +112,33 @@ VALUES
 
        -- Age Range 4 (Seniors) - 5 courses before May 22, 2025
        ('Bien-être des seniors - Introduction', 'Premiers pas pour adapter les activités à votre chien senior',
-        '2025-04-15 11:00:00', '2025-04-15 12:00:00', 6, 2, 1, 6),
+        '2025-04-15 11:00:00', '2025-04-15 12:00:00', 6, 3, 1, 6),
        ('Exercices doux pour seniors', 'Activités physiques adaptées pour maintenir la mobilité de votre chien âgé',
-        '2025-04-22 11:00:00', '2025-04-22 12:00:00', 6, 2, 1, 6),
+        '2025-04-22 11:00:00', '2025-04-22 12:00:00', 6, 3, 1, 6),
        ('Stimulation mentale pour seniors', 'Jeux et activités pour garder l''esprit de votre chien senior actif',
-        '2025-05-01 11:00:00', '2025-05-01 12:00:00', 6, 2, 1, 6),
+        '2025-05-01 11:00:00', '2025-05-01 12:00:00', 6, 3, 1, 6),
        ('Nutrition et soins des seniors', 'Conseils pour adapter l''alimentation et les soins aux besoins des chiens âgés',
-        '2025-05-08 11:00:00', '2025-05-08 12:00:00', 6, 2, 1, 6),
+        '2025-05-08 11:00:00', '2025-05-08 12:00:00', 6, 3, 1, 6),
        ('Confort et qualité de vie', 'Aménagements et astuces pour améliorer le quotidien de votre chien senior',
-        '2025-05-15 11:00:00', '2025-05-15 12:00:00', 6, 2, 1, 6),
+        '2025-05-15 11:00:00', '2025-05-15 12:00:00', 6, 3, 1, 6),
 
        -- Age Range 4 (Seniors) - 5 courses after May 22, 2025
        ('Bien-être des seniors - Avancé', 'Activités douces et stimulantes adaptées à nos compagnons plus âgés',
-        '2025-07-25 11:00:00', '2025-07-25 12:00:00', 6, 2, 1, 6),
+        '2025-07-25 11:00:00', '2025-07-25 12:00:00', 6, 3, 1, 6),
        ('Massage canin pour seniors', 'Techniques de massage pour soulager les douleurs articulaires des chiens âgés',
-        '2025-08-22 11:00:00', '2025-08-22 12:00:00', 6, 2, 1, 6),
+        '2025-08-22 11:00:00', '2025-08-22 12:00:00', 6, 3, 1, 6),
        ('Adaptation aux changements', 'Aider votre chien senior à s''adapter aux changements liés à l''âge',
-        '2025-10-10 11:00:00', '2025-10-10 12:00:00', 6, 2, 1, 6),
+        '2025-10-10 11:00:00', '2025-10-10 12:00:00', 6, 3, 1, 6),
        ('Jeux adaptés aux seniors', 'Activités ludiques spécialement conçues pour les chiens âgés',
-        '2025-12-05 11:00:00', '2025-12-05 12:00:00', 6, 2, 1, 6),
+        '2025-12-05 11:00:00', '2025-12-05 12:00:00', 6, 3, 1, 6),
        ('Promenades pour seniors', 'Comment adapter les sorties aux capacités de votre chien âgé',
-        '2026-03-20 11:00:00', '2026-03-20 12:00:00', 6, 2, 1, 6);
+        '2026-03-20 11:00:00', '2026-03-20 12:00:00', 6, 3, 1, 6);
 
 INSERT INTO breed (name)
 VALUES ('Berger Australien'),
        ('Golden Retriever'),
        ('Staffordshire Bull Terrier'),
-       ('Berger Belge'),                       -- Note: Souvent dominé par le Malinois mais regroupe les 4 variétés
+       ('Berger Belge'),                       -- Note: Souvent dominé par le Malinois, mais regroupe les 4 variétés
        ('Labrador Retriever'),
        ('Berger Allemand'),
        ('Setter Anglais'),
@@ -288,12 +290,12 @@ VALUES ('Berger Australien'),
        ('Saluki');-- Lévrier Persan
 
 INSERT INTO dog (name, birth_date, gender, chip_number, user_id)
-VALUES ('Rex', '2025-02-15', 'MALE', 'CHIP123456', 3),
-       ('Nala', '2017-08-22', 'FEMALE', 'CHIP789012', 3),
-       ('Oscar', '2021-02-10', 'STERILIZED_MALE', 'CHIP345678', 4),
-       ('Lola', '2018-11-30', 'FEMALE', 'CHIP901234', 4),
-       ('Filou', '2022-01-05', 'MALE', 'CHIP567890', 5),
-       ('Mia', '2020-07-18', 'STERILIZED_FEMALE', 'CHIP234567', 5);
+VALUES ('Rex', '2025-02-15', 'MALE', 'CHIP123456', 4),
+       ('Nala', '2017-08-22', 'FEMALE', 'CHIP789012', 4),
+       ('Oscar', '2021-02-10', 'STERILIZED_MALE', 'CHIP345678', 5),
+       ('Lola', '2018-11-30', 'FEMALE', 'CHIP901234', 5),
+       ('Filou', '2022-01-05', 'MALE', 'CHIP567890', 6),
+       ('Mia', '2020-07-18', 'STERILIZED_FEMALE', 'CHIP234567', 6);
 
 INSERT INTO dog_breed (dog_id, breed_id)
 VALUES (1, 1),  -- Rex est un Labrador Retriever
@@ -417,27 +419,45 @@ VALUES
     ('2025-06-20 09:45:00', 'CONFIRMED', 1, 7), -- Rex inscrit à Chiots - Manipulation et soins (5 juillet 2025)
     ('2025-07-25 14:30:00', 'CONFIRMED', 1, 8), -- Rex inscrit à Chiots - Socialisation avancée (10 août 2025)
 
-    -- Inscriptions de Nala (dog_id 2)
+    -- Inscriptions de Nala (dog_id 2) - Réduit à 3 cours avant le 23 mai 2025
     ('2025-05-01 11:00:00', 'CONFIRMED', 2, 5), -- Nala inscrite à Obéissance du quotidien
-    ('2025-05-15 16:30:00', 'CANCELLED', 2, 11), -- Nala a annulé Bien-être des seniors - Introduction
+    ('2025-04-10 16:30:00', 'CONFIRMED', 2, 11), -- Nala inscrite à Bien-être des seniors - Introduction
+    ('2025-05-13 09:45:00', 'CONFIRMED', 2, 15), -- Nala inscrite à Confort et qualité de vie
     ('2025-06-20 09:15:00', 'CONFIRMED', 2, 17), -- Nala inscrite à Formation chien visiteur - Avancé
+    ('2025-07-20 10:30:00', 'CONFIRMED', 2, 21), -- Nala inscrite à Bien-être des seniors - Avancé
+    ('2025-08-18 11:45:00', 'CONFIRMED', 2, 22), -- Nala inscrite à Massage canin pour seniors
+    ('2025-10-05 09:30:00', 'CONFIRMED', 2, 23), -- Nala inscrite à Adaptation aux changements
+    ('2025-12-01 10:15:00', 'CONFIRMED', 2, 24), -- Nala inscrite à Jeux adaptés aux seniors
+    ('2026-03-15 11:00:00', 'CONFIRMED', 2, 25), -- Nala inscrite à Promenades pour seniors
 
     -- Inscriptions d'Oscar (dog_id 3)
     ('2025-05-05 10:00:00', 'CONFIRMED', 3, 5), -- Oscar inscrit à Obéissance du quotidien
+    ('2025-04-22 11:15:00', 'CONFIRMED', 3, 12), -- Oscar inscrit à Exercices doux pour seniors
+    ('2025-05-08 11:30:00', 'CONFIRMED', 3, 14), -- Oscar inscrit à Nutrition et soins des seniors
     ('2025-06-05 15:45:00', 'CONFIRMED', 3, 15), -- Oscar inscrit à Trucs et astuces avancés
+    ('2025-07-22 14:30:00', 'CONFIRMED', 3, 21), -- Oscar inscrit à Bien-être des seniors - Avancé
 
     -- Inscriptions de Lola (dog_id 4)
     ('2025-04-25 13:30:00', 'CONFIRMED', 4, 1), -- Lola inscrite à Chiots - Éveil et Socialisation
+    ('2025-04-15 11:15:00', 'CONFIRMED', 4, 11), -- Lola inscrite à Bien-être des seniors - Introduction
+    ('2025-05-01 11:30:00', 'CONFIRMED', 4, 13), -- Lola inscrite à Stimulation mentale pour seniors
     ('2025-06-25 11:15:00', 'PENDING', 4, 17),   -- Lola en attente pour Formation chien visiteur - Avancé
+    ('2025-08-20 10:30:00', 'CONFIRMED', 4, 22), -- Lola inscrite à Massage canin pour seniors
 
     -- Inscriptions de Filou (dog_id 5)
+    ('2025-04-22 11:30:00', 'CONFIRMED', 5, 12), -- Filou inscrit à Exercices doux pour seniors
+    ('2025-05-15 11:45:00', 'CONFIRMED', 5, 15), -- Filou inscrit à Confort et qualité de vie
     ('2025-05-20 09:45:00', 'CONFIRMED', 5, 11), -- Filou inscrit à Bien-être des seniors - Introduction
     ('2025-07-10 14:00:00', 'CONFIRMED', 5, 19), -- Filou inscrit à Bien-être des seniors - Avancé
+    ('2025-10-08 11:30:00', 'CONFIRMED', 5, 23), -- Filou inscrit à Adaptation aux changements
 
     -- Inscriptions de Mia (dog_id 6)
     ('2025-05-10 10:30:00', 'CONFIRMED', 6, 5), -- Mia inscrite à Obéissance du quotidien
+    ('2025-04-28 11:45:00', 'CONFIRMED', 6, 13), -- Mia inscrite à Stimulation mentale pour seniors
+    ('2025-05-08 11:30:00', 'CONFIRMED', 6, 14), -- Mia inscrite à Nutrition et soins des seniors
     ('2025-06-01 13:45:00', 'CANCELLED', 6, 15), -- Mia a annulé Trucs et astuces avancés
     ('2025-07-15 11:30:00', 'CONFIRMED', 6, 19), -- Mia inscrite à Bien-être des seniors - Avancé
+    ('2025-12-03 10:00:00', 'CONFIRMED', 6, 24), -- Mia inscrite à Jeux adaptés aux seniors
 
     -- Autres inscriptions pour les cours (2025-2026)
     ('2025-05-18 10:30:00', 'CONFIRMED', 2, 3), -- Nala inscrite à Chiots - Jeux d'éveil
