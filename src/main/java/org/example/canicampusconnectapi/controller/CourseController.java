@@ -3,8 +3,10 @@ package org.example.canicampusconnectapi.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
+import org.example.canicampusconnectapi.security.annotation.role.IsCoach;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
 import org.example.canicampusconnectapi.service.course.CourseService;
+import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +65,8 @@ public class CourseController {
         return courseService.getAllCourses();
     }
 
+    @IsCoach
+    @JsonView({CoachView.class})
     @GetMapping("/coach/{coachId}/courses")
     public ResponseEntity<List<Course>> getCoursesByCoach(@PathVariable Long coachId) {
         try {
