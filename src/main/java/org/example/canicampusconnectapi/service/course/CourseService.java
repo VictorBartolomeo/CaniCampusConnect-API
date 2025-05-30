@@ -106,4 +106,13 @@ public interface CourseService {
      * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the course, coach, club, or course type does not exist.
      */
     Course updateCourse(Long id, Course course);
+
+    /**
+     * Récupère tous les cours à venir pour un coach spécifique.
+     *
+     * @param coachId L'ID du coach.
+     * @return Une liste des cours à venir du coach.
+     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound si le coach n'est pas trouvé.
+     */
+    List<Course> getUpcomingCoursesByCoach(Long coachId);
 }
