@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface CourseDao extends JpaRepository<Course, Long> {
+    List<Course> findByCoachIdAndStartDatetimeAfter(Long coachId, LocalDateTime dateTime);
     List<Course> findByCoach(Coach coach);
     List<Course> findByClub(Club club);
     List<Course> findByCourseType(CourseType courseType);
