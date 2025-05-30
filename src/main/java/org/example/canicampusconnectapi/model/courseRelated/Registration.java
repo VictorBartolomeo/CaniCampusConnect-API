@@ -29,6 +29,7 @@ public class Registration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "registration_id")
+    @JsonView({CoachView.class})
     protected Long id;
 
     @ManyToOne
