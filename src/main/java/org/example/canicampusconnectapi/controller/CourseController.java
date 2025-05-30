@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -65,10 +66,9 @@ public class CourseController {
         return courseService.getAllCourses();
     }
 
-    @IsCoach
     @JsonView({CoachView.class})
-    @GetMapping("/coach/{coachId}/courses")
-    public ResponseEntity<List<Course>> getCoursesByCoach(@PathVariable Long coachId) {
+    @GetMapping("/coach/{coachId}/courses/all")
+    public ResponseEntity<List<Course>> getAllCoursesByCoach(@PathVariable Long coachId) {
         try {
             List<Course> courses = courseService.getCoursesByCoach(coachId);
             return new ResponseEntity<>(courses, HttpStatus.OK);
@@ -76,6 +76,20 @@ public class CourseController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    // Nouvelle méthode pour les cours à venir d'un coach
+    @IsCoach
+    @JsonView({CoachView.class})
+    @GetMapping("/coach/{coachId}/courses/upcoming")
+    public ResponseEntity<List<Course>> getUpcomingCoursesByCoach(@PathVariable Long coachId) {
+        try {
+            List<Course> upcomingCourses = courseService.getUpcomingCoursesByCoach(coachId);
+            return new ResponseEntity<>(upcomingCourses, HttpStatus.OK);
+        } catch (ResourceNotFound e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @GetMapping("/club/{clubId}/courses")
     public ResponseEntity<List<Course>> getCoursesByClub(@PathVariable Integer clubId) {
