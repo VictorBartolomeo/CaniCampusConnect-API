@@ -33,15 +33,12 @@ public class AppUserDetailsService implements UserDetailsService {
         Optional<Owner> optionalOwner = ownerDao.findByEmail(email);
 
         if (optionalOwner.isEmpty()) {
-            System.out.println("Non trouvé Owner : " + email);
             Optional<ClubOwner> optionalClubOwner = clubOwnerDao.findByEmail(email);
 
             if (optionalClubOwner.isEmpty()) {
-                System.out.println("Non trouvé Club Owner : " + email);
                 Optional<Coach> optionalCoach = coachDao.findByEmail(email);
 
                 if (optionalCoach.isEmpty()) {
-                    System.out.println("Non trouvé Coach : " + email);
                     throw new UsernameNotFoundException("User not found");
                 } else {
                     return new AppUserDetails(optionalCoach.get());
