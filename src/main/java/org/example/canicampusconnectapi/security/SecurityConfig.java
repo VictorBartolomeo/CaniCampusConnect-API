@@ -56,7 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/register")
                         .permitAll()
                         .anyRequest()
-                        .authenticated())
+                        .permitAll())
                 .build();
     }
 
