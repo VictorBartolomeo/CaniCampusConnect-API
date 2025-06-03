@@ -35,6 +35,15 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     @Transactional
     public Registration create(Registration registration) {
+        List<Registration> existingRegistrations = registrationDao.findByDogIdAndCourseId(
+                registration.getDog().getId(),
+                registration.getCourse().getId()
+        );
+
+        if (!existingRegistrations.isEmpty()) {
+            throw new IllegalArgumentException("Ce chien est déjà inscrit à ce cours");
+        }
+
         // Vérifier si l'objet registration est valide
         if (registration.getCourse() == null || registration.getDog() == null) {
             throw new IllegalArgumentException("Le cours et le chien doivent être spécifiés");
