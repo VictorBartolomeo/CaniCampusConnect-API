@@ -423,12 +423,17 @@ VALUES
     ('2025-05-01 11:00:00', 'CONFIRMED', 2, 5), -- Nala inscrite à Obéissance du quotidien
     ('2025-04-10 16:30:00', 'CONFIRMED', 2, 11), -- Nala inscrite à Bien-être des seniors - Introduction
     ('2025-05-13 09:45:00', 'CONFIRMED', 2, 15), -- Nala inscrite à Confort et qualité de vie
-    ('2025-06-20 09:15:00', 'CONFIRMED', 2, 17), -- Nala inscrite à Formation chien visiteur - Avancé
-    ('2025-07-20 10:30:00', 'CONFIRMED', 2, 21), -- Nala inscrite à Bien-être des seniors - Avancé
+    -- Removed duplicate for course 17 (already registered on line 479)
+    -- Removed duplicate for course 21 (keeping PENDING status on line 484)
     ('2025-08-18 11:45:00', 'CONFIRMED', 2, 22), -- Nala inscrite à Massage canin pour seniors
     ('2025-10-05 09:30:00', 'CONFIRMED', 2, 23), -- Nala inscrite à Adaptation aux changements
     ('2025-12-01 10:15:00', 'CONFIRMED', 2, 24), -- Nala inscrite à Jeux adaptés aux seniors
     ('2026-03-15 11:00:00', 'CONFIRMED', 2, 25), -- Nala inscrite à Promenades pour seniors
+    -- Current date for registration_date, PENDING status, dog_id 2 (Nala)
+    -- Removed duplicate for course 17 (already registered on line 426)
+    (CURRENT_TIMESTAMP, 'PENDING', 2, 18), -- Préparation aux sports canins
+    (CURRENT_TIMESTAMP, 'PENDING', 2, 19), -- Techniques de concentration
+    (CURRENT_TIMESTAMP, 'PENDING', 2, 20), -- Formation chien visiteur - Introduction
 
     -- Inscriptions d'Oscar (dog_id 3)
     ('2025-05-05 10:00:00', 'CONFIRMED', 3, 5), -- Oscar inscrit à Obéissance du quotidien
@@ -446,7 +451,6 @@ VALUES
 
     -- Inscriptions de Filou (dog_id 5)
     ('2025-04-22 11:30:00', 'CONFIRMED', 5, 12), -- Filou inscrit à Exercices doux pour seniors
-    ('2025-05-15 11:45:00', 'CONFIRMED', 5, 15), -- Filou inscrit à Confort et qualité de vie
     ('2025-05-20 09:45:00', 'CONFIRMED', 5, 11), -- Filou inscrit à Bien-être des seniors - Introduction
     ('2025-07-10 14:00:00', 'CONFIRMED', 5, 19), -- Filou inscrit à Bien-être des seniors - Avancé
     ('2025-10-08 11:30:00', 'CONFIRMED', 5, 23), -- Filou inscrit à Adaptation aux changements

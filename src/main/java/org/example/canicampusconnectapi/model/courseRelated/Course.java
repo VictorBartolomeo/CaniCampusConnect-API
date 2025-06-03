@@ -12,6 +12,7 @@ import org.example.canicampusconnectapi.model.users.Club;
 import org.example.canicampusconnectapi.model.users.Coach;
 import org.example.canicampusconnectapi.view.admin.AdminViewCourse;
 import org.example.canicampusconnectapi.view.coach.CoachView;
+import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
@@ -29,35 +30,35 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
-    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class})
+    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class})
     protected Long id;
 
     @Column(nullable = false, length = 255)
     @NotBlank(message = "Le titre ne peut pas être vide")
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     protected String title;
 
     @Column(columnDefinition = "TEXT")
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     protected String description;
 
     @Column(nullable = false)
     @NotNull(message = "La date et l'heure de début ne peuvent pas être vides")
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class, CoachView.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class, CoachView.class,CoachViewRegistrations.class})
     protected LocalDateTime startDatetime;
 
     @Column(nullable = false)
     @NotNull(message = "La date et l'heure de fin ne peuvent pas être vides")
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class, CoachView.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class, CoachView.class,CoachViewRegistrations.class})
     protected LocalDateTime endDatetime;
 
     @Column(nullable = false)
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     protected int maxCapacity;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachViewRegistrations.class})
     protected Coach coach;
 
     @ManyToOne
@@ -66,7 +67,7 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "course_type_id", nullable = false)
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     protected CourseType courseType;
 
     @OneToMany(mappedBy = "course")

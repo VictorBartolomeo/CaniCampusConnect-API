@@ -44,4 +44,18 @@ public interface RegistrationDao extends JpaRepository<Registration, Long> {
 
     boolean existsByCourseIdAndDogId(Long courseId, Long dogId);
 
+    List<Registration> findByCourseCoachIdAndStatus(Long coachId, RegistrationStatus status);
+    /**
+     * Trouve les registrations par coach, statut et date de début de cours après une date donnée
+     */
+    List<Registration> findByCourseCoachIdAndStatusAndCourseStartDatetimeAfter(
+            Long coachId, RegistrationStatus status, LocalDateTime dateTime);
+
+    /**
+     * Trouve les registrations par statut et date de début de cours avant une date donnée
+     */
+    List<Registration> findByStatusAndCourseStartDatetimeBefore(
+            RegistrationStatus status, LocalDateTime dateTime);
+    List<Registration> findByDogIdAndCourseId(Long dogId, Long courseId);
+
 }

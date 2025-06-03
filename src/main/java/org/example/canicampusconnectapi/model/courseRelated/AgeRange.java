@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.canicampusconnectapi.view.admin.AdminView;
 import org.example.canicampusconnectapi.view.coach.CoachView;
+import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 
@@ -25,12 +26,12 @@ public class AgeRange {
 
     // En mois
     @Column(nullable = false)
-    @JsonView({OwnerView.class, OwnerViewCourse.class,CoachView.class})
+    @JsonView({OwnerView.class, OwnerViewCourse.class,CoachView.class, CoachViewRegistrations.class})
     protected int minAge;
 
     //En mois
     @Column(nullable = false)
-    @JsonView({OwnerView.class,OwnerViewCourse.class,CoachView.class})
+    @JsonView({OwnerView.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     protected int maxAge;
 
     @OneToMany(mappedBy = "ageRange")

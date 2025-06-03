@@ -187,4 +187,13 @@ public class CourseServiceImpl implements CourseService {
         return clubDao.findById(1)
                 .orElseThrow(() -> new ResourceNotFound("Default club not found"));
     }
+
+    @Override
+    public List<Course> getUpcomingCoursesByCoach(Long coachId) {
+        Coach coach = coachDao.findById(coachId)
+                .orElseThrow(() -> new ResourceNotFound("Coach not found with ID: " + coachId));
+
+        LocalDateTime now = LocalDateTime.now();
+        return courseDao.findByCoachIdAndStartDatetimeAfter(coachId, now);
+    }
 }

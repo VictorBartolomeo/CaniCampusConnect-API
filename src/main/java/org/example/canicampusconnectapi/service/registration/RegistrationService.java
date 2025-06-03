@@ -23,7 +23,6 @@ public interface RegistrationService {
 
     List<Registration> findByCourseId(Long courseId);
 
-
     List<Registration> findByStatus(RegistrationStatus status);
 
     List<Registration> findByRegistrationDate(LocalDateTime date);
@@ -45,4 +44,17 @@ public interface RegistrationService {
     long countByCourseId(Long courseId);
 
     boolean deleteById(Long id);
+
+    List<Registration> findPendingRegistrationsByCoachId(Long coachId);
+    /**
+     * Expire automatiquement les registrations en attente pour des cours passés
+     * et retourne seulement les registrations pending pour des cours futurs
+     */
+    List<Registration> findActivePendingRegistrationsByCoachId(Long coachId);
+
+    /**
+     * Expire toutes les registrations PENDING pour des cours passés
+     */
+    void expirePastPendingRegistrations();
+
 }

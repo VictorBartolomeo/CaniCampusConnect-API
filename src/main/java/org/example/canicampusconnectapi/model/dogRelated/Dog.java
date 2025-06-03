@@ -13,6 +13,7 @@ import org.example.canicampusconnectapi.model.healthRecord.Vaccination;
 import org.example.canicampusconnectapi.model.healthRecord.VeterinaryVisit;
 import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.view.coach.CoachView;
+import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
@@ -39,26 +40,26 @@ public class Dog {
     protected Long id;
 
     @Column(nullable = false, length = 255)
-    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class})
+    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class})
     protected String name;
 
     @Column(nullable = false)
-    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class,CoachView.class})
+    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     @NotNull(groups = {CreateFromOwner.class})
     @Column(nullable = false)
-    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class,CoachView.class})
+    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     protected Gender gender;
 
     @Column(unique = true, length = 50)
-    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class,CoachView.class})
+    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     protected String chipNumber;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class})
+    @JsonView({OwnerViewDog.class,OwnerView.class,OwnerViewCourse.class,CoachViewRegistrations.class})
     private Owner owner;
 
     @ManyToMany(fetch = FetchType.LAZY)
