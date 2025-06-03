@@ -19,6 +19,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"dog_id", "course_id"})
+})
 public class Registration {
 
     public interface RegistrationStatusValidation{}
