@@ -1,3 +1,4 @@
+
 package org.example.canicampusconnectapi.service;
 
 import org.example.canicampusconnectapi.dao.CourseDao;
@@ -144,7 +145,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         return registrationDao.findByCourseId(courseId);
     }
 
-
     @Override
     public List<Registration> findByStatus(RegistrationStatus status) {
         return registrationDao.findByStatus(status);
@@ -205,5 +205,49 @@ public class RegistrationServiceImpl implements RegistrationService {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Trouve toutes les registrations en attente pour les cours d'un coach spécifique.
+     */
+    @Override
+    public List<Registration> findPendingRegistrationsByCoachId(Long coachId) {
+        return registrationDao.findByCourseCoachIdAndStatus(coachId, RegistrationStatus.PENDING);
+    }
+
+
+    /**
+     * Trouve les registrations en attente pour des cours futurs d'un coach.
+     * Expire automatiquement celles pour des cours passés.
+     */
+    @Override
+    @Transactional
+    public List<Registration> findActivePendingRegistrationsByCoachId(Long coachId) {
+        // D'abord, expirer les registrations des cours passés
+        expirePastPendingRegistrations();
+
+        // Ensuite, retourner seulement les PENDING pour des cours futurs
+        LocalDateTime now = LocalDateTime.now();
+        return registrationDao.findByCourseCoachIdAndStatusAndCourseStartDatetimeAfter(
+                coachId, RegistrationStatus.PENDING, now);
+    }
+
+    /**
+     * Expire automatiquement toutes les registrations PENDING pour des cours passés
+     */
+    @Override
+    @Transactional
+    public void expirePastPendingRegistrations() {
+        LocalDateTime now = LocalDateTime.now();
+
+        // Trouver toutes les registrations PENDING pour des cours passés
+        List<Registration> expiredRegistrations = registrationDao
+                .findByStatusAndCourseStartDatetimeBefore(RegistrationStatus.PENDING, now);
+
+        // Les marquer comme REJECTED
+        for (Registration registration : expiredRegistrations) {
+            registration.setStatus(RegistrationStatus.REFUSED);
+            registrationDao.save(registration);
+        }
     }
 }
