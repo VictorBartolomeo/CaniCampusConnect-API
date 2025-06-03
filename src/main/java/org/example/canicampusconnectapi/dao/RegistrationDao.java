@@ -56,5 +56,6 @@ public interface RegistrationDao extends JpaRepository<Registration, Long> {
      */
     List<Registration> findByStatusAndCourseStartDatetimeBefore(
             RegistrationStatus status, LocalDateTime dateTime);
+    List<Registration> findByDogIdAndCourseId(Long dogId, Long courseId);
 
 }
