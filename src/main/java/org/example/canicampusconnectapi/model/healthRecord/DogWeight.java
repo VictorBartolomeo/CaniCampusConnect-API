@@ -13,7 +13,7 @@ import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Date;
 
 @Getter
@@ -27,7 +27,7 @@ public class DogWeight {
 
     @Column(nullable = false)
     @JsonView(OwnerViewDog.class)
-    protected LocalDateTime measurementDate;
+    protected Instant measurementDate;
 
     @Column(precision = 5, scale = 2, nullable = false)
     @DecimalMin(value = "0.1")

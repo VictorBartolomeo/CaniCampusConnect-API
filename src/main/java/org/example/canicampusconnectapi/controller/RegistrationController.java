@@ -21,7 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @CrossOrigin
@@ -87,7 +87,7 @@ public class RegistrationController {
     @GetMapping("/registrations/date")
     @JsonView(AdminViewRegistration.class)
     public List<Registration> getRegistrationsByDate(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant date) {
         return registrationService.findByRegistrationDate(date);
     }
 
@@ -96,8 +96,8 @@ public class RegistrationController {
     @GetMapping("/registrations/between")
     @JsonView(AdminViewRegistration.class)
     public List<Registration> getRegistrationsBetweenDates(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant end) {
         return registrationService.findByRegistrationDateBetween(start, end);
     }
 

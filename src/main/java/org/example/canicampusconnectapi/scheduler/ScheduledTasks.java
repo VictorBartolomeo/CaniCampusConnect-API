@@ -21,6 +21,6 @@ public class ScheduledTasks {
     public void expireOldPendingRegistrations() {
         registrationService.expirePastPendingRegistrations();
         System.out.println("Tâche d'expiration des registrations passées exécutée à " +
-                java.time.LocalDateTime.now());
+                java.time.Instant.now());
     }
 }

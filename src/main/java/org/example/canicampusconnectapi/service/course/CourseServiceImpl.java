@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,11 +79,11 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> getUpcomingCourses() {
         Club defaultClub = getDefaultClub();
-        return courseDao.findByClubAndStartDatetimeAfter(defaultClub, LocalDateTime.now());
+        return courseDao.findByClubAndStartDatetimeAfter(defaultClub, Instant.now());
     }
 
     @Override
-    public List<Course> getCoursesBetweenDates(LocalDateTime start, LocalDateTime end) {
+    public List<Course> getCoursesBetweenDates(Instant start, Instant end) {
         Club defaultClub = getDefaultClub();
         return courseDao.findByClubAndStartDatetimeBetween(defaultClub, start, end);
     }
@@ -193,7 +193,7 @@ public class CourseServiceImpl implements CourseService {
         Coach coach = coachDao.findById(coachId)
                 .orElseThrow(() -> new ResourceNotFound("Coach not found with ID: " + coachId));
 
-        LocalDateTime now = LocalDateTime.now();
+        Instant now = Instant.now();
         return courseDao.findByCoachIdAndStartDatetimeAfter(coachId, now);
     }
 }

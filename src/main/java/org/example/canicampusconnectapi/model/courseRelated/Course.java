@@ -16,7 +16,7 @@ import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -45,12 +45,12 @@ public class Course {
     @Column(nullable = false)
     @NotNull(message = "La date et l'heure de début ne peuvent pas être vides")
     @JsonView({OwnerViewDog.class,OwnerViewCourse.class, CoachView.class,CoachViewRegistrations.class})
-    protected LocalDateTime startDatetime;
+    protected Instant startDatetime;
 
     @Column(nullable = false)
     @NotNull(message = "La date et l'heure de fin ne peuvent pas être vides")
     @JsonView({OwnerViewDog.class,OwnerViewCourse.class, CoachView.class,CoachViewRegistrations.class})
-    protected LocalDateTime endDatetime;
+    protected Instant endDatetime;
 
     @Column(nullable = false)
     @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})

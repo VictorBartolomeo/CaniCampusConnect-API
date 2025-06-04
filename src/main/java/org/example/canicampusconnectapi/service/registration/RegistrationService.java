@@ -3,7 +3,7 @@ package org.example.canicampusconnectapi.service.registration;
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
 import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,9 +25,9 @@ public interface RegistrationService {
 
     List<Registration> findByStatus(RegistrationStatus status);
 
-    List<Registration> findByRegistrationDate(LocalDateTime date);
+    List<Registration> findByRegistrationDate(Instant date);
 
-    List<Registration> findByRegistrationDateBetween(LocalDateTime start, LocalDateTime end);
+    List<Registration> findByRegistrationDateBetween(Instant start, Instant end);
 
     List<Registration> findUpcoming();
 

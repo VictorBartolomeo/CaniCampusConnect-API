@@ -1,17 +1,15 @@
-
-package org.example.canicampusconnectapi.service;
+package org.example.canicampusconnectapi.service.registration;
 
 import org.example.canicampusconnectapi.dao.CourseDao;
 import org.example.canicampusconnectapi.dao.RegistrationDao;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
 import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
-import org.example.canicampusconnectapi.service.registration.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,7 +67,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         // Régler les valeurs par défaut
         registration.setStatus(RegistrationStatus.PENDING);
-        registration.setRegistrationDate(LocalDateTime.now());
+        registration.setRegistrationDate(Instant.now());
 
         // Sauvegarder l'inscription
         return registrationDao.save(registration);
@@ -160,44 +158,44 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public List<Registration> findByRegistrationDate(LocalDateTime date) {
+    public List<Registration> findByRegistrationDate(Instant date) {
         return registrationDao.findByRegistrationDate(date);
     }
 
     @Override
-    public List<Registration> findByRegistrationDateBetween(LocalDateTime start, LocalDateTime end) {
+    public List<Registration> findByRegistrationDateBetween(Instant start, Instant end) {
         return registrationDao.findByRegistrationDateBetween(start, end);
     }
 
     @Override
     public List<Registration> findUpcoming() {
-        return registrationDao.findByCourseStartDatetimeAfter(LocalDateTime.now());
+        return registrationDao.findByCourseStartDatetimeAfter(Instant.now());
     }
 
     @Override
     public List<Registration> findUpcomingByDogId(Long dogId) {
-        return registrationDao.findByDogIdAndCourseStartDatetimeAfter(dogId, LocalDateTime.now());
+        return registrationDao.findByDogIdAndCourseStartDatetimeAfter(dogId, Instant.now());
     }
 
     @Override
     public List<Registration> findPast() {
-        return registrationDao.findByCourseEndDatetimeBefore(LocalDateTime.now());
+        return registrationDao.findByCourseEndDatetimeBefore(Instant.now());
     }
 
     @Override
     public List<Registration> findPastByDogId(Long dogId) {
-        return registrationDao.findByDogIdAndCourseEndDatetimeBefore(dogId, LocalDateTime.now());
+        return registrationDao.findByDogIdAndCourseEndDatetimeBefore(dogId, Instant.now());
     }
 
     @Override
     public List<Registration> findCurrent() {
-        LocalDateTime now = LocalDateTime.now();
+        Instant now = Instant.now();
         return registrationDao.findByCourseStartDatetimeBeforeAndCourseEndDatetimeAfter(now, now);
     }
 
     @Override
     public List<Registration> findCurrentByDogId(Long dogId) {
-        LocalDateTime now = LocalDateTime.now();
+        Instant now = Instant.now();
         return registrationDao.findByDogIdAndCourseStartDatetimeBeforeAndCourseEndDatetimeAfter(
                 dogId, now, now);
     }
@@ -236,7 +234,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         expirePastPendingRegistrations();
 
         // Ensuite, retourner seulement les PENDING pour des cours futurs
-        LocalDateTime now = LocalDateTime.now();
+        Instant now = Instant.now();
         return registrationDao.findByCourseCoachIdAndStatusAndCourseStartDatetimeAfter(
                 coachId, RegistrationStatus.PENDING, now);
     }
@@ -247,7 +245,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     @Transactional
     public void expirePastPendingRegistrations() {
-        LocalDateTime now = LocalDateTime.now();
+        Instant now = Instant.now();
 
         // Trouver toutes les registrations PENDING pour des cours passés
         List<Registration> expiredRegistrations = registrationDao
