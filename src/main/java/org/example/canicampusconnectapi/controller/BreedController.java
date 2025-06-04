@@ -3,6 +3,7 @@ package org.example.canicampusconnectapi.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
 import org.example.canicampusconnectapi.model.dogRelated.Breed;
+import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
 import org.example.canicampusconnectapi.service.breed.BreedService;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
@@ -83,13 +84,11 @@ public class BreedController {
             @RequestParam("file") MultipartFile file) {
 
         try {
-            // Vérifier que la race existe
             Optional<Breed> breedOpt = breedService.findById(id);
             if (breedOpt.isEmpty()) {
                 return ResponseEntity.notFound().build();
             }
 
-            // Validations
             if (file.isEmpty()) {
                 return ResponseEntity.badRequest().body("Fichier vide");
             }
@@ -98,7 +97,6 @@ public class BreedController {
                 return ResponseEntity.badRequest().body("Type de fichier non supporté");
             }
 
-            // Générer le nom de fichier
             Breed breed = breedOpt.get();
             String fileExtension = getFileExtension(file.getOriginalFilename());
             String fileName = id + "_" +
@@ -128,6 +126,7 @@ public class BreedController {
     }
 
 
+    @JsonView(OwnerViewDog.class)
     @GetMapping("/breed/{id}/image")
     public ResponseEntity<Resource> getBreedImage(@PathVariable Short id) {
         try {
@@ -217,9 +216,10 @@ public class BreedController {
                 Map.entry("American Staffordshire Terrier", "American_Staffordshire_Terrier.png")
         );
 
-        return breedToFile.getOrDefault(breedName, "default.png");
+        return breedToFile.getOrDefault(breedName, "placeholder_no_breed.jpg");
     }
 
+    @IsClubOwner
     @DeleteMapping("/breed/{id}/image")
     public ResponseEntity<Void> deleteBreedImage(@PathVariable Short id) {
         try {
@@ -255,7 +255,8 @@ public class BreedController {
         }
     }
 
-    // Méthodes utilitaires
+
+
     private boolean isValidImageType(String contentType) {
         return contentType != null && (
                 contentType.equals("image/jpeg") ||
