@@ -3,7 +3,7 @@ package org.example.canicampusconnectapi.service.course;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
 import org.example.canicampusconnectapi.model.courseRelated.AgeRange;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,7 +68,7 @@ public interface CourseService {
      * @param end The end date.
      * @return A list of courses between the specified dates.
      */
-    List<Course> getCoursesBetweenDates(LocalDateTime start, LocalDateTime end);
+    List<Course> getCoursesBetweenDates(Instant start, Instant end);
 
     /**
      * Retrieves all courses for a specific age range in the default club.

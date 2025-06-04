@@ -13,7 +13,7 @@ import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.data.annotation.CreatedDate;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 
 @Getter
@@ -47,7 +47,7 @@ public class Registration {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     @JsonView({OwnerViewDog.class, OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
-    protected LocalDateTime registrationDate;
+    protected Instant registrationDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 255)

@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Repository
@@ -20,23 +20,23 @@ public interface RegistrationDao extends JpaRepository<Registration, Long> {
 
     List<Registration> findByStatus(RegistrationStatus status);
 
-    List<Registration> findByRegistrationDate(LocalDateTime date);
+    List<Registration> findByRegistrationDate(Instant date);
 
-    List<Registration> findByRegistrationDateBetween(LocalDateTime start, LocalDateTime end);
+    List<Registration> findByRegistrationDateBetween(Instant start, Instant end);
 
-    List<Registration> findByCourseStartDatetimeAfter(LocalDateTime date);
+    List<Registration> findByCourseStartDatetimeAfter(Instant date);
 
-    List<Registration> findByDogIdAndCourseStartDatetimeAfter(Long dogId, LocalDateTime date);
+    List<Registration> findByDogIdAndCourseStartDatetimeAfter(Long dogId, Instant date);
 
-    List<Registration> findByCourseEndDatetimeBefore(LocalDateTime date);
+    List<Registration> findByCourseEndDatetimeBefore(Instant date);
 
-    List<Registration> findByDogIdAndCourseEndDatetimeBefore(Long dogId, LocalDateTime date);
+    List<Registration> findByDogIdAndCourseEndDatetimeBefore(Long dogId, Instant date);
 
     List<Registration> findByCourseStartDatetimeBeforeAndCourseEndDatetimeAfter(
-            LocalDateTime startBefore, LocalDateTime endAfter);
+            Instant startBefore, Instant endAfter);
 
     List<Registration> findByDogIdAndCourseStartDatetimeBeforeAndCourseEndDatetimeAfter(
-            Long dogId, LocalDateTime startBefore, LocalDateTime endAfter);
+            Long dogId, Instant startBefore, Instant endAfter);
 
     long countByCourseId(Long courseId);
 
@@ -49,13 +49,13 @@ public interface RegistrationDao extends JpaRepository<Registration, Long> {
      * Trouve les registrations par coach, statut et date de début de cours après une date donnée
      */
     List<Registration> findByCourseCoachIdAndStatusAndCourseStartDatetimeAfter(
-            Long coachId, RegistrationStatus status, LocalDateTime dateTime);
+            Long coachId, RegistrationStatus status, Instant dateTime);
 
     /**
      * Trouve les registrations par statut et date de début de cours avant une date donnée
      */
     List<Registration> findByStatusAndCourseStartDatetimeBefore(
-            RegistrationStatus status, LocalDateTime dateTime);
+            RegistrationStatus status, Instant dateTime);
     List<Registration> findByDogIdAndCourseId(Long dogId, Long courseId);
 
 }
