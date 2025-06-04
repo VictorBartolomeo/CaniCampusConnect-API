@@ -23,10 +23,10 @@ public class Breed {
     @JsonView({OwnerViewDog.class, CoachView.class})
     protected String name;
 
+    @Column(length = 500)
+    @JsonView({OwnerViewDog.class, CoachView.class})
+    protected String avatarUrl;
+
     @ManyToMany(mappedBy = "breeds", fetch = FetchType.LAZY)
     protected Set<Dog> dogs;
-
-    String avatarUrl;
-
-
 }

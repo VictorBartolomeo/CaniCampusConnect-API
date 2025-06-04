@@ -53,8 +53,8 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register")
-                        .permitAll()
+                        .requestMatchers("/login", "/register").permitAll()
+                        .requestMatchers("breed/*/image").permitAll()
                         .anyRequest()
                         .permitAll())
                 .build();

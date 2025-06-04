@@ -134,160 +134,160 @@ VALUES
        ('Promenades pour seniors', 'Comment adapter les sorties aux capacités de votre chien âgé',
         '2026-03-20 11:00:00', '2026-03-20 12:00:00', 6, 3, 1, 6);
 
-INSERT INTO breed (name)
-VALUES ('Berger Australien'),
-       ('Golden Retriever'),
-       ('Staffordshire Bull Terrier'),
-       ('Berger Belge'),                       -- Note: Souvent dominé par le Malinois, mais regroupe les 4 variétés
-       ('Labrador Retriever'),
-       ('Berger Allemand'),
-       ('Setter Anglais'),
-       ('Épagneul Breton'),
-       ('Beagle'),
-       ('Cavalier King Charles Spaniel'),
-       ('Bouledogue Français'),
-       ('Cocker Spaniel Anglais'),
-       ('Teckel'),                             -- Regroupe les différentes tailles/poils
-       ('Yorkshire Terrier'),
-       ('Cane Corso'),
-       ('Husky de Sibérie'),
-       ('Shih Tzu'),
-       ('American Staffordshire Terrier'),
-       ('Chihuahua'),
-       ('Jack Russell Terrier'),
-       ('Border Collie'),
-       ('Pointer Anglais'),                    -- Souvent appelé simplement Pointer
-       ('Dogue Allemand'),
-       ('Rottweiler'),
-       ('Berger Blanc Suisse'),
-       ('Samoyède'),
-       ('West Highland White Terrier'),        -- Westie
-       ('Basset Hound'),
-       ('Dalmatien'),
-       ('Akita Inu'),
-       ('Shiba Inu'),
-       ('Bichon Frisé'),
-       ('Bichon Maltais'),
-       ('Lhassa Apso'),
-       ('Shar Pei'),
-       ('Chow Chow'),
-       ('Dobermann'),
-       ('Leonberg'),
-       ('Terre-Neuve'),
-       ('Bouvier Bernois'),
-       ('Saint-Bernard'),
-       ('Welsh Corgi Pembroke'),
-       ('Setter Irlandais Rouge'),
-       ('Braque Allemand'),
-       ('Braque de Weimar'),
-       ('Griffon Korthals'),
-       ('Braque Français'),                    -- Type Gascogne et Pyrénées
-       ('Barbet'),
-       ('Coton de Tuléar'),
-       ('Spitz Allemand'),                     -- Regroupe Nain (Pomeranian), Petit, Moyen, Grand, Loup
-       ('Pékinois'),
-       ('Carlin'),
-       ('Bull Terrier'),
-       ('Fox Terrier'),                        -- Poil Lisse et Poil Dur
-       ('Scottish Terrier'),
-       ('Schnauzer'),                          -- Nain, Moyen, Géant
-       ('Airedale Terrier'),
-       ('Berger des Pyrénées'),                -- Face Rase et Poil Long
-       ('Colley à poil long'),                 -- Collie
-       ('Whippet'),
-       ('Lévrier Afghan'),
-       ('Greyhound'),                          -- Lévrier Anglais
-       ('Borzoi'),                             -- Lévrier Russe
-       ('Basenji'),
-       ('Rhodesian Ridgeback'),
-       ('Dogue de Bordeaux'),
-       ('Bullmastiff'),
-       ('Mastiff'),                            -- Old English Mastiff
-       ('Pinscher Nain'),
-       ('Chien d''eau Portugais'),
-       ('Lagotto Romagnolo'),
-       ('Berger Picard'),
-       ('Beauceron'),                          -- Berger de Beauce
-       ('Berger Hollandais'),
-       ('Komondor'),
-       ('Kuvasz'),
-       ('Mâtin des Pyrénées'),                 -- Chien de Montagne des Pyrénées
-       ('Mâtin Espagnol'),
-       ('Dogue du Tibet'),
-       ('Fila Brasileiro'),
-       ('Akita Américain'),
-       ('Malamute de l''Alaska'),
-       ('Groenlandais'),                       -- Chien du Groenland
-       ('Chien Finnois de Laponie'),
-       ('Spitz Finlandais'),
-       ('Spitz des Visigoths'),                -- Vallhund Suédois
-       ('Chien Norvégien de Macareux'),        -- Lundehund
-       ('Elkhound Norvégien'),                 -- Chien d'élan Norvégien
-       ('Eurasier'),
-       ('Hovawart'),
-       ('Landseer'),
-       ('Retriever à poil plat'),              -- Flat-Coated Retriever
-       ('Retriever de la Baie de Chesapeake'), -- Chesapeake Bay Retriever
-       ('Retriever à poil bouclé'),            -- Curly-Coated Retriever
-       ('Retriever de la Nouvelle-Écosse'),    -- Nova Scotia Duck Tolling Retriever
-       ('Épagneul d''eau Irlandais'),
-       ('Épagneul du Tibet'),                  -- Tibetan Spaniel
-       ('Épagneul Japonais'),                  -- Chin
-       ('Épagneul King Charles'),              -- différent du Cavalier
-       ('Épagneul Papillon'),                  -- Continental Toy Spaniel Papillon
-       ('Épagneul Phalène'),                   -- Continental Toy Spaniel Phalène
-       ('Petit Chien Lion'),
-       ('Griffon Belge'),
-       ('Griffon Bruxellois'),
-       ('Petit Brabançon'),
-       ('Terrier Irlandais'),
-       ('Terrier Kerry Blue'),
-       ('Terrier Soft Coated Wheaten'),
-       ('Terrier Tibétain'),
-       ('Terrier Noir Russe'),
-       ('Bedlington Terrier'),
-       ('Border Terrier'),
-       ('Cairn Terrier'),
-       ('Dandie Dinmont Terrier'),
-       ('Lakeland Terrier'),
-       ('Manchester Terrier'),
-       ('Norfolk Terrier'),
-       ('Norwich Terrier'),
-       ('Sealyham Terrier'),
-       ('Skye Terrier'),
-       ('Terrier Australien'),
-       ('Terrier Tchèque'),                    -- Cesky Terrier
-       ('Terrier Japonais'),                   -- Nihon Teria
-       ('Terrier Brésilien'),
-       ('Basset Artésien Normand'),
-       ('Basset Bleu de Gascogne'),
-       ('Basset Fauve de Bretagne'),
-       ('Grand Basset Griffon Vendéen'),
-       ('Petit Basset Griffon Vendéen'),
-       ('Briquet Griffon Vendéen'),
-       ('Chien d''Artois'),
-       ('Porcelaine'),
-       ('Billy'),
-       ('Français Blanc et Noir'),
-       ('Français Tricolore'),
-       ('Français Blanc et Orange'),
-       ('Grand Anglo-Français Tricolore'),
-       ('Grand Anglo-Français Blanc et Noir'),
-       ('Grand Anglo-Français Blanc et Orange'),
-       ('Grand Bleu de Gascogne'),
-       ('Grand Gascon Saintongeois'),
-       ('Griffon Bleu de Gascogne'),
-       ('Griffon Fauve de Bretagne'),
-       ('Griffon Nivernais'),
-       ('Poitevin'),
-       ('Chien de Saint-Hubert'),              -- Bloodhound
-       ('Sloughi'),                            -- Lévrier Arabe
-       ('Azawakh'),                            -- Lévrier Touareg
-       ('Galgo Espagnol'),                     -- Lévrier Espagnol
-       ('Irish Wolfhound'),                    -- Lévrier Irlandais
-       ('Deerhound'),                          -- Lévrier Écossais
-       ('Petit Lévrier Italien'),              -- Italian Greyhound
-       ('Saluki');-- Lévrier Persan
+INSERT INTO breed (name, avatar_url)
+VALUES ('Berger Australien', '/breed/1/image'),
+       ('Golden Retriever', '/breed/2/image'),
+       ('Staffordshire Bull Terrier', '/breed/3/image'),
+       ('Berger Belge', '/breed/4/image'),                       -- Note: Souvent dominé par le Malinois, mais regroupe les 4 variétés
+       ('Labrador Retriever', '/breed/5/image'),
+       ('Berger Allemand', '/breed/6/image'),
+       ('Setter Anglais', '/breed/7/image'),
+       ('Épagneul Breton', '/breed/8/image'),
+       ('Beagle', '/breed/9/image'),
+       ('Cavalier King Charles Spaniel', '/breed/10/image'),
+       ('Bouledogue Français', '/breed/11/image'),
+       ('Cocker Spaniel Anglais', '/breed/12/image'),
+       ('Teckel', '/breed/13/image'),                             -- Regroupe les différentes tailles/poils
+       ('Yorkshire Terrier', '/breed/14/image'),
+       ('Cane Corso', '/breed/15/image'),
+       ('Husky de Sibérie', '/breed/16/image'),
+       ('Shih Tzu', '/breed/17/image'),
+       ('American Staffordshire Terrier', '/breed/18/image'),
+       ('Chihuahua', '/breed/19/image'),
+       ('Jack Russell Terrier', '/breed/20/image'),
+       ('Border Collie', '/breed/21/image'),
+       ('Pointer Anglais', '/breed/22/image'),                    -- Souvent appelé simplement Pointer
+       ('Dogue Allemand', '/breed/23/image'),
+       ('Rottweiler', '/breed/24/image'),
+       ('Berger Blanc Suisse', '/breed/25/image'),
+       ('Samoyède', '/breed/26/image'),
+       ('West Highland White Terrier', '/breed/27/image'),        -- Westie
+       ('Basset Hound', '/breed/28/image'),
+       ('Dalmatien', '/breed/29/image'),
+       ('Akita Inu', '/breed/30/image'),
+       ('Shiba Inu', '/breed/31/image'),
+       ('Bichon Frisé', '/breed/32/image'),
+       ('Bichon Maltais', '/breed/33/image'),
+       ('Lhassa Apso', '/breed/34/image'),
+       ('Shar Pei', '/breed/35/image'),
+       ('Chow Chow', '/breed/36/image'),
+       ('Dobermann', '/breed/37/image'),
+       ('Leonberg', '/breed/38/image'),
+       ('Terre-Neuve', '/breed/39/image'),
+       ('Bouvier Bernois', '/breed/40/image'),
+       ('Saint-Bernard', '/breed/41/image'),
+       ('Welsh Corgi Pembroke', '/breed/42/image'),
+       ('Setter Irlandais Rouge', '/breed/43/image'),
+       ('Braque Allemand', '/breed/44/image'),
+       ('Braque de Weimar', '/breed/45/image'),
+       ('Griffon Korthals', '/breed/46/image'),
+       ('Braque Français', '/breed/47/image'),                    -- Type Gascogne et Pyrénées
+       ('Barbet', '/breed/48/image'),
+       ('Coton de Tuléar', '/breed/49/image'),
+       ('Spitz Allemand', '/breed/50/image'),                     -- Regroupe Nain (Pomeranian), Petit, Moyen, Grand, Loup
+       ('Pékinois', '/breed/51/image'),
+       ('Carlin', '/breed/52/image'),
+       ('Bull Terrier', '/breed/53/image'),
+       ('Fox Terrier', '/breed/54/image'),                        -- Poil Lisse et Poil Dur
+       ('Scottish Terrier', '/breed/55/image'),
+       ('Schnauzer', '/breed/56/image'),                          -- Nain, Moyen, Géant
+       ('Airedale Terrier', '/breed/57/image'),
+       ('Berger des Pyrénées', '/breed/58/image'),                -- Face Rase et Poil Long
+       ('Colley à poil long', '/breed/59/image'),                 -- Collie
+       ('Whippet', '/breed/60/image'),
+       ('Lévrier Afghan', '/breed/61/image'),
+       ('Greyhound', '/breed/62/image'),                          -- Lévrier Anglais
+       ('Borzoi', '/breed/63/image'),                             -- Lévrier Russe
+       ('Basenji', '/breed/64/image'),
+       ('Rhodesian Ridgeback', '/breed/65/image'),
+       ('Dogue de Bordeaux', '/breed/66/image'),
+       ('Bullmastiff', '/breed/67/image'),
+       ('Mastiff', '/breed/68/image'),                            -- Old English Mastiff
+       ('Pinscher Nain', '/breed/69/image'),
+       ('Chien d''eau Portugais', '/breed/70/image'),
+       ('Lagotto Romagnolo', '/breed/71/image'),
+       ('Berger Picard', '/breed/72/image'),
+       ('Beauceron', '/breed/73/image'),                          -- Berger de Beauce
+       ('Berger Hollandais', '/breed/74/image'),
+       ('Komondor', '/breed/75/image'),
+       ('Kuvasz', '/breed/76/image'),
+       ('Mâtin des Pyrénées', '/breed/77/image'),                 -- Chien de Montagne des Pyrénées
+       ('Mâtin Espagnol', '/breed/78/image'),
+       ('Dogue du Tibet', '/breed/79/image'),
+       ('Fila Brasileiro', '/breed/80/image'),
+       ('Akita Américain', '/breed/81/image'),
+       ('Malamute de l''Alaska', '/breed/82/image'),
+       ('Groenlandais', '/breed/83/image'),                       -- Chien du Groenland
+       ('Chien Finnois de Laponie', '/breed/84/image'),
+       ('Spitz Finlandais', '/breed/85/image'),
+       ('Spitz des Visigoths', '/breed/86/image'),                -- Vallhund Suédois
+       ('Chien Norvégien de Macareux', '/breed/87/image'),        -- Lundehund
+       ('Elkhound Norvégien', '/breed/88/image'),                 -- Chien d'élan Norvégien
+       ('Eurasier', '/breed/89/image'),
+       ('Hovawart', '/breed/90/image'),
+       ('Landseer', '/breed/91/image'),
+       ('Retriever à poil plat', '/breed/92/image'),              -- Flat-Coated Retriever
+       ('Retriever de la Baie de Chesapeake', '/breed/93/image'), -- Chesapeake Bay Retriever
+       ('Retriever à poil bouclé', '/breed/94/image'),            -- Curly-Coated Retriever
+       ('Retriever de la Nouvelle-Écosse', '/breed/95/image'),    -- Nova Scotia Duck Tolling Retriever
+       ('Épagneul d''eau Irlandais', '/breed/96/image'),
+       ('Épagneul du Tibet', '/breed/97/image'),                  -- Tibetan Spaniel
+       ('Épagneul Japonais', '/breed/98/image'),                  -- Chin
+       ('Épagneul King Charles', '/breed/99/image'),              -- différent du Cavalier
+       ('Épagneul Papillon', '/breed/100/image'),                  -- Continental Toy Spaniel Papillon
+       ('Épagneul Phalène', '/breed/101/image'),                   -- Continental Toy Spaniel Phalène
+       ('Petit Chien Lion', '/breed/102/image'),
+       ('Griffon Belge', '/breed/103/image'),
+       ('Griffon Bruxellois', '/breed/104/image'),
+       ('Petit Brabançon', '/breed/105/image'),
+       ('Terrier Irlandais', '/breed/106/image'),
+       ('Terrier Kerry Blue', '/breed/107/image'),
+       ('Terrier Soft Coated Wheaten', '/breed/108/image'),
+       ('Terrier Tibétain', '/breed/109/image'),
+       ('Terrier Noir Russe', '/breed/110/image'),
+       ('Bedlington Terrier', '/breed/111/image'),
+       ('Border Terrier', '/breed/112/image'),
+       ('Cairn Terrier', '/breed/113/image'),
+       ('Dandie Dinmont Terrier', '/breed/114/image'),
+       ('Lakeland Terrier', '/breed/115/image'),
+       ('Manchester Terrier', '/breed/116/image'),
+       ('Norfolk Terrier', '/breed/117/image'),
+       ('Norwich Terrier', '/breed/118/image'),
+       ('Sealyham Terrier', '/breed/119/image'),
+       ('Skye Terrier', '/breed/120/image'),
+       ('Terrier Australien', '/breed/121/image'),
+       ('Terrier Tchèque', '/breed/122/image'),                    -- Cesky Terrier
+       ('Terrier Japonais', '/breed/123/image'),                   -- Nihon Teria
+       ('Terrier Brésilien', '/breed/124/image'),
+       ('Basset Artésien Normand', '/breed/125/image'),
+       ('Basset Bleu de Gascogne', '/breed/126/image'),
+       ('Basset Fauve de Bretagne', '/breed/127/image'),
+       ('Grand Basset Griffon Vendéen', '/breed/128/image'),
+       ('Petit Basset Griffon Vendéen', '/breed/129/image'),
+       ('Briquet Griffon Vendéen', '/breed/130/image'),
+       ('Chien d''Artois', '/breed/131/image'),
+       ('Porcelaine', '/breed/132/image'),
+       ('Billy', '/breed/133/image'),
+       ('Français Blanc et Noir', '/breed/134/image'),
+       ('Français Tricolore', '/breed/135/image'),
+       ('Français Blanc et Orange', '/breed/136/image'),
+       ('Grand Anglo-Français Tricolore', '/breed/137/image'),
+       ('Grand Anglo-Français Blanc et Noir', '/breed/138/image'),
+       ('Grand Anglo-Français Blanc et Orange', '/breed/139/image'),
+       ('Grand Bleu de Gascogne', '/breed/140/image'),
+       ('Grand Gascon Saintongeois', '/breed/141/image'),
+       ('Griffon Bleu de Gascogne', '/breed/142/image'),
+       ('Griffon Fauve de Bretagne', '/breed/143/image'),
+       ('Griffon Nivernais', '/breed/144/image'),
+       ('Poitevin', '/breed/145/image'),
+       ('Chien de Saint-Hubert', '/breed/146/image'),              -- Bloodhound
+       ('Sloughi', '/breed/147/image'),                            -- Lévrier Arabe
+       ('Azawakh', '/breed/148/image'),                            -- Lévrier Touareg
+       ('Galgo Espagnol', '/breed/149/image'),                     -- Lévrier Espagnol
+       ('Irish Wolfhound', '/breed/150/image'),                    -- Lévrier Irlandais
+       ('Deerhound', '/breed/151/image'),                          -- Lévrier Écossais
+       ('Petit Lévrier Italien', '/breed/152/image'),              -- Italian Greyhound
+       ('Saluki', '/breed/153/image');-- Lévrier Persan
 
 INSERT INTO dog (name, birth_date, gender, chip_number, user_id)
 VALUES ('Rex', '2025-02-15', 'MALE', 'CHIP123456', 4),
