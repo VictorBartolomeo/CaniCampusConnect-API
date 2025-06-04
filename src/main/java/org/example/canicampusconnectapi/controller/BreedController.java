@@ -9,6 +9,7 @@ import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin
@@ -111,12 +113,10 @@ public class BreedController {
                 Files.createDirectories(uploadPath);
             }
 
-            // Sauvegarder le fichier
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            // 🔗 LIEN EN BDD : Mettre à jour l'avatarUrl
-            String imageUrl = "/api/breed/" + id + "/image";
+            String imageUrl = "/breed/" + id + "/image";
             breedService.updateAvatarUrl(id, imageUrl);
 
             return ResponseEntity.ok(imageUrl);
@@ -127,10 +127,10 @@ public class BreedController {
         }
     }
 
+
     @GetMapping("/breed/{id}/image")
     public ResponseEntity<Resource> getBreedImage(@PathVariable Short id) {
         try {
-            // Récupérer la race pour construire le nom de fichier
             Optional<Breed> breedOpt = breedService.findById(id);
             if (breedOpt.isEmpty()) {
                 return ResponseEntity.notFound().build();
@@ -138,23 +138,12 @@ public class BreedController {
 
             Breed breed = breedOpt.get();
 
-            // Chercher le fichier (essayer plusieurs extensions)
-            String baseName = id + "_" + breed.getName().toLowerCase()
-                    .replaceAll("\\s+", "-")
-                    .replaceAll("[^a-z0-9-]", "");
+            // 🗺️ MAPPING EXACT AVEC TES FICHIERS EXISTANTS
+            String fileName = mapBreedNameToFileName(breed.getName());
 
-            String[] extensions = {".jpg", ".jpeg", ".png", ".webp"};
-            Path filePath = null;
+            Path filePath = Paths.get(uploadDir).resolve(fileName);
 
-            for (String ext : extensions) {
-                Path testPath = Paths.get(uploadDir).resolve(baseName + ext);
-                if (Files.exists(testPath)) {
-                    filePath = testPath;
-                    break;
-                }
-            }
-
-            if (filePath == null || !Files.exists(filePath)) {
+            if (!Files.exists(filePath)) {
                 return ResponseEntity.notFound().build();
             }
 
@@ -163,7 +152,7 @@ public class BreedController {
             if (resource.exists() && resource.isReadable()) {
                 String contentType = Files.probeContentType(filePath);
                 if (contentType == null) {
-                    contentType = "image/jpeg";
+                    contentType = "image/png"; // Par défaut PNG car tes fichiers sont en PNG
                 }
 
                 return ResponseEntity.ok()
@@ -172,9 +161,63 @@ public class BreedController {
             }
 
             return ResponseEntity.notFound().build();
+
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+
+    private String mapBreedNameToFileName(String breedName) {
+        Map<String, String> breedToFile = Map.ofEntries(
+                Map.entry("Beagle", "Beagle.png"),
+                Map.entry("Shih Tzu", "shitzu.png"),
+                Map.entry("Teckel", "teckel.png"),
+                Map.entry("Maltais", "Maltese.png"),
+                Map.entry("Samoyède", "Samoyed.png"),
+                Map.entry("Leonberg", "Leonberg.png"),
+                Map.entry("Shar Pei", "Shar_Pei.png"),
+                Map.entry("Akita Inu", "Akita_Inu.png"),
+                Map.entry("Chihuahua", "Chihuahua.png"),
+                Map.entry("Chow Chow", "Chow_Chow.png"),
+                Map.entry("Dalmatien", "Dalmatien.png"),
+                Map.entry("Dobermann", "dobberman.png"),
+                Map.entry("Shiba Inu", "shiba_inu.png"),
+                Map.entry("Cane Corso", "Cane_Corso.png"),
+                Map.entry("Dogue Allemand", "Great_Dane.png"),
+                Map.entry("Lhassa Apso", "Lhasa_Apso.png"),
+                Map.entry("Rottweiler", "Rottweiler.png"),
+                Map.entry("Braque de Weimar", "Waimaraner.png"),
+                Map.entry("Basset Hound", "Basset_Hound.png"),
+                Map.entry("Bichon Frisé", "Bichon_Frise.png"),
+                Map.entry("Setter Irlandais", "Irish_Setter.png"),
+                Map.entry("Terre-Neuve", "Newfoundland.png"),
+                Map.entry("Border Collie", "Border_Collie.png"),
+                Map.entry("Saint-Bernard", "Saint_Bernard.png"),
+                Map.entry("Setter Anglais", "English_Setter.png"),
+                Map.entry("Bouledogue Français", "French_Bulldog.png"),
+                Map.entry("Husky Sibérien", "Siberian_Husky.png"),
+                Map.entry("Pointer Anglais", "English_Pointer.png"),
+                Map.entry("Berger Allemand", "German_Shepherd.png"),
+                Map.entry("Malinois Belge", "Belgian_Malinois.png"),
+                Map.entry("Épagneul Breton", "Brittany_Spaniel.png"),
+                Map.entry("Golden Retriever", "golden_retriever.png"),
+                Map.entry("Yorkshire Terrier", "Yorkshire_Terrier.png"),
+                Map.entry("Berger Australien", "australian_sheperd.png"),
+                Map.entry("Labrador Retriever", "Labrador_Retriever.png"),
+                Map.entry("Bouvier Bernois", "Bernese_Mountain_Dog.png"),
+                Map.entry("Jack Russell Terrier", "Jack_Russell_Terrier.png"),
+                Map.entry("Corgi du Pays de Galles", "Pembroke_Welsh_Corgi.png"),
+                Map.entry("Berger Blanc Suisse", "White_Swiss_Shepherd.png"),
+                Map.entry("Cocker Spaniel Anglais", "English_Cocker_Spaniel.png"),
+                Map.entry("Braque Allemand à Poil Court", "German_Shorthaired_Pointer.png"),
+                Map.entry("Staffordshire Bull Terrier", "Staffordshire_Bull_Terrier.png"),
+                Map.entry("West Highland White Terrier", "West_Highland_White_Terrier.png"),
+                Map.entry("Cavalier King Charles Spaniel", "Cavalier_King_Charles_Spaniel.png"),
+                Map.entry("American Staffordshire Terrier", "American_Staffordshire_Terrier.png")
+        );
+
+        return breedToFile.getOrDefault(breedName, "default.png");
     }
 
     @DeleteMapping("/breed/{id}/image")
