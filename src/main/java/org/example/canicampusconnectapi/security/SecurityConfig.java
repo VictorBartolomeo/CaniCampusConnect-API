@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -70,5 +71,18 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }
+
+    public boolean isOwnerOfResource(Authentication authentication, Long resourceId) {
+        if (authentication == null || authentication.getPrincipal() == null) {
+            return false;
+        }
+
+        if (authentication.getPrincipal() instanceof AppUserDetails userDetails) {
+            return userDetails.getUserId().equals(resourceId);
+        }
+
+        return false;
+    }
+
 }
 

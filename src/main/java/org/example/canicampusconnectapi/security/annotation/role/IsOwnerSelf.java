@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAnyRole('ROLE_OWNER', 'ROLE_CLUB_OWNER', 'ROLE_COACH') and authentication.principal.userId == #id")
+@PreAuthorize("hasRole('ROLE_CLUB_OWNER') or (hasRole('ROLE_OWNER') and @securityConfig.isOwnerOfResource(authentication, #id))")
 public @interface IsOwnerSelf {
 }

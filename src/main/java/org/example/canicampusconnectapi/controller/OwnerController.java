@@ -7,7 +7,9 @@ import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.model.users.User;
 import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
+import org.example.canicampusconnectapi.security.annotation.role.IsOwnerSelf;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
+import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +32,8 @@ public class OwnerController {
         this.userDao = userDao;
     }
 
-    @IsOwner
-    @JsonView(OwnerView.class)
+    @IsOwnerSelf
+    @JsonView(OwnerViewDog.class)
     @GetMapping("/owner/{id}")
     public ResponseEntity<Owner> getOwner(@PathVariable Long id) {
 
