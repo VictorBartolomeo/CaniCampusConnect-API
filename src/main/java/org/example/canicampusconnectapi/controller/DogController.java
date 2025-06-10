@@ -3,6 +3,7 @@ package org.example.canicampusconnectapi.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
+import org.example.canicampusconnectapi.security.AppUserDetails;
 import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwnerSelf;
@@ -12,6 +13,7 @@ import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,9 +55,9 @@ public class DogController {
     @IsOwner
     @GetMapping("/owner/{ownerId}/dogs")
     @JsonView(OwnerViewDog.class)
-    public ResponseEntity<List<Dog>> getDogsByOwner(@PathVariable Long ownerId) {
+    public ResponseEntity<List<Dog>> getDogsByOwner(@PathVariable Long ownerId, @AuthenticationPrincipal AppUserDetails userDetails) {
         try {
-            List<Dog> dogs = dogService.getDogsByOwner(ownerId);
+            List<Dog> dogs = dogService.getDogsByOwner(userDetails.getUserId());
             return new ResponseEntity<>(dogs, HttpStatus.OK);
         } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
