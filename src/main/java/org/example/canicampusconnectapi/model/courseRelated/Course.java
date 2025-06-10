@@ -27,6 +27,10 @@ import java.util.List;
 @Entity
 public class Course {
 
+    public interface CreateCourse{
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
@@ -34,7 +38,7 @@ public class Course {
     protected Long id;
 
     @Column(nullable = false, length = 255)
-    @NotBlank(message = "Le titre ne peut pas être vide")
+    @NotBlank(message = "Le titre ne peut pas être vide", groups ={CreateCourse.class})
     @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     protected String title;
 
@@ -43,30 +47,34 @@ public class Course {
     protected String description;
 
     @Column(nullable = false)
-    @NotNull(message = "La date et l'heure de début ne peuvent pas être vides")
+    @NotNull(message = "La date et l'heure de début ne peuvent pas être vides", groups ={CreateCourse.class})
     @JsonView({OwnerViewDog.class,OwnerViewCourse.class, CoachView.class,CoachViewRegistrations.class})
     protected Instant startDatetime;
 
     @Column(nullable = false)
-    @NotNull(message = "La date et l'heure de fin ne peuvent pas être vides")
+    @NotNull(message = "La date et l'heure de fin ne peuvent pas être vides", groups ={CreateCourse.class})
     @JsonView({OwnerViewDog.class,OwnerViewCourse.class, CoachView.class,CoachViewRegistrations.class})
     protected Instant endDatetime;
 
     @Column(nullable = false)
+    @NotNull(message = "Vous devez renseigner un nombre de place limitées", groups ={CreateCourse.class})
     @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     protected int maxCapacity;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @NotNull(message="Vous devez renseigner un coach", groups ={CreateCourse.class})
     @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachViewRegistrations.class})
     protected Coach coach;
 
     @ManyToOne
     @JoinColumn(name = "club_id", nullable = false)
+    @NotNull(message="Vous devez renseigner un club", groups ={CreateCourse.class})
     protected Club club;
 
     @ManyToOne
     @JoinColumn(name = "course_type_id", nullable = false)
+    @NotNull(message="Vous devez renseigner un type de cours", groups ={CreateCourse.class})
     @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     protected CourseType courseType;
 
