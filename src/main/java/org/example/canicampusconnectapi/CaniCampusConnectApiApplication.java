@@ -3,6 +3,8 @@ package org.example.canicampusconnectapi;
 import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -14,7 +16,7 @@ import java.util.TimeZone;
 @EnableJpaAuditing
 @SpringBootApplication
 @EnableScheduling
-public class CaniCampusConnectApiApplication {
+public class CaniCampusConnectApiApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(CaniCampusConnectApiApplication.class, args);
@@ -28,6 +30,13 @@ public class CaniCampusConnectApiApplication {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+
+    //pour le déploiement à partir de TomCat 9
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(CaniCampusConnectApiApplication.class);
     }
 
 }
