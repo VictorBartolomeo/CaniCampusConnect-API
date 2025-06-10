@@ -37,7 +37,7 @@ VALUES ('Socialisation des Chiots', 'Socialisation de base et introduction à l'
        ('Bien-être des Chiens Seniors', 'Exercices doux et stimulation mentale pour chiens âgés', 4);
 
 INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, user_id, club_id, course_type_id)
-VALUES 
+VALUES
        -- Age Range 1 (Puppies) - 5 courses before May 22, 2025
        ('Chiots - Éveil et Socialisation', 'On va apprendre à votre chiot les bases de l''éducation et le faire jouer avec d''autres pour une bonne socialisation',
         '2025-05-15 10:00:00', '2025-05-15 11:30:00', 8, 2, 1, 1),
