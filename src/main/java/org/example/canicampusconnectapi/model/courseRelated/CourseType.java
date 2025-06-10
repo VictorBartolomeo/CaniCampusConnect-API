@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.canicampusconnectapi.view.admin.AdminView;
@@ -28,6 +29,7 @@ public class CourseType {
     protected Long id;
 
     @Column(nullable = false, length = 255)
+    @NotNull(message = "Le nom du type de cours ne peut être vide", groups = Course.CreateCourse.class)
     @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class})
     protected String name;
 
@@ -40,6 +42,7 @@ public class CourseType {
 
     @ManyToOne
     @JoinColumn(name = "age_range_id", nullable = false)
+    @NotNull(message = "Le tranche d'age doit être renseignée", groups = Course.CreateCourse.class)
     @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     protected AgeRange ageRange;
 
