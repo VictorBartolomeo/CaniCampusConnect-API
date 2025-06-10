@@ -143,7 +143,6 @@ public class CourseController {
             Course createdCourse = courseService.createCourse(course);
             return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            System.out.println("ntm");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
