@@ -1,6 +1,7 @@
 package org.example.canicampusconnectapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.extern.slf4j.Slf4j;
 import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
 import org.example.canicampusconnectapi.security.annotation.role.IsCoach;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @CrossOrigin
 @RestController
 public class CourseController {
@@ -133,12 +136,14 @@ public class CourseController {
         return courseService.getCoursesBetweenDates(start, end);
     }
 
+    @IsOwner
     @PostMapping("/course")
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+    public ResponseEntity<Course> createCourse(@RequestBody @Validated(Course.CreateCourse.class) Course course)  {
         try {
             Course createdCourse = courseService.createCourse(course);
             return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
+            System.out.println("ntm");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
