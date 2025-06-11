@@ -65,7 +65,14 @@ public class AuthController {
         try {
             owner.setPassword(passwordEncoder.encode(owner.getPassword()));
             userDao.save(owner);
-            //Masque le mot de passe dans la réponse
+
+            try {
+                emailService.sendEmailValidationToken(owner.getEmail());
+                System.out.println("✅ Email de validation envoyé à: " + owner.getEmail());
+            } catch (Exception emailError) {
+                System.err.println("❌ Erreur envoi email: " + emailError.getMessage());
+            }
+
             owner.setPassword(null);
             return new ResponseEntity<>(owner, HttpStatus.CREATED);
 
@@ -73,6 +80,7 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid UserLoginDto userLogin) {
@@ -157,8 +165,7 @@ public class AuthController {
         }
     }
 
-    // ⭐ CORRECTION de l'endpoint de validation
-    @GetMapping("/validate-email") // ⭐ GET au lieu de POST
+    @GetMapping("/validate-email")
     public ResponseEntity<?> validateEmail(
             @RequestParam @NotBlank(message = "Le token est obligatoire") String token,
             @RequestParam @Email(message = "Format d'email invalide") String email) {
