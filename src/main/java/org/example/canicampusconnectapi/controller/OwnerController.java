@@ -35,7 +35,7 @@ public class OwnerController {
         this.userDao = userDao;
     }
 
-    @IsOwnerSelf
+    @IsOwner
     @JsonView(OwnerViewDog.class)
     @GetMapping("/owner/{id}")
     public ResponseEntity<Owner> getOwner(@PathVariable Long id, @AuthenticationPrincipal AppUserDetails userDetails) {
@@ -49,12 +49,13 @@ public class OwnerController {
 
     }
 
-@IsClubOwner
+    @IsClubOwner
     @GetMapping("/owners")
     public List<Owner> getAll() {
         return ownerDao.findAll();
     }
 
+    @IsClubOwner
     @DeleteMapping("owner/{id}")
     public ResponseEntity<Owner> deleteOwner(@PathVariable Long id) {
 

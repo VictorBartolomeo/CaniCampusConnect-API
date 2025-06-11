@@ -6,6 +6,7 @@ import org.example.canicampusconnectapi.dao.OwnerDao;
 import org.example.canicampusconnectapi.model.dogRelated.Breed;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.users.Owner;
+import org.example.canicampusconnectapi.service.rgpd.RgpdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +25,15 @@ public class DogServiceImpl implements DogService {
     private final DogDao dogDao;
     private final OwnerDao ownerDao;
     private final BreedDao breedDao;
+    private final RgpdService rgpdService;
 
-    @Autowired // Constructor injection
-    public DogServiceImpl(DogDao dogDao, OwnerDao ownerDao, BreedDao breedDao) {
+
+    @Autowired
+    public DogServiceImpl(DogDao dogDao, OwnerDao ownerDao, BreedDao breedDao, RgpdService rgpdService) {
         this.dogDao = dogDao;
         this.ownerDao = ownerDao;
         this.breedDao = breedDao;
+        this.rgpdService = rgpdService;
     }
 
     @Override
@@ -76,10 +80,14 @@ public class DogServiceImpl implements DogService {
     @Override
     @Transactional
     public void deleteDog(Long id) {
-        if (!dogDao.existsById(id)) {
-            throw new ResourceNotFound("Dog not found with id: " + id);
-        }
-        dogDao.deleteById(id);
+        // L'appel à findById est implicite dans le service d'anonymisation
+        // qui lancera une exception si le chien n'est pas trouvé.
+        rgpdService.anonymizeEntity(Dog.class, id);
+    }
+
+    @Override
+    public boolean isDogAnonymized(Long id) {
+        return rgpdService.isAnonymized(Dog.class, id);
     }
 
     @Override
