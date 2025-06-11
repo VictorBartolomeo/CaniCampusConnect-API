@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -90,16 +91,42 @@ public class DogController {
         }
     }
 
-    @IsClubOwner
+    @IsOwner
     @DeleteMapping("/dog/{id}")
-    public ResponseEntity<Dog> deleteDog(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteDog(
+            @PathVariable Long id,
+            @AuthenticationPrincipal AppUserDetails userDetails) {
         try {
+            // Vérifier si déjà anonymisé
+            if (dogService.isDogAnonymized(id)) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "message", "Ce chien est déjà anonymisé",
+                        "action", "already_anonymized"
+                ));
+            }
+
             dogService.deleteDog(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Données personnelles du chien anonymisées avec succès (conformité RGPD)",
+                    "action", "gdpr_anonymized",
+                    "dogId", id.toString(),
+                    "anonymizedBy", userDetails.getUsername()
+            ));
         } catch (ResourceNotFound e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(Map.of(
+                    "message", "Chien non trouvé",
+                    "action", "error"
+            ), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of(
+                    "message", "Erreur lors de l'anonymisation GDPR",
+                    "action", "error",
+                    "details", e.getMessage()
+            ), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @IsOwner
     @PutMapping("/dog/{id}")
