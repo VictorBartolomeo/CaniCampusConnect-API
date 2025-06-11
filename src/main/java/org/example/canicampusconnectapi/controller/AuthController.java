@@ -2,22 +2,27 @@ package org.example.canicampusconnectapi.controller;
 
 import jakarta.validation.Valid;
 import org.example.canicampusconnectapi.dao.UserDao;
+import org.example.canicampusconnectapi.dto.ChangePasswordDTO;
 import org.example.canicampusconnectapi.dto.UserLoginDto;
 import org.example.canicampusconnectapi.model.users.Owner;
+import org.example.canicampusconnectapi.model.users.User;
 import org.example.canicampusconnectapi.security.AppUserDetails;
 import org.example.canicampusconnectapi.security.SecurityUtils;
+import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
+import org.example.canicampusconnectapi.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -27,13 +32,19 @@ public class AuthController {
     protected PasswordEncoder passwordEncoder;
     protected AuthenticationProvider authenticationProvider;
     protected SecurityUtils securityUtils;
+    protected UserService userService;
 
     @Autowired
-    public AuthController(UserDao userDao, PasswordEncoder passwordEncoder, AuthenticationProvider authenticationProvider, SecurityUtils securityUtils) {
+    public AuthController(UserDao userDao,
+                          PasswordEncoder passwordEncoder,
+                          AuthenticationProvider authenticationProvider,
+                          SecurityUtils securityUtils,
+                          UserService userService) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.authenticationProvider = authenticationProvider;
         this.securityUtils = securityUtils;
+        this.userService = userService;
     }
 
     //TODO Demander à Franck comment faire pour ajouter les informations d'un Owner directement
@@ -68,6 +79,35 @@ public class AuthController {
         }
 
     }
+    @IsOwner
+    @PutMapping(value = "/change-password",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> changePassword(
+            @RequestBody @Validated(User.OnUpdatePassword.class) ChangePasswordDTO request,
+            @AuthenticationPrincipal AppUserDetails userDetails) {
 
+        try {
+            boolean success = userService.changePassword(
+                    userDetails.getUserId(),
+                    request.getCurrentPassword(),
+                    request.getNewPassword()
+            );
 
+            if (success) {
+                return ResponseEntity.ok(Map.of(
+                        "message", "Mot de passe mis à jour avec succès"
+                ));
+            } else {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "error", "Mot de passe actuel incorrect"
+                ));
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "error", "Erreur interne du serveur"
+            ));
+        }
+    }
 }
