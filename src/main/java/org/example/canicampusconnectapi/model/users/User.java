@@ -16,6 +16,8 @@ import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -64,5 +66,13 @@ public class User {
     @Column(length = 500)
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class})
     protected String avatarUrl;
+
+    @Column(nullable = false)
+    @JsonView({OwnerView.class, CoachView.class}) // Selon vos besoins
+    private boolean emailValidated = false; // ⭐ NOUVEAU champ
+
+    @Column
+    private LocalDateTime emailValidatedAt; // ⭐ OPTIONNEL - quand validé
+
 
 }
