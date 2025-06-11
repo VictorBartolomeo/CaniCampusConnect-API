@@ -66,8 +66,8 @@ public class Dog {
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class})
     protected Gender gender;
 
-    @PersonalData(nullable = true)
-    @Column(unique = true, length = 50)
+    @PersonalData(anonymizeWith = "000-000-000")
+    @Column(unique = true, length = 50, nullable = true)
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class})
     protected String chipNumber;
 
@@ -106,7 +106,6 @@ public class Dog {
     @JsonView({OwnerViewDog.class, AdminViewDog.class})
     private List<DogWeight> dogWeights;
 
-    // Champs d'audit pour l'anonymisation
     @Column(nullable = false)
     private boolean isAnonymized = false;
 
