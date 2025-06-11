@@ -1,94 +1,103 @@
-﻿package org.example.canicampusconnectapi.service.rgpd;
+package org.example.canicampusconnectapi.service.rgpd;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
+import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
 import org.example.canicampusconnectapi.security.annotation.rgpd.PersonalData;
 import org.example.canicampusconnectapi.security.annotation.rgpd.RgpdEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
-@Transactional
 public class RgpdService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
-    public <T> void anonymizeEntity(Class<T> entityClass, Object identifier) {
+    @Autowired
+    public RgpdService(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+    @Transactional
+    public <T> void anonymizeEntity(Class<T> entityClass, Long id) {
         if (!entityClass.isAnnotationPresent(RgpdEntity.class)) {
-            throw new IllegalArgumentException("Entity must be annotated with @RgpdEntity");
+            throw new IllegalArgumentException("L'entité " + entityClass.getSimpleName() + " n'est pas marquée comme @RgpdEntity.");
         }
 
-        RgpdEntity rgpdEntity = entityClass.getAnnotation(RgpdEntity.class);
-        String identifierField = rgpdEntity.identifierField();
+        T entity = entityManager.find(entityClass, id);
+        if (entity == null) {
+            throw new ResourceNotFound("Entité non trouvée avec l'ID: " + id);
+        }
 
-        List<String> updateClauses = new ArrayList<>();
-        Field[] fields = entityClass.getDeclaredFields();
-
-        for (Field field : fields) {
+        // Anonymiser les champs personnels
+        for (Field field : entityClass.getDeclaredFields()) {
             if (field.isAnnotationPresent(PersonalData.class)) {
-                PersonalData personalData = field.getAnnotation(PersonalData.class);
-                String anonymizedValue = generateAnonymizedValue(field, personalData, identifier);
-                updateClauses.add(field.getName() + " = '" + anonymizedValue + "'");
+                anonymizeField(entity, field);
             }
         }
 
-        // Ajouter les champs d'audit
-        updateClauses.add("isAnonymized = true");
-        updateClauses.add("anonymizedAt = '" + LocalDateTime.now() + "'");
+        // Mettre à jour les champs d'audit RGPD
+        setGdprAuditFields(entity, id);
 
-        if (!updateClauses.isEmpty()) {
-            String tableName = getTableName(entityClass);
-            String sql = "UPDATE " + tableName + " SET " +
-                    String.join(", ", updateClauses) +
-                    " WHERE " + identifierField + " = :identifier";
-
-            Query query = entityManager.createNativeQuery(sql);
-            query.setParameter("identifier", identifier);
-            query.executeUpdate();
-        }
+        entityManager.merge(entity);
     }
 
-    private String generateAnonymizedValue(Field field, PersonalData personalData, Object identifier) {
-        String baseValue = personalData.anonymizeWith();
+    private <T> void anonymizeField(T entity, Field field) {
+        try {
+            field.setAccessible(true);
+            PersonalData annotation = field.getAnnotation(PersonalData.class);
 
-        // Personnalisation selon le type de champ
-        if (field.getType() == String.class) {
-            if (field.getName().toLowerCase().contains("name")) {
-                return baseValue + "_" + identifier;
-            } else if (field.getName().toLowerCase().contains("email")) {
-                return "anonymized_" + identifier + "@deleted.canicampus";
-            } else if (field.getName().toLowerCase().contains("phone")) {
-                return "+33000000000";
-            } else if (field.getName().toLowerCase().contains("chip")) {
-                return null;
+            // Gère le cas spécial du champ email pour garantir l'unicité
+            if (field.getName().equalsIgnoreCase("email")) {
+                long timestamp = System.currentTimeMillis();
+                field.set(entity, "anonymized-" + timestamp + "@example.com");
+            } else {
+                field.set(entity, annotation.anonymizeWith());
             }
-            return baseValue + "_" + identifier;
+
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Impossible d'accéder au champ pour l'anonymisation: " + field.getName(), e);
         }
-
-        return personalData.nullable() ? null : baseValue;
     }
 
-    private String getTableName(Class<?> entityClass) {
-        // Convertit le nom de classe en nom de table (CamelCase -> snake_case)
-        String className = entityClass.getSimpleName();
-        return className.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
+    private <T> void setGdprAuditFields(T entity, Long id) {
+        try {
+            // Marquer comme anonymisé
+            Field isAnonymizedField = entity.getClass().getDeclaredField("isAnonymized");
+            isAnonymizedField.setAccessible(true);
+            isAnonymizedField.set(entity, true);
+
+            // Date d'anonymisation
+            Field anonymizedAtField = entity.getClass().getDeclaredField("anonymizedAt");
+            anonymizedAtField.setAccessible(true);
+            anonymizedAtField.set(entity, LocalDateTime.now());
+
+            // Qui a anonymisé
+            Field anonymizedByField = entity.getClass().getDeclaredField("anonymizedBy");
+            anonymizedByField.setAccessible(true);
+            String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+            anonymizedByField.set(entity, currentUser);
+
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Erreur lors de la mise à jour des champs d'audit RGPD pour l'entité avec ID: " + id, e);
+        }
     }
 
-    public <T> boolean isAnonymized(Class<T> entityClass, Object identifier) {
-        String tableName = getTableName(entityClass);
-        String sql = "SELECT is_anonymized FROM " + tableName + " WHERE id = :identifier";
-
-        Query query = entityManager.createNativeQuery(sql);
-        query.setParameter("identifier", identifier);
-
-        Object result = query.getSingleResult();
-        return result != null && (Boolean) result;
+    public <T> boolean isAnonymized(Class<T> entityClass, Long id) {
+        T entity = entityManager.find(entityClass, id);
+        if (entity == null) {
+            return false; // Ou lancer une exception
+        }
+        try {
+            Field isAnonymizedField = entityClass.getDeclaredField("isAnonymized");
+            isAnonymizedField.setAccessible(true);
+            return (boolean) isAnonymizedField.get(entity);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            return false;
+        }
     }
 }
