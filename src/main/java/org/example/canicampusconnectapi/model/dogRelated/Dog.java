@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
 import org.example.canicampusconnectapi.model.enumeration.Gender;
 import org.example.canicampusconnectapi.model.healthRecord.DogWeight;
@@ -21,13 +20,13 @@ import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
-import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,7 +35,6 @@ import java.util.Set;
 @Entity
 @Table(name = "dog")
 @RgpdEntity(identifierField = "id")
-@Where(clause = "is_anonymized = false")
 @EntityListeners(AuditingEntityListener.class)
 public class Dog {
 
@@ -58,7 +56,7 @@ public class Dog {
 
     @Column(nullable = false)
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class})
-    private LocalDate birthDate;
+    private Date birthDate;
 
     @Enumerated(EnumType.STRING)
     @NotNull(groups = {CreateFromOwner.class})
@@ -76,6 +74,7 @@ public class Dog {
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachViewRegistrations.class, AdminViewDog.class})
     private Owner owner;
 
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "dog_breed",
@@ -84,7 +83,7 @@ public class Dog {
     )
     @NotNull(groups = {CreateFromOwner.class, updateFromOwner.class, CoachView.class})
     @JsonView({OwnerViewDog.class, AdminViewDog.class})
-    private Set<Breed> breeds;
+    private Set<Breed> breeds = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "dog")
     @JsonView({OwnerViewDog.class, AdminViewDog.class})

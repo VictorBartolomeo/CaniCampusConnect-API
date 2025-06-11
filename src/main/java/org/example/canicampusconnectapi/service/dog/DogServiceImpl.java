@@ -15,6 +15,7 @@ import org.example.canicampusconnectapi.dao.BreedDao;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -115,7 +116,7 @@ public class DogServiceImpl implements DogService {
             if (dogDetails.getBreeds().size() > 3) {
                 throw new IllegalArgumentException("Le chien ne peut pas avoir plus de 3 races");
             }
-            Set<Breed> newBreeds = new HashSet<>();
+            LinkedHashSet<Breed> newBreeds = new LinkedHashSet<>();
 
             for (Breed breed : dogDetails.getBreeds()) {
                 if (breed.getId() != null) {

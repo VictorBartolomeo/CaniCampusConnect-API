@@ -3,6 +3,7 @@ package org.example.canicampusconnectapi.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -56,6 +57,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/register").permitAll()
                         .requestMatchers("breed/*/image").permitAll()
+                        .requestMatchers("user/*/avatar").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/change-password").authenticated()
                         .anyRequest()
                         .permitAll())
                 .build();

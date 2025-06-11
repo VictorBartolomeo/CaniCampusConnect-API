@@ -40,7 +40,6 @@ public class RgpdService {
             }
         }
 
-        // Mettre à jour les champs d'audit RGPD
         setGdprAuditFields(entity, id);
 
         entityManager.merge(entity);
@@ -54,7 +53,7 @@ public class RgpdService {
             // Gère le cas spécial du champ email pour garantir l'unicité
             if (field.getName().equalsIgnoreCase("email")) {
                 long timestamp = System.currentTimeMillis();
-                field.set(entity, "anonymized-" + timestamp + "@example.com");
+                field.set(entity, "deleted-" + timestamp + "@example.com");
             } else {
                 field.set(entity, annotation.anonymizeWith());
             }
@@ -90,7 +89,7 @@ public class RgpdService {
     public <T> boolean isAnonymized(Class<T> entityClass, Long id) {
         T entity = entityManager.find(entityClass, id);
         if (entity == null) {
-            return false; // Ou lancer une exception
+            return false;
         }
         try {
             Field isAnonymizedField = entityClass.getDeclaredField("isAnonymized");
