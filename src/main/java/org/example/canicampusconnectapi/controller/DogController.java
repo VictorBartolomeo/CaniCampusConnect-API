@@ -97,7 +97,6 @@ public class DogController {
             @PathVariable Long id,
             @AuthenticationPrincipal AppUserDetails userDetails) {
         try {
-            // Vérifier si déjà anonymisé
             if (dogService.isDogAnonymized(id)) {
                 return ResponseEntity.badRequest().body(Map.of(
                         "message", "Ce chien est déjà anonymisé",
@@ -105,7 +104,7 @@ public class DogController {
                 ));
             }
 
-            dogService.deleteDog(id);
+            dogService.deleteDog(id); // Appelle maintenant le service rgpd
 
             return ResponseEntity.ok(Map.of(
                     "message", "Données personnelles du chien anonymisées avec succès (conformité RGPD)",
@@ -126,6 +125,7 @@ public class DogController {
             ), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 
     @IsOwner
