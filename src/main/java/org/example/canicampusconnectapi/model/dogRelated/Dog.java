@@ -26,17 +26,16 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "dog")
 @RgpdEntity(identifierField = "id")
-@Where(clause = "is_anonymized = false")
 @EntityListeners(AuditingEntityListener.class)
 public class Dog {
 
@@ -58,7 +57,7 @@ public class Dog {
 
     @Column(nullable = false)
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class})
-    private LocalDate birthDate;
+    private Date birthDate;
 
     @Enumerated(EnumType.STRING)
     @NotNull(groups = {CreateFromOwner.class})
@@ -76,6 +75,7 @@ public class Dog {
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachViewRegistrations.class, AdminViewDog.class})
     private Owner owner;
 
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "dog_breed",
@@ -84,7 +84,7 @@ public class Dog {
     )
     @NotNull(groups = {CreateFromOwner.class, updateFromOwner.class, CoachView.class})
     @JsonView({OwnerViewDog.class, AdminViewDog.class})
-    private Set<Breed> breeds;
+    private Set<Breed> breeds = new HashSet<>();
 
     @OneToMany(mappedBy = "dog")
     @JsonView({OwnerViewDog.class, AdminViewDog.class})
