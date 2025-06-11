@@ -1,14 +1,20 @@
 package org.example.canicampusconnectapi.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import org.example.canicampusconnectapi.dao.UserDao;
 import org.example.canicampusconnectapi.dto.ChangePasswordDTO;
+import org.example.canicampusconnectapi.dto.EmailValidationRequest;
 import org.example.canicampusconnectapi.dto.UserLoginDto;
 import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.model.users.User;
 import org.example.canicampusconnectapi.security.AppUserDetails;
 import org.example.canicampusconnectapi.security.SecurityUtils;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
+import org.example.canicampusconnectapi.service.EmailService;
+import org.example.canicampusconnectapi.service.TokenService; // ⭐ VOTRE TokenService, pas celui de Spring
 import org.example.canicampusconnectapi.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,35 +32,47 @@ import java.util.Map;
 
 @CrossOrigin
 @RestController
+@Validated
 public class AuthController {
 
-    protected UserDao userDao;
-    protected PasswordEncoder passwordEncoder;
-    protected AuthenticationProvider authenticationProvider;
-    protected SecurityUtils securityUtils;
-    protected UserService userService;
+    private final UserDao userDao;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationProvider authenticationProvider;
+    private final SecurityUtils securityUtils;
+    private final UserService userService;
+    private final TokenService tokenService; // ⭐ VOTRE service de tokens
+    private final EmailService emailService; // ⭐ AJOUT du EmailService
 
     @Autowired
     public AuthController(UserDao userDao,
                           PasswordEncoder passwordEncoder,
                           AuthenticationProvider authenticationProvider,
                           SecurityUtils securityUtils,
-                          UserService userService) {
+                          UserService userService,
+                          TokenService tokenService,
+                          EmailService emailService) { // ⭐ AJOUT dans le constructeur
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.authenticationProvider = authenticationProvider;
         this.securityUtils = securityUtils;
         this.userService = userService;
+        this.tokenService = tokenService;
+        this.emailService = emailService;
     }
 
-    //TODO Demander à Franck comment faire pour ajouter les informations d'un Owner directement
     @PostMapping("/owner/register")
     public ResponseEntity<Owner> register(@RequestBody @Validated(Owner.onCreateOwner.class) Owner owner) {
         try {
             owner.setPassword(passwordEncoder.encode(owner.getPassword()));
             userDao.save(owner);
-            //Masque le mot de passe dans la réponse
-            System.out.println(owner.getPassword());
+
+            try {
+                emailService.sendEmailValidationToken(owner.getEmail());
+                System.out.println("✅ Email de validation envoyé à: " + owner.getEmail());
+            } catch (Exception emailError) {
+                System.err.println("❌ Erreur envoi email: " + emailError.getMessage());
+            }
+
             owner.setPassword(null);
             return new ResponseEntity<>(owner, HttpStatus.CREATED);
 
@@ -62,6 +80,7 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid UserLoginDto userLogin) {
@@ -71,14 +90,14 @@ public class AuthController {
                                     userLogin.getEmail(),
                                     userLogin.getPassword()))
                     .getPrincipal();
-            System.out.println(securityUtils.generateToken(userDetails));
+
             return new ResponseEntity<>(securityUtils.generateToken(userDetails), HttpStatus.OK);
 
         } catch (AuthenticationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
-
     }
+
     @IsOwner
     @PutMapping(value = "/change-password",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -110,4 +129,78 @@ public class AuthController {
             ));
         }
     }
-}
+
+    // ⭐ NOUVEAU : Envoyer un email de validation
+    @PostMapping("/send-validation-email")
+    public ResponseEntity<?> sendValidationEmail(
+            @RequestBody @Validated EmailValidationRequest request) { // ⭐ SUPPRIMÉ HttpServletRequest
+
+        try {
+            // Vérifier si l'utilisateur existe
+            if (!userService.existsByEmail(request.getEmail())) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Aucun compte trouvé avec cet email"));
+            }
+
+            // Vérifier si le compte n'est pas déjà validé
+            if (userService.isEmailAlreadyValidated(request.getEmail())) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Ce compte est déjà validé"));
+            }
+
+            // ⭐ SIMPLIFIÉ - Envoyer l'email de validation
+            emailService.sendEmailValidationToken(request.getEmail());
+
+            // Obtenir le nombre de tokens récents (pour information)
+            long remainingAttempts = Math.max(0, 3 - tokenService.getRecentTokenCount(request.getEmail()));
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Email de validation envoyé avec succès",
+                    "remainingAttempts", remainingAttempts
+            ));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/validate-email")
+    public ResponseEntity<?> validateEmail(
+            @RequestParam @NotBlank(message = "Le token est obligatoire") String token,
+            @RequestParam @Email(message = "Format d'email invalide") String email) {
+
+        try {
+            // Valider le token
+            boolean isValidToken = tokenService.validateToken(token, email);
+
+            if (!isValidToken) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "error", "Token invalide ou expiré",
+                        "code", "INVALID_TOKEN"
+                ));
+            }
+
+            // Activer le compte utilisateur
+            boolean accountActivated = userService.activateUserAccount(email);
+
+            if (!accountActivated) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "error", "Impossible d'activer le compte",
+                        "code", "ACTIVATION_FAILED"
+                ));
+            }
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Compte validé avec succès ! Vous pouvez maintenant vous connecter.",
+                    "code", "VALIDATION_SUCCESS"
+            ));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "error", "Erreur interne lors de la validation",
+                    "code", "INTERNAL_ERROR"
+            ));
+        }
+    }
+} // ⭐ SUPPRESSION de l'accolade en trop

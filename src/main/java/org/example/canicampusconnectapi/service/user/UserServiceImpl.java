@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -90,5 +91,30 @@ public class UserServiceImpl implements UserService {
         return passwordEncoder.matches(password, user.getPassword());
     }
 
+    // Dans votre UserServiceImpl.java, ajoutez ces méthodes :
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userDao.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public boolean isEmailAlreadyValidated(String email) {
+        return userDao.findByEmail(email)
+                .map(user -> user.isEmailValidated()) // ⭐ Vous devez ajouter ce champ à User
+                .orElse(false);
+    }
+
+    @Override
+    public boolean activateUserAccount(String email) {
+        return userDao.findByEmail(email)
+                .map(user -> {
+                    user.setEmailValidated(true); // ⭐ Vous devez ajouter ce champ à User
+                    user.setEmailValidatedAt(LocalDateTime.now()); // ⭐ Optionnel
+                    userDao.save(user);
+                    return true;
+                })
+                .orElse(false);
+    }
 
 }
