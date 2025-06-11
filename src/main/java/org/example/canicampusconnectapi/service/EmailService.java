@@ -90,7 +90,7 @@ public class EmailService {
         try {
             String encodedEmail = URLEncoder.encode(email, StandardCharsets.UTF_8);
             String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8);
-            return String.format("%s/api/auth/validate-email?token=%s&email=%s",
+            return String.format("%s/validate-email?token=%s&email=%s",
                     baseUrl, encodedToken, encodedEmail);
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors de la création du lien de validation", e);
