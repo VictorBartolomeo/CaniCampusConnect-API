@@ -289,13 +289,13 @@ VALUES ('Berger Australien', '/breed/1/image'),
        ('Petit Lévrier Italien', '/breed/152/image'),              -- Italian Greyhound
        ('Saluki', '/breed/153/image');-- Lévrier Persan
 
-INSERT INTO dog (name, birth_date, gender, chip_number, user_id)
-VALUES ('Rex', '2025-02-15', 'MALE', 'CHIP123456', 4),
-       ('Nala', '2017-08-22', 'FEMALE', 'CHIP789012', 4),
-       ('Oscar', '2021-02-10', 'STERILIZED_MALE', 'CHIP345678', 5),
-       ('Lola', '2018-11-30', 'FEMALE', 'CHIP901234', 5),
-       ('Filou', '2022-01-05', 'MALE', 'CHIP567890', 6),
-       ('Mia', '2020-07-18', 'STERILIZED_FEMALE', 'CHIP234567', 6);
+INSERT INTO dog (name, birth_date, gender, chip_number, user_id, is_anonymized)
+VALUES ('Rex', '2025-02-15', 'MALE', 'CHIP123456', 4, false),
+       ('Nala', '2017-08-22', 'FEMALE', 'CHIP789012', 4, false),
+       ('Oscar', '2021-02-10', 'STERILIZED_MALE', 'CHIP345678', 5, false),
+       ('Lola', '2018-11-30', 'FEMALE', 'CHIP901234', 5, false),
+       ('Filou', '2022-01-05', 'MALE', 'CHIP567890', 6, false),
+       ('Mia', '2020-07-18', 'STERILIZED_FEMALE', 'CHIP234567', 6, false);
 
 INSERT INTO dog_breed (dog_id, breed_id)
 VALUES (1, 1),  -- Rex est un Labrador Retriever
