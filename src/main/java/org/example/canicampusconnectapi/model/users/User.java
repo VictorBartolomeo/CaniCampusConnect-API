@@ -61,4 +61,8 @@ public class User {
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     protected String phone;
 
+    @Column(length = 500)
+    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class})
+    protected String avatarUrl;
+
 }
