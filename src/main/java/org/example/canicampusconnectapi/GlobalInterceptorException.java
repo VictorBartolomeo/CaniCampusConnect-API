@@ -1,5 +1,6 @@
 package org.example.canicampusconnectapi;
 
+import org.example.canicampusconnectapi.common.exception.InvalidPasswordException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,19 @@ public class GlobalInterceptorException {
             return Map.of("message", "A constraint violation occurred - Foreign Key");
         }
     }
+
+    // Ajouter un handler spécifique pour les erreurs de mot de passe
+    @ExceptionHandler(InvalidPasswordException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Map<String, Object> handleInvalidPasswordException(InvalidPasswordException ex) {
+        return Map.of(
+                "error", ex.getMessage(),
+                "field", "currentPassword"
+        );
+    }
+
+
 
 //    A dé-commenter uniquement pour voir les erreurs en production
 //
