@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # Copier le fichier JAR de l'application dans le conteneur
-COPY target/app.jar app.jar
+COPY target/CaniCampusConnect_api.jar CaniCampusConnect_api.jar
 
 # Copier le fichier .env dans le conteneur
 COPY .env .env

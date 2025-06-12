@@ -31,7 +31,7 @@
 
 	<properties>
 		<java.version>17</java.version>
-		<final.jar.name>app</final.jar.name>
+		<final.jar.name>CaniCampusConnect_api</final.jar.name>
 	</properties>
 
 	<dependencies>
