@@ -77,17 +77,29 @@ public class CoachController {
     }
 
     //Put change tout l'objet
+
     @IsCoach
     @PutMapping("/coach/{id}")
-    // Patch change une partie de l'objet
-//    @PatchMapping("/coach/{id}")
-    public ResponseEntity<Coach> updateCoach(@PathVariable Long id, @RequestBody Coach coach) {
+    public ResponseEntity<Coach> updateCoach(
+            @PathVariable Long id,
+            @RequestBody @Validated(Coach.onUpdateCoach.class) Coach coach) {
+
         Optional<Coach> optionalCoach = coachDao.findById(id);
         if (optionalCoach.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        Coach existingCoach = optionalCoach.get();
+
+        // ⭐ Préserver TOUS les champs système et sensibles
         coach.setId(id);
+        coach.setPassword(existingCoach.getPassword());
+        coach.setRegistrationDate(existingCoach.getRegistrationDate());
+        coach.setCourse(existingCoach.getCourse());
+        coach.setEmailValidated(existingCoach.isEmailValidated());
+        coach.setEmailValidatedAt(existingCoach.getEmailValidatedAt());
+        coach.setActive(existingCoach.isActive()); // ⭐ AJOUTER CETTE LIGNE !
+
         coachDao.save(coach);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
