@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -28,10 +29,11 @@ public class Owner extends User {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     @JsonView({OwnerViewDog.class, OwnerView.class})
-    protected LocalDate registrationDate;
+    protected Date registrationDate;
 
     @ColumnDefault("TRUE")
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_active")
+    @JsonView({OwnerViewDog.class, OwnerView.class})
     protected boolean isActive = isActive();
 
     @OneToMany(mappedBy ="owner")

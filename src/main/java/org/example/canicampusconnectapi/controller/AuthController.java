@@ -8,10 +8,12 @@ import org.example.canicampusconnectapi.dao.UserDao;
 import org.example.canicampusconnectapi.dto.ChangePasswordDTO;
 import org.example.canicampusconnectapi.dto.EmailValidationRequest;
 import org.example.canicampusconnectapi.dto.UserLoginDto;
+import org.example.canicampusconnectapi.model.users.Coach;
 import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.model.users.User;
 import org.example.canicampusconnectapi.security.AppUserDetails;
 import org.example.canicampusconnectapi.security.SecurityUtils;
+import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
 import org.example.canicampusconnectapi.service.EmailService;
 import org.example.canicampusconnectapi.service.TokenService; // ⭐ VOTRE TokenService, pas celui de Spring
@@ -40,8 +42,8 @@ public class AuthController {
     private final AuthenticationProvider authenticationProvider;
     private final SecurityUtils securityUtils;
     private final UserService userService;
-    private final TokenService tokenService; // ⭐ VOTRE service de tokens
-    private final EmailService emailService; // ⭐ AJOUT du EmailService
+    private final TokenService tokenService;
+    private final EmailService emailService;
 
     @Autowired
     public AuthController(UserDao userDao,
@@ -50,7 +52,7 @@ public class AuthController {
                           SecurityUtils securityUtils,
                           UserService userService,
                           TokenService tokenService,
-                          EmailService emailService) { // ⭐ AJOUT dans le constructeur
+                          EmailService emailService) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.authenticationProvider = authenticationProvider;
@@ -83,7 +85,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid UserLoginDto userLogin) {
+    public ResponseEntity<?> login(@RequestBody @Valid UserLoginDto userLogin) {
         try {
             AppUserDetails userDetails = (AppUserDetails) authenticationProvider.authenticate(
                             new UsernamePasswordAuthenticationToken(
@@ -94,7 +96,19 @@ public class AuthController {
             return new ResponseEntity<>(securityUtils.generateToken(userDetails), HttpStatus.OK);
 
         } catch (AuthenticationException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+            if (e.getMessage().contains("Compte non activé")) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of(
+                        "error", "Compte non activé",
+                        "message", "Votre compte n'est pas encore activé. Veuillez valider votre email avant de vous connecter.",
+                        "code", "EMAIL_NOT_VALIDATED",
+                        "action", "validate_email"
+                ));
+            }
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+                    "error", "Échec de l'authentification",
+                    "message", e.getMessage()
+            ));
         }
     }
 
@@ -133,7 +147,7 @@ public class AuthController {
     // ⭐ NOUVEAU : Envoyer un email de validation
     @PostMapping("/send-validation-email")
     public ResponseEntity<?> sendValidationEmail(
-            @RequestBody @Validated EmailValidationRequest request) { // ⭐ SUPPRIMÉ HttpServletRequest
+            @RequestBody @Validated EmailValidationRequest request) {
 
         try {
             // Vérifier si l'utilisateur existe
@@ -203,4 +217,26 @@ public class AuthController {
             ));
         }
     }
-} // ⭐ SUPPRESSION de l'accolade en trop
+
+    @IsClubOwner
+    @PostMapping("/coach/register")
+    public ResponseEntity<Coach> registerCoach(@RequestBody @Validated(Coach.onCreateCoach.class) Coach coach) {
+        try {
+            coach.setPassword(passwordEncoder.encode(coach.getPassword()));
+            userDao.save(coach);
+
+            try {
+                emailService.sendEmailValidationToken(coach.getEmail());
+                System.out.println("✅ Email de validation envoyé à: " + coach.getEmail());
+            } catch (Exception emailError) {
+                System.err.println("❌ Erreur envoi email: " + emailError.getMessage());
+            }
+
+            coach.setPassword(null);
+            return new ResponseEntity<>(coach, HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+}
