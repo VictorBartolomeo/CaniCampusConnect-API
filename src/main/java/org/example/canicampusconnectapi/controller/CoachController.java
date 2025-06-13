@@ -91,14 +91,13 @@ public class CoachController {
 
         Coach existingCoach = optionalCoach.get();
 
-        // ⭐ Préserver TOUS les champs système et sensibles
         coach.setId(id);
         coach.setPassword(existingCoach.getPassword());
         coach.setRegistrationDate(existingCoach.getRegistrationDate());
         coach.setCourse(existingCoach.getCourse());
         coach.setEmailValidated(existingCoach.isEmailValidated());
         coach.setEmailValidatedAt(existingCoach.getEmailValidatedAt());
-        coach.setActive(existingCoach.isActive()); // ⭐ AJOUTER CETTE LIGNE !
+        coach.setActive(existingCoach.isActive());
 
         coachDao.save(coach);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
