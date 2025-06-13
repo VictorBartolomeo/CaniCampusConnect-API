@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import org.example.canicampusconnectapi.common.exception.EmailConstraintRequests;
 import org.example.canicampusconnectapi.dao.UserDao;
 import org.example.canicampusconnectapi.dto.ChangePasswordDTO;
 import org.example.canicampusconnectapi.dto.EmailValidationRequest;
@@ -195,7 +196,6 @@ public class AuthController {
                 ));
             }
 
-            // Activer le compte utilisateur
             boolean accountActivated = userService.activateUserAccount(email);
 
             if (!accountActivated) {
@@ -237,6 +237,43 @@ public class AuthController {
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @PostMapping("/resend-validation-email")
+    public ResponseEntity<?> resendValidationEmail(@RequestParam String email) {
+        try {
+            tokenService.resendValidationEmail(email);
+            emailService.sendEmailValidationToken(email);
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Email de validation renvoyé avec succès",
+                    "code", "EMAIL_RESENT"
+            ));
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "Aucun compte trouvé pour cet email",
+                    "code", "ACCOUNT_NOT_FOUND"
+            ));
+
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "Ce compte est déjà validé",
+                    "code", "ALREADY_VALIDATED"
+            ));
+
+        } catch (EmailConstraintRequests e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", e.getMessage(),
+                    "code", "RATE_LIMIT_EXCEEDED"
+            ));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "error", "Erreur lors de l'envoi de l'email",
+                    "code", "INTERNAL_ERROR"
+            ));
         }
     }
 }
