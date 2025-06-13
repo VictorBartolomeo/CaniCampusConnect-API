@@ -35,6 +35,7 @@ public class CoachController {
 
 
 
+    @IsCoach
     @GetMapping("/coach/{id}")
 
     public ResponseEntity<Coach> getCoach(@PathVariable Long id) {
@@ -55,12 +56,14 @@ public class CoachController {
         return coachDao.findAll();
     }
 
+    @IsClubOwner
     @PostMapping("/coach")
     public ResponseEntity<Coach> createCoach(@RequestBody Coach coach) {
         coachDao.save(coach);
         return new ResponseEntity<>(coach, HttpStatus.CREATED);
     }
 
+    @IsClubOwner
     @DeleteMapping("coach/{id}")
     public ResponseEntity<Coach> deleteCoach(@PathVariable Long id) {
 
@@ -74,6 +77,7 @@ public class CoachController {
     }
 
     //Put change tout l'objet
+    @IsCoach
     @PutMapping("/coach/{id}")
     // Patch change une partie de l'objet
 //    @PatchMapping("/coach/{id}")
