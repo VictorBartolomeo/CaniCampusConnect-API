@@ -1,9 +1,10 @@
-
 package org.example.canicampusconnectapi.service;
 
 import org.example.canicampusconnectapi.dao.EmailValidationTokenDao;
+import org.example.canicampusconnectapi.dao.UserDao;
 import org.example.canicampusconnectapi.common.exception.EmailConstraintRequests;
 import org.example.canicampusconnectapi.model.users.EmailValidationToken;
+import org.example.canicampusconnectapi.model.users.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class TokenService {
 
     private final EmailValidationTokenDao tokenRepository;
+    private final UserDao userRepository;
     private final SecureRandom secureRandom = new SecureRandom();
 
     @Value("${app.security.token.expiration-hours:24}")
@@ -28,12 +30,13 @@ public class TokenService {
     @Value("${app.security.token.max-emails-per-hour:3}")
     private int maxEmailsPerHour;
 
-    public TokenService(EmailValidationTokenDao tokenRepository) {
+    public TokenService(EmailValidationTokenDao tokenRepository, UserDao userRepository) {
         this.tokenRepository = tokenRepository;
+        this.userRepository = userRepository;
     }
 
     /**
-     * ⭐ CORRIGÉ - Génère un nouveau token de validation pour l'email donné (1 seul paramètre)
+     * ⭐ CORRIGÉ - Génère un nouveau token de validation pour l'email donné
      */
     public String generateValidationToken(String email) {
         // Vérifier la limitation de taux
@@ -55,7 +58,6 @@ public class TokenService {
         validationToken.setEmail(email);
         validationToken.setCreatedAt(LocalDateTime.now());
         validationToken.setExpiresAt(LocalDateTime.now().plusHours(expirationHours));
-        // ⭐ SUPPRIMÉ : ipAddress et userAgent
 
         tokenRepository.save(validationToken);
         return token;
@@ -76,6 +78,32 @@ public class TokenService {
             }
         }
         return false;
+    }
+
+    /**
+     * ⭐ NOUVEAU - Permet à un utilisateur de redemander un email de validation
+     */
+    public void resendValidationEmail(String email) {
+        // Vérifier que le compte existe et n'est pas validé
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty()) {
+            throw new IllegalArgumentException("Aucun compte trouvé pour cet email");
+        }
+
+        User user = userOpt.get();
+        if (user.isEmailValidated()) {
+            throw new IllegalStateException("Ce compte est déjà validé");
+        }
+
+        // Vérifier la limitation
+        if (!canSendEmail(email)) {
+            throw new EmailConstraintRequests(
+                    "Trop de demandes d'email envoyées. Maximum " + maxEmailsPerHour + " par heure."
+            );
+        }
+
+        // Générer un nouveau token (cela invalidera automatiquement les anciens)
+        generateValidationToken(email);
     }
 
     /**
@@ -114,10 +142,24 @@ public class TokenService {
     }
 
     /**
-     * Nettoyage automatique des tokens expirés (toutes les heures)
+     * ⭐ AMÉLIORÉ - Nettoyage complet : tokens + comptes non validés
      */
     @Scheduled(fixedRate = 3600000) // 1 heure
     public void cleanupExpiredTokens() {
-        tokenRepository.deleteExpiredTokens(LocalDateTime.now());
+        LocalDateTime now = LocalDateTime.now();
+
+        // 1. Récupérer les emails des tokens expirés AVANT de les supprimer
+        List<String> expiredEmails = tokenRepository.findEmailsWithExpiredTokens(now);
+
+        // 2. Supprimer les tokens expirés
+        tokenRepository.deleteExpiredTokens(now);
+
+        // 3. Supprimer les comptes non validés correspondants
+        if (!expiredEmails.isEmpty()) {
+            int deletedUsers = userRepository.deleteUnvalidatedUsers(expiredEmails);
+            System.out.println("🧹 Nettoyage automatique : " +
+                    expiredEmails.size() + " tokens expirés et " +
+                    deletedUsers + " comptes non validés supprimés");
+        }
     }
 }
