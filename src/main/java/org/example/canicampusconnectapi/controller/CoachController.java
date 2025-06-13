@@ -6,8 +6,10 @@ import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.example.canicampusconnectapi.dao.CoachDao;
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
 import org.example.canicampusconnectapi.model.users.Coach;
+import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsCoach;
 import org.example.canicampusconnectapi.service.registration.RegistrationService;
+import org.example.canicampusconnectapi.view.admin.AdminViewCoach;
 import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +48,9 @@ public class CoachController {
 
     }
 
-
+    @IsClubOwner
     @GetMapping("/coachs")
+    @JsonView(AdminViewCoach.class)
     public List<Coach> getAll() {
         return coachDao.findAll();
     }

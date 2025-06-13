@@ -1,10 +1,9 @@
-
 package org.example.canicampusconnectapi.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.example.canicampusconnectapi.common.exception.EmailConstraintRequests;
 import org.example.canicampusconnectapi.dao.EmailValidationTokenDao;
-import org.example.canicampusconnectapi.common.exception.EmailConstraintRequests; // ⭐ Votre chemin d'exception
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -24,6 +23,9 @@ public class EmailService {
 
     @Value("${app.base-url:http://localhost:8080}")
     private String baseUrl;
+
+    @Value("${app.frontend-url:http://localhost:4200}")  // ← Nouvelle propriété !
+    private String frontendUrl;
 
     @Value("${APP_NAME:CaniCampusConnect}")
     private String appName;
@@ -51,7 +53,7 @@ public class EmailService {
             // ⭐ CORRIGÉ - Générer un token avec 1 seul paramètre
             String token = tokenService.generateValidationToken(to);
 
-            // Créer le lien de validation
+            // Créer le lien de validation qui pointe vers Angular
             String validationLink = buildValidationLink(token, to);
 
             MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -84,14 +86,15 @@ public class EmailService {
     }
 
     /**
-     * Construit le lien de validation sécurisé
+     * Construit le lien de validation qui pointe vers Angular
      */
     private String buildValidationLink(String token, String email) {
         try {
             String encodedEmail = URLEncoder.encode(email, StandardCharsets.UTF_8);
             String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8);
+            // ⭐ CHANGEMENT ICI : Utilise frontendUrl au lieu de baseUrl
             return String.format("%s/validate-email?token=%s&email=%s",
-                    baseUrl, encodedToken, encodedEmail);
+                    frontendUrl, encodedToken, encodedEmail);
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors de la création du lien de validation", e);
         }

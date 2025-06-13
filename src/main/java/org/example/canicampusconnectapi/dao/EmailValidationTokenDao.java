@@ -18,12 +18,19 @@ public interface EmailValidationTokenDao extends JpaRepository<EmailValidationTo
 
     List<EmailValidationToken> findByEmailAndUsedFalse(String email);
 
-    // ⭐ NETTOYAGE automatique des tokens expirés
+    @Query("SELECT COUNT(t) FROM EmailValidationToken t WHERE t.email = :email AND t.createdAt > :since")
+    long countRecentTokensByEmail(@Param("email") String email, @Param("since") LocalDateTime since);
+
+    /**
+     * ⭐ NOUVEAU - Récupère les emails ayant des tokens expirés
+     */
+    @Query("SELECT DISTINCT t.email FROM EmailValidationToken t WHERE t.expiresAt < :now")
+    List<String> findEmailsWithExpiredTokens(@Param("now") LocalDateTime now);
+
+    /**
+     * ⭐ NETTOYAGE automatique des tokens expirés
+     */
     @Modifying
     @Query("DELETE FROM EmailValidationToken t WHERE t.expiresAt < :now")
     void deleteExpiredTokens(@Param("now") LocalDateTime now);
-
-    // ⭐ COMPTAGE pour limitation (anti-spam)
-    @Query("SELECT COUNT(t) FROM EmailValidationToken t WHERE t.email = :email AND t.createdAt > :since")
-    long countRecentTokensByEmail(@Param("email") String email, @Param("since") LocalDateTime since);
 }
