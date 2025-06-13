@@ -13,6 +13,7 @@ import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -36,7 +37,7 @@ public class Coach extends User {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     @JsonView({CoachView.class, AdminViewCoach.class})
-    protected LocalDate registrationDate;
+    protected Date registrationDate;
 
     @OneToMany(mappedBy = "coach")
     @JsonView({AdminViewCoach.class})
