@@ -28,7 +28,7 @@ public class OwnerController {
     protected UserDao userDao;
     protected OwnerDao ownerDao;
     protected OwnerSecurityService ownerSecurityService;
-    protected RgpdService rgpdService; // ✅ Injecter directement votre service existant
+    protected RgpdService rgpdService;
 
     @Autowired
     public OwnerController(OwnerDao ownerDao, UserDao userDao, OwnerSecurityService ownerSecurityService, RgpdService rgpdService) {
@@ -87,7 +87,6 @@ public class OwnerController {
                 ));
             }
 
-            // ✅ Utiliser directement votre service existant !
             rgpdService.anonymizeEntity(Owner.class, id);
 
             return ResponseEntity.ok(Map.of(
