@@ -16,6 +16,7 @@ import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
+import org.example.canicampusconnectapi.view.utilities.AgeRangeView;
 
 @Getter
 @Setter
@@ -30,7 +31,7 @@ public class CourseType {
 
     @Column(nullable = false, length = 255)
     @NotNull(message = "Le nom du type de cours ne peut être vide", groups = Course.CreateCourse.class)
-    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class})
+    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AgeRangeView.class})
     protected String name;
 
     @Column(columnDefinition = "TEXT")
