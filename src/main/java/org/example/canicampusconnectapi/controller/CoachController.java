@@ -15,6 +15,7 @@ import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +28,12 @@ public class CoachController {
 
     private final RegistrationService registrationService;
     private final CoachDao coachDao;
+    private final PasswordEncoder passwordEncoder; // ✅ Ajouter le PasswordEncoder
 
-    public CoachController(RegistrationService registrationService, CoachDao coachDao) {
+    public CoachController(RegistrationService registrationService, CoachDao coachDao, PasswordEncoder passwordEncoder) {
         this.registrationService = registrationService;
         this.coachDao = coachDao;
+        this.passwordEncoder = passwordEncoder; // ✅ Injection
     }
 
 
@@ -56,12 +59,7 @@ public class CoachController {
         return coachDao.findAll();
     }
 
-    @IsClubOwner
-    @PostMapping("/coach")
-    public ResponseEntity<Coach> createCoach(@RequestBody Coach coach) {
-        coachDao.save(coach);
-        return new ResponseEntity<>(coach, HttpStatus.CREATED);
-    }
+    //J'ai mis le POST dans le AuthController avec les register Owner
 
     @IsClubOwner
     @DeleteMapping("coach/{id}")
@@ -79,18 +77,27 @@ public class CoachController {
     //Put change tout l'objet
     @IsCoach
     @PutMapping("/coach/{id}")
-    // Patch change une partie de l'objet
-//    @PatchMapping("/coach/{id}")
-    public ResponseEntity<Coach> updateCoach(@PathVariable Long id, @RequestBody Coach coach) {
+    @JsonView(AdminViewCoach.class)
+    public ResponseEntity<Coach> updateCoach(@PathVariable Long id, @RequestBody @Validated(Coach.onUpdateCoach.class) Coach coach) {
         Optional<Coach> optionalCoach = coachDao.findById(id);
         if (optionalCoach.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        Coach existingCoach = optionalCoach.get();
+
+        // ✅ Préserver le mot de passe existant lors des mises à jour
         coach.setId(id);
-        coachDao.save(coach);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        coach.setPassword(existingCoach.getPassword());
+        coach.setEmailValidated(existingCoach.isEmailValidated());
+        coach.setEmailValidatedAt(existingCoach.getEmailValidatedAt());
+
+        Coach updatedCoach = coachDao.save(coach);
+        updatedCoach.setPassword(null); // Masquer dans la réponse
+
+        return new ResponseEntity<>(updatedCoach, HttpStatus.OK);
     }
+
 
     /**
      * Récupère toutes les registrations en attente pour les cours FUTURS d'un coach.
