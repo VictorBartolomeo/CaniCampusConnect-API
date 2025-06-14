@@ -2,6 +2,7 @@ package org.example.canicampusconnectapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
+import org.example.canicampusconnectapi.common.exception.UnauthorizedAccessException;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.security.AppUserDetails;
 import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
@@ -35,15 +36,21 @@ public class DogController {
     }
 
 
+
     @IsOwner
     @GetMapping("/dog/{id}")
     @JsonView(OwnerViewDog.class)
-    public ResponseEntity<Dog> getDog(@PathVariable Long id) {
-        Optional<Dog> optionalDog = dogService.getDogById(id);
-        if (optionalDog.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> getDog(@PathVariable Long id, @AuthenticationPrincipal AppUserDetails userDetails) {
+        try {
+            Optional<Dog> optionalDog = dogService.getDogByIdAndOwnerId(id, userDetails.getUserId());
+            return new ResponseEntity<>(optionalDog.get(), HttpStatus.OK);
+        } catch (ResourceNotFound e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "NOT_FOUND", "message", e.getMessage()));
+        } catch (UnauthorizedAccessException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "UNAUTHORIZED_ACCESS", "message", e.getMessage()));
         }
-        return new ResponseEntity<>(optionalDog.get(), HttpStatus.OK);
     }
 
     @IsClubOwner
@@ -61,18 +68,6 @@ public class DogController {
             List<Dog> dogs = dogService.getDogsByOwner(userDetails.getUserId());
             return new ResponseEntity<>(dogs, HttpStatus.OK);
         } catch (ResourceNotFound e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @IsOwner
-    @GetMapping("/owner/{ownerId}/dog/{dogId}")
-    @JsonView(OwnerViewDog.class)
-    public ResponseEntity<Dog> getDogByOwnerAndDogId(@PathVariable Long ownerId, @PathVariable Long dogId) {
-        try {
-            Dog dog = dogService.getDogByOwnerIdAndDogId(ownerId, dogId);
-            return new ResponseEntity<>(dog, HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
