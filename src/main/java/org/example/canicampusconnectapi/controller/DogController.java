@@ -7,7 +7,6 @@ import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.security.AppUserDetails;
 import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
-import org.example.canicampusconnectapi.security.annotation.role.IsOwnerSelf;
 import org.example.canicampusconnectapi.service.dog.DogService;
 import org.example.canicampusconnectapi.view.admin.AdminViewDog;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
