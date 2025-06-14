@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -65,6 +66,22 @@ public class DogServiceImpl implements DogService {
 
         dog.setOwner(owner);
         dog.setId(null);
+
+        // ✅ Valider et traiter les races si nécessaire
+        if (dog.getBreeds() != null && !dog.getBreeds().isEmpty()) {
+            List<Breed> validatedBreeds = new ArrayList<>();
+
+            for (Breed breed : dog.getBreeds()) {
+                if (breed.getId() != null) {
+                    Breed existingBreed = breedDao.findById(breed.getId())
+                            .orElseThrow(() -> new ResourceNotFound("Race non trouvée avec l'ID: " + breed.getId()));
+                    validatedBreeds.add(existingBreed);
+                }
+            }
+
+            dog.setBreeds(validatedBreeds);
+        }
+
         return dogDao.save(dog);
     }
 
@@ -104,7 +121,9 @@ public class DogServiceImpl implements DogService {
             if (dogDetails.getBreeds().size() > 3) {
                 throw new IllegalArgumentException("Le chien ne peut pas avoir plus de 3 races");
             }
-            LinkedHashSet<Breed> newBreeds = new LinkedHashSet<>();
+
+            // ✅ CORRECTION : Utiliser ArrayList au lieu de LinkedHashSet
+            List<Breed> newBreeds = new ArrayList<>();
 
             for (Breed breed : dogDetails.getBreeds()) {
                 if (breed.getId() != null) {
