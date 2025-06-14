@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
+@IsClubOwner
 public class AgeRangeController {
 
     protected AgeRangeDao ageRangeDao;
@@ -42,7 +43,6 @@ public class AgeRangeController {
         return ageRangeDao.findAll();
     }
 
-    @IsClubOwner
     @JsonView(AgeRangeView.class)
     @PostMapping("/agerange")
     public ResponseEntity<AgeRange> createAgeRange(@RequestBody AgeRange ageRange) {
@@ -61,7 +61,6 @@ public class AgeRangeController {
         return new ResponseEntity<>(ageRange, HttpStatus.CREATED);
     }
 
-    @IsClubOwner
     @DeleteMapping("/agerange/{id}")
     public ResponseEntity<Void> deleteAgeRange(@PathVariable Long id) {
         Optional<AgeRange> optionalAgeRange = ageRangeDao.findById(id);
@@ -85,7 +84,6 @@ public class AgeRangeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @IsClubOwner
     @JsonView(AgeRangeView.class)
     @PutMapping("/agerange/{id}")
     public ResponseEntity<Void> updateAgeRange(@PathVariable Long id, @RequestBody AgeRange ageRange) {
