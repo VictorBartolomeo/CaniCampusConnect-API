@@ -11,13 +11,11 @@ import org.example.canicampusconnectapi.service.dog.DogService;
 import org.example.canicampusconnectapi.service.dogweight.DogWeightService;
 import org.example.canicampusconnectapi.view.utilities.WeightView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -148,46 +146,6 @@ public class DogWeightController {
         try {
             DogWeight updatedDogWeight = dogWeightService.updateDogWeight(id, dogWeight);
             return new ResponseEntity<>(updatedDogWeight, HttpStatus.OK);
-        } catch (ResourceNotFound e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("/dog/{dogId}/weights/last7days")
-    public ResponseEntity<List<DogWeight>> getDogWeightsFromLast7Days(@PathVariable Long dogId) {
-        try {
-            List<DogWeight> dogWeights = dogWeightService.getDogWeightsFromLast7Days(dogId);
-            return new ResponseEntity<>(dogWeights, HttpStatus.OK);
-        } catch (ResourceNotFound e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("/dog/{dogId}/weights/last3months")
-    public ResponseEntity<List<DogWeight>> getDogWeightsFromLast3Months(@PathVariable Long dogId) {
-        try {
-            List<DogWeight> dogWeights = dogWeightService.getDogWeightsFromLast3Months(dogId);
-            return new ResponseEntity<>(dogWeights, HttpStatus.OK);
-        } catch (ResourceNotFound e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("/dog/{dogId}/weights/last6months")
-    public ResponseEntity<List<DogWeight>> getDogWeightsFromLast6Months(@PathVariable Long dogId) {
-        try {
-            List<DogWeight> dogWeights = dogWeightService.getDogWeightsFromLast6Months(dogId);
-            return new ResponseEntity<>(dogWeights, HttpStatus.OK);
-        } catch (ResourceNotFound e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("/dog/{dogId}/weights/last12months")
-    public ResponseEntity<List<DogWeight>> getDogWeightsFromLast12Months(@PathVariable Long dogId) {
-        try {
-            List<DogWeight> dogWeights = dogWeightService.getDogWeightsFromLast12Months(dogId);
-            return new ResponseEntity<>(dogWeights, HttpStatus.OK);
         } catch (ResourceNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
