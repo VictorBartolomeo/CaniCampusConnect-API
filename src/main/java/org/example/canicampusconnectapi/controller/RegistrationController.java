@@ -8,6 +8,7 @@ import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
 import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsCoach;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
+import org.example.canicampusconnectapi.service.registration.RegistrationService;
 import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
@@ -26,12 +27,13 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@IsClubOwner
 public class RegistrationController {
 
     // Groupe de validation pour mise à jour du statut uniquement
     public interface StatusUpdateValidation extends Default {}
 
-    private final org.example.canicampusconnectapi.service.registration.RegistrationService registrationService;
+    protected RegistrationService registrationService;
 
     @Autowired
     public RegistrationController(org.example.canicampusconnectapi.service.registration.RegistrationService registrationService) {
@@ -49,7 +51,6 @@ public class RegistrationController {
     }
 
     // Get all registrations
-    @IsClubOwner
     @GetMapping("/registrations")
     @JsonView(AdminViewRegistration.class)
     public List<Registration> getAllRegistrations() {
@@ -75,7 +76,6 @@ public class RegistrationController {
     }
 
     // Get registrations by status
-    @IsClubOwner
     @GetMapping("/registrations/status/{status}")
     @JsonView(AdminViewRegistration.class)
     public List<Registration> getRegistrationsByStatus(@PathVariable RegistrationStatus status) {
@@ -83,7 +83,6 @@ public class RegistrationController {
     }
 
     // Get registrations by date
-    @IsClubOwner
     @GetMapping("/registrations/date")
     @JsonView(AdminViewRegistration.class)
     public List<Registration> getRegistrationsByDate(
@@ -92,7 +91,6 @@ public class RegistrationController {
     }
 
     // Get registrations by date range
-    @IsClubOwner
     @GetMapping("/registrations/between")
     @JsonView(AdminViewRegistration.class)
     public List<Registration> getRegistrationsBetweenDates(
@@ -193,7 +191,6 @@ public class RegistrationController {
     }
 
     // Delete a registration
-    @IsClubOwner
     @DeleteMapping("/registration/{id}")
     public ResponseEntity<Void> deleteRegistration(@PathVariable Long id) {
         boolean deleted = registrationService.deleteById(id);
