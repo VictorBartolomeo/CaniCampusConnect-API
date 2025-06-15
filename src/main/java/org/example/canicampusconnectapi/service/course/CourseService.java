@@ -65,7 +65,7 @@ public interface CourseService {
      * Retrieves all courses between two dates for the default club.
      *
      * @param start The start date.
-     * @param end The end date.
+     * @param end   The end date.
      * @return A list of courses between the specified dates.
      */
     List<Course> getCoursesBetweenDates(Instant start, Instant end);
@@ -85,7 +85,7 @@ public interface CourseService {
      * @param course The course object to create. Must have valid coach and course type IDs set.
      * @return The created course with its generated ID.
      * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the specified coach, club, or course type does not exist.
-     * @throws IllegalArgumentException if the coach or course type information is missing.
+     * @throws IllegalArgumentException                                           if the coach or course type information is missing.
      */
     Course createCourse(Course course);
 
@@ -100,7 +100,7 @@ public interface CourseService {
     /**
      * Updates an existing course.
      *
-     * @param id The ID of the course to update.
+     * @param id     The ID of the course to update.
      * @param course The course data to update. Coach and course type can be updated if provided.
      * @return The updated course.
      * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the course, coach, club, or course type does not exist.
@@ -115,4 +115,12 @@ public interface CourseService {
      * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound si le coach n'est pas trouvé.
      */
     List<Course> getUpcomingCoursesByCoach(Long coachId);
+
+    /**
+     * Retrieves all courses that a specific dog is registered for.
+     *
+     * @param dogId The ID of the dog.
+     * @return A list of courses the dog is registered for.
+     */
+    List<Course> getCoursesByDogId(Long dogId);
 }
