@@ -2,7 +2,6 @@ package org.example.canicampusconnectapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.constraints.Positive;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.example.canicampusconnectapi.dao.CoachDao;
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
 import org.example.canicampusconnectapi.model.users.Coach;
@@ -10,12 +9,9 @@ import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsCoach;
 import org.example.canicampusconnectapi.service.registration.RegistrationService;
 import org.example.canicampusconnectapi.view.admin.AdminViewCoach;
-import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,14 +22,12 @@ import java.util.Optional;
 @RestController
 public class CoachController {
 
-    private final RegistrationService registrationService;
-    private final CoachDao coachDao;
-    private final PasswordEncoder passwordEncoder; // ✅ Ajouter le PasswordEncoder
+    protected RegistrationService registrationService;
+    protected CoachDao coachDao;
 
-    public CoachController(RegistrationService registrationService, CoachDao coachDao, PasswordEncoder passwordEncoder) {
+    public CoachController(RegistrationService registrationService, CoachDao coachDao) {
         this.registrationService = registrationService;
         this.coachDao = coachDao;
-        this.passwordEncoder = passwordEncoder; // ✅ Injection
     }
 
 
@@ -44,11 +38,9 @@ public class CoachController {
     public ResponseEntity<Coach> getCoach(@PathVariable Long id) {
 
         Optional<Coach> optionalCoach = coachDao.findById(id);
-        if (optionalCoach.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(optionalCoach.get(), HttpStatus.OK);
+        return optionalCoach
+                .map(coach -> new ResponseEntity<>(coach, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
     }
 
@@ -59,7 +51,7 @@ public class CoachController {
         return coachDao.findAll();
     }
 
-    //J'ai mis le POST dans le AuthController avec les register Owner
+    //J'ai mis le POST dans le AuthController avec les register Owner ca me parait plus pertinent
 
     @IsClubOwner
     @DeleteMapping("coach/{id}")
@@ -86,7 +78,6 @@ public class CoachController {
 
         Coach existingCoach = optionalCoach.get();
 
-        // ✅ Préserver le mot de passe existant lors des mises à jour
         coach.setId(id);
         coach.setPassword(existingCoach.getPassword());
         coach.setEmailValidated(existingCoach.isEmailValidated());
