@@ -22,6 +22,7 @@ import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
+import org.example.canicampusconnectapi.view.utilities.WeightView;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -47,27 +48,27 @@ public class Dog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, AdminViewDog.class})
+    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, AdminViewDog.class,WeightView.class})
     protected Long id;
 
     @PersonalData(anonymizeWith = "Anonymized Dog")
     @Column(nullable = false, length = 255)
-    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class})
+    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class,WeightView.class})
     protected String name;
 
     @Column(nullable = false)
-    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class})
+    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class,WeightView.class})
     private Date birthDate;
 
     @Enumerated(EnumType.STRING)
     @NotNull(groups = {CreateFromOwner.class})
     @Column(nullable = false)
-    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class})
+    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class,WeightView.class})
     protected Gender gender;
 
     @PersonalData(anonymizeWith = "000-000-000")
     @Column(unique = true, length = 50, nullable = true)
-    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class})
+    @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class,WeightView.class})
     protected String chipNumber;
 
     @ManyToOne
@@ -85,20 +86,20 @@ public class Dog {
     @OrderColumn(name = "breed_order") // ✅ Préserve l'ordre en base
     @JsonSerialize(using = BreedOrderSerializer.class)
     @NotNull(groups = {CreateFromOwner.class, updateFromOwner.class, CoachView.class})
-    @JsonView({OwnerViewDog.class, AdminViewDog.class})
+    @JsonView({OwnerViewDog.class})
     private List<Breed> breeds = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "dog")
-    @JsonView({OwnerViewDog.class, AdminViewDog.class})
+    @JsonView({OwnerViewDog.class})
     private List<Registration> registrations;
 
     @OneToMany(mappedBy = "dog")
-    @JsonView({OwnerViewDog.class, AdminViewDog.class})
+    @JsonView({OwnerViewDog.class})
     private List<Vaccination> vaccinations;
 
     @OneToMany(mappedBy = "dog")
-    @JsonView({OwnerViewDog.class, AdminViewDog.class})
+    @JsonView({OwnerViewDog.class})
     private List<VeterinaryVisit> veterinaryVisits;
 
     @OneToMany(mappedBy = "dog")
