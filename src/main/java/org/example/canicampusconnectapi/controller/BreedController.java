@@ -3,6 +3,7 @@ package org.example.canicampusconnectapi.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
 import org.example.canicampusconnectapi.model.dogRelated.Breed;
+import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
 import org.example.canicampusconnectapi.service.breed.BreedService;
@@ -20,12 +21,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
+@IsClubOwner
 public class BreedController {
 
     private final BreedService breedService; // Utiliser le service au lieu du DAO direct
@@ -52,24 +53,12 @@ public class BreedController {
         return ResponseEntity.ok(breeds);
     }
 
-    @IsClubOwner
     @PostMapping("/breed")
     public ResponseEntity<Breed> createBreed(@RequestBody @Valid Breed breed) {
         Breed savedBreed = breedService.save(breed);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBreed);
     }
 
-    @IsClubOwner
-    @DeleteMapping("/breed/{id}")
-    public ResponseEntity<Void> deleteBreed(@PathVariable Short id) {
-        if (breedService.existsById(id)) {
-            breedService.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @IsClubOwner
     @PutMapping("/breed/{id}")
     public ResponseEntity<Breed> updateBreed(@PathVariable Short id, @RequestBody @Valid Breed breed) {
         return breedService.findById(id)
@@ -81,7 +70,7 @@ public class BreedController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-@IsOwner
+    @IsOwner
     @PostMapping("/breed/{id}/image")
     public ResponseEntity<String> uploadBreedImage(
             @PathVariable Short id,
@@ -332,42 +321,53 @@ public class BreedController {
         return breedToFile.getOrDefault(breedName, "placeholder_no_breed.jpg");
     }
 
-    @IsClubOwner
-    @DeleteMapping("/breed/{id}/image")
-    public ResponseEntity<Void> deleteBreedImage(@PathVariable Short id) {
-        try {
-            Optional<Breed> breedOpt = breedService.findById(id);
-            if (breedOpt.isEmpty()) {
-                return ResponseEntity.notFound().build();
-            }
-
-            // Supprimer le fichier physique
-            Breed breed = breedOpt.get();
-            String baseName = id + "_" + breed.getName().toLowerCase()
-                    .replaceAll("\\s+", "-")
-                    .replaceAll("[^a-z0-9-]", "");
-
-            String[] extensions = {".jpg", ".jpeg", ".png", ".webp"};
-            boolean fileDeleted = false;
-
-            for (String ext : extensions) {
-                Path testPath = Paths.get(uploadDir).resolve(baseName + ext);
-                if (Files.exists(testPath)) {
-                    Files.delete(testPath);
-                    fileDeleted = true;
-                    break;
-                }
-            }
-
-            // Mettre à jour en BDD (supprimer l'URL)
-            breedService.updateAvatarUrl(id, null);
-
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    @DeleteMapping("/breed/{id}")
+    public ResponseEntity<?> deleteBreed(@PathVariable Short id) {
+        Optional<Breed> optionalBreed = breedService.findById(id);
+        if (optionalBreed.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
+
+        Breed breed = optionalBreed.get();
+
+        // Vérifier s'il y a des chiens associés à cette race
+        if (breed.getDogs() != null && !breed.getDogs().isEmpty()) {
+            List<String> dogNames = breed.getDogs().stream()
+                    .map(Dog::getName)
+                    .collect(Collectors.toList());
+
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Impossible de supprimer cette race car elle est utilisée par " +
+                    breed.getDogs().size() + " chien(s). Vous devez d'abord modifier ou supprimer ces chiens.");
+            errorResponse.put("affectedDogs", dogNames);
+            errorResponse.put("breedId", id);
+            errorResponse.put("breedName", breed.getName());
+            errorResponse.put("suggestedEndpoint", "/breed/" + id + "/affected-dogs");
+            errorResponse.put("timestamp", new Date());
+            errorResponse.put("status", 409);
+            errorResponse.put("error", "Conflict");
+            errorResponse.put("path", "/breed/" + id);
+
+            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        }
+
+        breedService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/breed/{id}/affected-dogs")
+    @JsonView(OwnerViewDog.class)
+    public ResponseEntity<List<Dog>> getDogsByBreed(@PathVariable Short id) {
+        Optional<Breed> optionalBreed = breedService.findById(id);
+        if (optionalBreed.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Breed breed = optionalBreed.get();
+        List<Dog> dogs = breed.getDogs();
+
+        return ResponseEntity.ok(dogs != null ? dogs : List.of());
+    }
 
 
     private boolean isValidImageType(String contentType) {

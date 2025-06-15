@@ -257,4 +257,11 @@ public class RegistrationServiceImpl implements RegistrationService {
             registrationDao.save(registration);
         }
     }
+
+    @Override
+    @Transactional
+    public void deleteAllByCourseId(Long courseId) {
+        List<Registration> registrations = findByCourseId(courseId);
+        registrations.forEach(registration -> deleteById(registration.getId()));
+    }
 }

@@ -6,11 +6,13 @@ import org.example.canicampusconnectapi.dao.ClubDao;
 import org.example.canicampusconnectapi.dao.CoachDao;
 import org.example.canicampusconnectapi.dao.CourseDao;
 import org.example.canicampusconnectapi.dao.CourseTypeDao;
+import org.example.canicampusconnectapi.model.courseRelated.Registration;
 import org.example.canicampusconnectapi.model.users.Club;
 import org.example.canicampusconnectapi.model.courseRelated.AgeRange;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
 import org.example.canicampusconnectapi.model.courseRelated.CourseType;
 import org.example.canicampusconnectapi.model.users.Coach;
+import org.example.canicampusconnectapi.service.registration.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,20 +25,23 @@ import java.util.stream.Collectors;
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    private final CourseDao courseDao;
-    private final CoachDao coachDao;
-    private final ClubDao clubDao;
-    private final CourseTypeDao courseTypeDao;
-    private final AgeRangeDao ageRangeDao;
+    protected CourseDao courseDao;
+    protected CoachDao coachDao;
+    protected ClubDao clubDao;
+    protected CourseTypeDao courseTypeDao;
+    protected AgeRangeDao ageRangeDao;
+    protected RegistrationService registrationService;
 
     @Autowired
-    public CourseServiceImpl(CourseDao courseDao, CoachDao coachDao, ClubDao clubDao, 
-                            CourseTypeDao courseTypeDao, AgeRangeDao ageRangeDao) {
+    public CourseServiceImpl(CourseDao courseDao, CoachDao coachDao, ClubDao clubDao,
+                             CourseTypeDao courseTypeDao, AgeRangeDao ageRangeDao,
+                             RegistrationService registrationService) {
         this.courseDao = courseDao;
         this.coachDao = coachDao;
         this.clubDao = clubDao;
         this.courseTypeDao = courseTypeDao;
         this.ageRangeDao = ageRangeDao;
+        this.registrationService = registrationService;
     }
 
     @Override
@@ -55,7 +60,7 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> getCoursesByCoach(Long coachId) {
         Coach coach = coachDao.findById(coachId)
                 .orElseThrow(() -> new ResourceNotFound("Coach not found with id: " + coachId));
-        
+
         Club defaultClub = getDefaultClub();
         return courseDao.findByClubAndCoach(defaultClub, coach);
     }
@@ -71,7 +76,7 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> getCoursesByCourseType(Long courseTypeId) {
         CourseType courseType = courseTypeDao.findById(courseTypeId)
                 .orElseThrow(() -> new ResourceNotFound("Course type not found with id: " + courseTypeId));
-        
+
         Club defaultClub = getDefaultClub();
         return courseDao.findByClubAndCourseType(defaultClub, courseType);
     }
@@ -92,12 +97,12 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> getCoursesByAgeRange(Long ageRangeId) {
         AgeRange ageRange = ageRangeDao.findById(ageRangeId)
                 .orElseThrow(() -> new ResourceNotFound("Age range not found with id: " + ageRangeId));
-        
+
         Club defaultClub = getDefaultClub();
-        
+
         // Get all course types for this age range
         List<CourseType> courseTypes = courseTypeDao.findByAgeRange(ageRange);
-        
+
         // Get all courses for these course types
         return courseTypes.stream()
                 .flatMap(courseType -> courseDao.findByClubAndCourseType(defaultClub, courseType).stream())
@@ -110,37 +115,28 @@ public class CourseServiceImpl implements CourseService {
         if (course.getCoach() == null || course.getCoach().getId() == null) {
             throw new IllegalArgumentException("Coach ID must be provided to create a course.");
         }
-        
+
         Coach coach = coachDao.findById(course.getCoach().getId())
                 .orElseThrow(() -> new ResourceNotFound("Coach not found with id: " + course.getCoach().getId()));
-        
+
         Club defaultClub = getDefaultClub();
-        
+
         if (course.getCourseType() == null || course.getCourseType().getId() == null) {
             throw new IllegalArgumentException("Course type ID must be provided to create a course.");
         }
-        
+
         CourseType courseType = courseTypeDao.findById(course.getCourseType().getId())
                 .orElseThrow(() -> new ResourceNotFound("Course type not found with id: " + course.getCourseType().getId()));
-        
+
         // Set the full objects before saving
         course.setCoach(coach);
         course.setClub(defaultClub);
         course.setCourseType(courseType);
-        
+
         // Clear ID to ensure creation, not update
         course.setId(null);
-        
-        return courseDao.save(course);
-    }
 
-    @Override
-    @Transactional
-    public void deleteCourse(Long id) {
-        if (!courseDao.existsById(id)) {
-            throw new ResourceNotFound("Course not found with id: " + id);
-        }
-        courseDao.deleteById(id);
+        return courseDao.save(course);
     }
 
     @Override
@@ -148,38 +144,38 @@ public class CourseServiceImpl implements CourseService {
     public Course updateCourse(Long id, Course courseDetails) {
         Course existingCourse = courseDao.findById(id)
                 .orElseThrow(() -> new ResourceNotFound("Course not found with id: " + id));
-        
+
         // Update basic fields
         existingCourse.setTitle(courseDetails.getTitle());
         existingCourse.setDescription(courseDetails.getDescription());
         existingCourse.setStartDatetime(courseDetails.getStartDatetime());
         existingCourse.setEndDatetime(courseDetails.getEndDatetime());
         existingCourse.setMaxCapacity(courseDetails.getMaxCapacity());
-        
+
         // Handle coach update only if provided in the request
         if (courseDetails.getCoach() != null && courseDetails.getCoach().getId() != null) {
             Coach coach = coachDao.findById(courseDetails.getCoach().getId())
                     .orElseThrow(() -> new ResourceNotFound("Coach not found with id: " + courseDetails.getCoach().getId()));
             existingCourse.setCoach(coach);
         }
-        
+
         // Always use the default club
         Club defaultClub = getDefaultClub();
         existingCourse.setClub(defaultClub);
-        
+
         // Handle course type update only if provided in the request
         if (courseDetails.getCourseType() != null && courseDetails.getCourseType().getId() != null) {
             CourseType courseType = courseTypeDao.findById(courseDetails.getCourseType().getId())
                     .orElseThrow(() -> new ResourceNotFound("Course type not found with id: " + courseDetails.getCourseType().getId()));
             existingCourse.setCourseType(courseType);
         }
-        
+
         return courseDao.save(existingCourse);
     }
-    
+
     /**
      * Helper method to get the default club (ID 1).
-     * 
+     *
      * @return The default club.
      * @throws ResourceNotFound if the default club does not exist.
      */
@@ -195,5 +191,26 @@ public class CourseServiceImpl implements CourseService {
 
         Instant now = Instant.now();
         return courseDao.findByCoachIdAndStartDatetimeAfter(coachId, now);
+    }
+
+    @Override
+    public List<Course> getCoursesByDogId(Long dogId) {
+        List<Registration> registrations = registrationService.findByDogId(dogId);
+        return registrations.stream()
+                .map(Registration::getCourse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void deleteCourse(Long id) {
+        Course course = courseDao.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Course not found with id: " + id));
+
+        // ✅ Supprimer toutes les registrations liées à ce cours
+        registrationService.deleteAllByCourseId(id);
+
+        // ✅ Ensuite supprimer le cours
+        courseDao.deleteById(id);
     }
 }

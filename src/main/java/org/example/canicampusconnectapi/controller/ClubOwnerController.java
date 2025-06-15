@@ -2,6 +2,7 @@ package org.example.canicampusconnectapi.controller;
 
 import org.example.canicampusconnectapi.dao.ClubOwnerDao;
 import org.example.canicampusconnectapi.model.users.ClubOwner;
+import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
+@IsClubOwner
 public class ClubOwnerController {
 
     protected ClubOwnerDao clubOwnerDao;
@@ -22,7 +24,6 @@ public class ClubOwnerController {
     }
 
     @GetMapping("/clubOwner/{id}")
-
     public ResponseEntity<ClubOwner> getClubOwner(@PathVariable Long id) {
 
         Optional<ClubOwner> optionalClubOwner = clubOwnerDao.findById(id);

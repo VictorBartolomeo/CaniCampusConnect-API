@@ -1,19 +1,21 @@
 package org.example.canicampusconnectapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import jakarta.validation.Valid;
 import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
 import org.example.canicampusconnectapi.common.exception.UnauthorizedAccessException;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
+import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.security.AppUserDetails;
 import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
-import org.example.canicampusconnectapi.security.annotation.role.IsOwnerSelf;
 import org.example.canicampusconnectapi.service.dog.DogService;
 import org.example.canicampusconnectapi.view.admin.AdminViewDog;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
+@IsClubOwner
 public class DogController {
 
     private final DogService dogService;
@@ -35,25 +38,42 @@ public class DogController {
         this.dogService = dogService;
     }
 
-
-
     @IsOwner
     @GetMapping("/dog/{id}")
     @JsonView(OwnerViewDog.class)
     public ResponseEntity<?> getDog(@PathVariable Long id, @AuthenticationPrincipal AppUserDetails userDetails) {
         try {
-            Optional<Dog> optionalDog = dogService.getDogByIdAndOwnerId(id, userDetails.getUserId());
-            return new ResponseEntity<>(optionalDog.get(), HttpStatus.OK);
+            if (userDetails == null || userDetails.getUserId() == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Utilisateur non authentifié"));
+            }
+
+            // Vérifier si l'utilisateur est ClubOwner
+            boolean isClubOwner = userDetails.getAuthorities().stream()
+                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_CLUB_OWNER"));
+
+            if (isClubOwner) {
+                // ClubOwner peut accéder à n'importe quel chien
+                Optional<Dog> optionalDog = dogService.getDogById(id);
+                if (optionalDog.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(Map.of("error", "Chien avec l'ID " + id + " introuvable"));
+                }
+                return ResponseEntity.ok(optionalDog.get());
+            } else {
+                // Owner ne peut accéder qu'à ses propres chiens
+                Dog dog = dogService.getDogByOwnerIdAndDogId(userDetails.getUserId(), id);
+                return ResponseEntity.ok(dog);
+            }
         } catch (ResourceNotFound e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "NOT_FOUND", "message", e.getMessage()));
-        } catch (UnauthorizedAccessException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("error", "UNAUTHORIZED_ACCESS", "message", e.getMessage()));
+                    .body(Map.of("error", "Chien introuvable ou accès non autorisé"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Erreur serveur"));
         }
     }
 
-    @IsClubOwner
     @GetMapping("/dogs")
     @JsonView(AdminViewDog.class)
     public List<Dog> getAllDogs() {
@@ -61,28 +81,88 @@ public class DogController {
     }
 
     @IsOwner
-    @GetMapping("/owner/{ownerId}/dogs")
+    @GetMapping("/owner/connected/dogs")
     @JsonView(OwnerViewDog.class)
-    public ResponseEntity<List<Dog>> getDogsByOwner(@PathVariable Long ownerId, @AuthenticationPrincipal AppUserDetails userDetails) {
+    public ResponseEntity<?> getDogsByOwner(@AuthenticationPrincipal AppUserDetails userDetails) {
         try {
+            if (userDetails == null || userDetails.getUserId() == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Utilisateur non authentifié"));
+            }
+
             List<Dog> dogs = dogService.getDogsByOwner(userDetails.getUserId());
-            return new ResponseEntity<>(dogs, HttpStatus.OK);
+            return ResponseEntity.ok(dogs);
         } catch (ResourceNotFound e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Propriétaire introuvable"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Erreur serveur"));
         }
     }
+
+    @GetMapping("/owner/{ownerId}/dogs")
+    @JsonView(AdminViewDog.class)
+    public ResponseEntity<?> getDogsByOwner(@PathVariable Long ownerId) {
+        try {
+            if (ownerId == null || ownerId <= 0) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "ID propriétaire invalide"));
+            }
+
+            List<Dog> dogs = dogService.getDogsByOwner(ownerId);
+            return ResponseEntity.ok(dogs);
+        } catch (ResourceNotFound e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Propriétaire avec l'ID " + ownerId + " introuvable"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Erreur serveur"));
+        }
+    }
+
 
     @IsOwner
     @PostMapping("/dog")
     @JsonView(OwnerViewDog.class)
-    public ResponseEntity<Dog> createDog(@RequestBody Dog dog) {
+    public ResponseEntity<?> createDog(@RequestBody @Validated(Dog.CreateFromOwner.class) Dog dog, @AuthenticationPrincipal AppUserDetails userDetails) {
         try {
+            // Vérifier l'authentification
+            if (userDetails == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Utilisateur non authentifié"));
+            }
+
+            // Vérifier si l'utilisateur est ClubOwner (admin)
+            boolean isClubOwner = userDetails.getAuthorities().stream()
+                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_CLUB_OWNER"));
+
+            if (isClubOwner) {
+                // ClubOwner DOIT spécifier un owner dans le JSON
+                if (dog.getOwner() == null || dog.getOwner().getId() == null) {
+                    return ResponseEntity.badRequest()
+                            .body(Map.of("error", "En tant qu'administrateur, vous devez spécifier l'ID du propriétaire"));
+                }
+                // Garder l'owner spécifié dans le JSON
+            } else {
+                // Owner normal : toujours assigné à lui-même (ignore owner du JSON)
+                Owner owner = new Owner();
+                owner.setId(userDetails.getUserId());
+                dog.setOwner(owner);
+            }
+
             Dog createdDog = dogService.createDog(dog);
-            return new ResponseEntity<>(createdDog, HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdDog);
+
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Données invalides : " + e.getMessage()));
         } catch (ResourceNotFound e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Race ou propriétaire introuvable"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Erreur lors de la création du chien"));
         }
     }
 

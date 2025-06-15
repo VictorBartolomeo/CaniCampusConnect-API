@@ -1,4 +1,6 @@
 package org.example.canicampusconnectapi.view.admin;
 
-public class AdminViewDog {
+import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
+
+public class AdminViewDog extends OwnerViewDog {
 }

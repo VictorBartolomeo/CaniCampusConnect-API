@@ -1,11 +1,22 @@
-INSERT INTO user (firstname, lastname, email, password, phone, email_validated)
-VALUES
-    ('PrénomAdmin', 'NomAdmin', 'admin@admin.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0611111111', true),
-    ('Marin', 'Tintin', 'coach@coach.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0622222222', true),
-    ('PrénomCoach2', 'NomCoach2', 'coach2@coach.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0633333333', true),
-    ('Propriétaire1', 'Utilisateur1', 'owner3@user.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0677777777', true),
-    ('Propriétaire2', 'Utilisateur2', 'owner4@user.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0644444444', true),
-    ('Propriétaire3', 'Utilisateur3', 'owner5@user.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0655555555', true);
+-- Au lieu de l'ancien INSERT
+INSERT INTO user (firstname, lastname, email, password, phone, email_validated, created_date, last_modified_date,
+                  created_by, last_modified_by)
+VALUES ('PrénomAdmin', 'NomAdmin', 'admin@admin.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
+        '0611111111', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Marin', 'Tintin', 'coach@coach.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
+        '0622222222', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('PrénomCoach2', 'NomCoach2', 'coach2@coach.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
+        '0633333333', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Propriétaire1', 'Utilisateur1', 'owner3@user.com',
+        '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0677777777', true, NOW(), NOW(), 'SYSTEM',
+        'SYSTEM'),
+       ('Propriétaire2', 'Utilisateur2', 'owner4@user.com',
+        '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0644444444', true, NOW(), NOW(), 'SYSTEM',
+        'SYSTEM'),
+       ('Propriétaire3', 'Utilisateur3', 'owner5@user.com',
+        '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0655555555', true, NOW(), NOW(), 'SYSTEM',
+        'SYSTEM');
+
 INSERT INTO club_owner (user_id)
 VALUES (1);
 
@@ -21,11 +32,11 @@ VALUES (4, false, '2023-03-10'),
 INSERT INTO club (name, address, user_id)
 VALUES ('Les moustaches Messines', '123 Rue des Chiens, Paris', 1);
 
-INSERT INTO age_range (min_age, max_age)
-VALUES (0, 12),  -- 0-12 mois (chiots)
-       (13, 36), -- 13-36 mois (jeune chien)
-       (37, 84), -- 37-84 mois (adulte)
-       (85, 999); -- 85+ mois (senior)
+INSERT INTO age_range (min_age, max_age, name)
+VALUES (0, 12, 'Chiot'),  -- 0-12 mois (chiots)
+       (13, 36, 'Jeune chien'), -- 13-36 mois (jeune chien)
+       (37, 84, 'Adulte'), -- 37-84 mois (adulte)
+       (85, 999, 'Senior'); -- 85+ mois (senior)
 
 INSERT INTO course_type (name, description, age_range_id)
 VALUES ('Socialisation des Chiots', 'Socialisation de base et introduction à l''éducation pour chiots', 1),
@@ -36,276 +47,296 @@ VALUES ('Socialisation des Chiots', 'Socialisation de base et introduction à l'
         'Formation pour chiens destinés à devenir des animaux thérapeutiques certifiés', 3),
        ('Bien-être des Chiens Seniors', 'Exercices doux et stimulation mentale pour chiens âgés', 4);
 
-INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, user_id, club_id, course_type_id)
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, user_id, club_id, course_type_id,
+                    created_date, last_modified_date, created_by, last_modified_by)
 VALUES
-       -- Age Range 1 (Puppies) - 5 courses before May 22, 2025
-       ('Chiots - Éveil et Socialisation', 'On va apprendre à votre chiot les bases de l''éducation et le faire jouer avec d''autres pour une bonne socialisation',
-        '2025-05-15 10:00:00', '2025-05-15 11:30:00', 8, 2, 1, 1),
-       ('Chiots - Premiers pas', 'Cours d''introduction pour les tout jeunes chiots, axé sur la socialisation de base et la découverte de l''environnement',
-        '2025-04-25 09:00:00', '2025-04-25 10:30:00', 8, 2, 1, 1),
-       ('Chiots - Jeux d''éveil', 'Activités ludiques pour stimuler le développement cognitif et social de votre chiot',
-        '2025-05-01 14:00:00', '2025-05-01 15:30:00', 8, 2, 1, 1),
-       ('Chiots - Découverte sensorielle', 'Exposer votre chiot à différentes textures, sons et environnements pour une meilleure adaptation',
-        '2025-05-08 10:00:00', '2025-05-08 11:30:00', 8, 2, 1, 1),
-       ('Chiots - Bases de l''éducation', 'Premiers apprentissages pour une bonne cohabitation avec votre chiot',
-        '2025-05-18 09:00:00', '2025-05-18 10:30:00', 8, 2, 1, 1),
+    -- Age Range 1 (Puppies) - 5 courses before May 22, 2025
+    ('Chiots - Éveil et Socialisation',
+     'On va apprendre à votre chiot les bases de l''éducation et le faire jouer avec d''autres pour une bonne socialisation',
+     '2025-05-15 10:00:00', '2025-05-15 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Premiers pas',
+     'Cours d''introduction pour les tout jeunes chiots, axé sur la socialisation de base et la découverte de l''environnement',
+     '2025-04-25 09:00:00', '2025-04-25 10:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Jeux d''éveil', 'Activités ludiques pour stimuler le développement cognitif et social de votre chiot',
+     '2025-05-01 14:00:00', '2025-05-01 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Découverte sensorielle',
+     'Exposer votre chiot à différentes textures, sons et environnements pour une meilleure adaptation',
+     '2025-05-08 10:00:00', '2025-05-08 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Bases de l''éducation', 'Premiers apprentissages pour une bonne cohabitation avec votre chiot',
+     '2025-05-18 09:00:00', '2025-05-18 10:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
 
-       -- Age Range 1 (Puppies) - 5 courses after May 22, 2025
-       ('Chiots - Communication canine', 'Apprendre à comprendre le langage corporel de votre chiot et à communiquer efficacement avec lui',
-        '2025-06-15 10:00:00', '2025-06-15 11:30:00', 8, 2, 1, 1),
-       ('Chiots - Manipulation et soins', 'Habituer votre chiot à être manipulé pour les soins quotidiens et les visites vétérinaires',
-        '2025-07-05 14:00:00', '2025-07-05 15:30:00', 8, 2, 1, 1),
-       ('Chiots - Socialisation avancée', 'Exposition à différents environnements, personnes et autres animaux pour une socialisation complète',
-        '2025-08-10 10:00:00', '2025-08-10 11:30:00', 8, 2, 1, 1),
-       ('Chiots - Préparation à l''adolescence', 'Préparer les propriétaires aux changements comportementaux liés à l''adolescence canine',
-        '2025-10-15 09:00:00', '2025-10-15 10:30:00', 8, 2, 1, 1),
-       ('Chiots - Jeux et apprentissage', 'Utilisation de jeux pour développer les capacités cognitives et la socialisation des chiots',
-        '2026-01-20 14:00:00', '2026-01-20 15:30:00', 8, 2, 1, 1),
+    -- Age Range 1 (Puppies) - 5 courses after May 22, 2025
+    ('Chiots - Communication canine',
+     'Apprendre à comprendre le langage corporel de votre chiot et à communiquer efficacement avec lui',
+     '2025-06-15 10:00:00', '2025-06-15 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Manipulation et soins',
+     'Habituer votre chiot à être manipulé pour les soins quotidiens et les visites vétérinaires',
+     '2025-07-05 14:00:00', '2025-07-05 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Socialisation avancée',
+     'Exposition à différents environnements, personnes et autres animaux pour une socialisation complète',
+     '2025-08-10 10:00:00', '2025-08-10 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Préparation à l''adolescence',
+     'Préparer les propriétaires aux changements comportementaux liés à l''adolescence canine',
+     '2025-10-15 09:00:00', '2025-10-15 10:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Jeux et apprentissage',
+     'Utilisation de jeux pour développer les capacités cognitives et la socialisation des chiots',
+     '2026-01-20 14:00:00', '2026-01-20 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
 
-       -- Age Range 2 (Young dogs) - 5 courses before May 22, 2025
-       ('Obéissance de base - Niveau 1', 'Apprentissage des commandes fondamentales pour jeunes chiens',
-        '2025-04-20 14:00:00', '2025-04-20 16:00:00', 10, 3, 1, 2),
-       ('Obéissance de base - Niveau 2', 'Renforcement des commandes de base et introduction à de nouvelles commandes',
-        '2025-04-27 14:00:00', '2025-04-27 16:00:00', 10, 3, 1, 2),
-       ('Marche en laisse sans traction', 'Techniques pour apprendre à votre jeune chien à marcher correctement en laisse',
-        '2025-05-04 09:00:00', '2025-05-04 11:00:00', 8, 3, 1, 2),
-       ('Rappel efficace', 'Méthodes pour obtenir un rappel fiable avec votre jeune chien',
-        '2025-05-11 14:00:00', '2025-05-11 16:00:00', 8, 3, 1, 2),
-       ('Obéissance du quotidien', 'Pour les chiens qui connaissent déjà quelques bases, on va travailler sur les situations de tous les jours',
-        '2025-05-18 14:00:00', '2025-05-18 16:00:00', 10, 3, 1, 2),
+    -- Age Range 2 (Young dogs) - 5 courses before May 22, 2025
+    ('Obéissance de base - Niveau 1', 'Apprentissage des commandes fondamentales pour jeunes chiens',
+     '2025-04-20 14:00:00', '2025-04-20 16:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Obéissance de base - Niveau 2', 'Renforcement des commandes de base et introduction à de nouvelles commandes',
+     '2025-04-27 14:00:00', '2025-04-27 16:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Marche en laisse sans traction', 'Techniques pour apprendre à votre jeune chien à marcher correctement en laisse',
+     '2025-05-04 09:00:00', '2025-05-04 11:00:00', 8, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Rappel efficace', 'Méthodes pour obtenir un rappel fiable avec votre jeune chien',
+     '2025-05-11 14:00:00', '2025-05-11 16:00:00', 8, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Obéissance du quotidien',
+     'Pour les chiens qui connaissent déjà quelques bases, on va travailler sur les situations de tous les jours',
+     '2025-05-18 14:00:00', '2025-05-18 16:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
 
-       -- Age Range 2 (Young dogs) - 5 courses after May 22, 2025
-       ('Découverte de l''agilité', 'Venez vous amuser avec votre chien sur différents obstacles, parfait pour renforcer votre complicité',
-        '2025-06-05 09:00:00', '2025-06-05 11:00:00', 6, 3, 1, 4),
-       ('Parcours d''agilité', 'On va travailler sur des parcours plus complexes pour les chiens qui ont déjà découvert l''agilité',
-        '2025-07-20 09:00:00', '2025-07-20 11:30:00', 5, 3, 1, 4),
-       ('Jeux d''intelligence canine', 'Des activités ludiques pour stimuler le cerveau de votre chien et renforcer votre lien',
-        '2025-08-28 10:00:00', '2025-08-28 12:00:00', 8, 3, 1, 2),
-       ('Rappel en toutes situations', 'Fini les angoisses au parc! Apprenez à avoir un rappel fiable même avec des distractions',
-        '2025-10-10 14:00:00', '2025-10-10 16:00:00', 6, 3, 1, 2),
-       ('Balades éducatives', 'On sort en groupe pour mettre en pratique les apprentissages dans un environnement réel',
-        '2026-01-18 13:30:00', '2026-01-18 15:30:00', 8, 3, 1, 2),
+    -- Age Range 2 (Young dogs) - 5 courses after May 22, 2025
+    ('Découverte de l''agilité',
+     'Venez vous amuser avec votre chien sur différents obstacles, parfait pour renforcer votre complicité',
+     '2025-06-05 09:00:00', '2025-06-05 11:00:00', 6, 3, 1, 4, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Parcours d''agilité',
+     'On va travailler sur des parcours plus complexes pour les chiens qui ont déjà découvert l''agilité',
+     '2025-07-20 09:00:00', '2025-07-20 11:30:00', 5, 3, 1, 4, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeux d''intelligence canine',
+     'Des activités ludiques pour stimuler le cerveau de votre chien et renforcer votre lien',
+     '2025-08-28 10:00:00', '2025-08-28 12:00:00', 8, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Rappel en toutes situations',
+     'Fini les angoisses au parc! Apprenez à avoir un rappel fiable même avec des distractions',
+     '2025-10-10 14:00:00', '2025-10-10 16:00:00', 6, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Balades éducatives', 'On sort en groupe pour mettre en pratique les apprentissages dans un environnement réel',
+     '2026-01-18 13:30:00', '2026-01-18 15:30:00', 8, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
 
-       -- Age Range 3 (Adults) - 5 courses before May 22, 2025
-       ('Obéissance avancée - Niveau 1', 'Perfectionnement des commandes et travail sans laisse pour chiens adultes',
-        '2025-04-18 13:00:00', '2025-04-18 16:00:00', 8, 2, 1, 3),
-       ('Obéissance avancée - Niveau 2', 'Travail à distance et avec distractions pour chiens adultes bien éduqués',
-        '2025-04-25 13:00:00', '2025-04-25 16:00:00', 8, 2, 1, 3),
-       ('Préparation aux sports canins', 'Introduction aux différentes disciplines sportives canines pour chiens adultes',
-        '2025-05-02 10:00:00', '2025-05-02 13:00:00', 6, 2, 1, 3),
-       ('Techniques de concentration', 'Améliorer la concentration de votre chien adulte dans différents environnements',
-        '2025-05-09 14:00:00', '2025-05-09 17:00:00', 6, 2, 1, 3),
-       ('Formation chien visiteur - Introduction', 'Première approche pour les chiens adultes qui pourraient devenir chiens visiteurs',
-        '2025-05-16 10:00:00', '2025-05-16 12:00:00', 5, 2, 1, 5),
+    -- Age Range 3 (Adults) - 5 courses before May 22, 2025
+    ('Obéissance avancée - Niveau 1', 'Perfectionnement des commandes et travail sans laisse pour chiens adultes',
+     '2025-04-18 13:00:00', '2025-04-18 16:00:00', 8, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Obéissance avancée - Niveau 2', 'Travail à distance et avec distractions pour chiens adultes bien éduqués',
+     '2025-04-25 13:00:00', '2025-04-25 16:00:00', 8, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Préparation aux sports canins', 'Introduction aux différentes disciplines sportives canines pour chiens adultes',
+     '2025-05-02 10:00:00', '2025-05-02 13:00:00', 6, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Techniques de concentration', 'Améliorer la concentration de votre chien adulte dans différents environnements',
+     '2025-05-09 14:00:00', '2025-05-09 17:00:00', 6, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Formation chien visiteur - Introduction',
+     'Première approche pour les chiens adultes qui pourraient devenir chiens visiteurs',
+     '2025-05-16 10:00:00', '2025-05-16 12:00:00', 5, 2, 1, 5, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
 
-       -- Age Range 3 (Adults) - 5 courses after May 22, 2025
-       ('Trucs et astuces avancés', 'Une journée pour apprendre des techniques qui impressionneront vos amis et faciliteront votre vie',
-        '2025-06-18 13:00:00', '2025-06-18 17:00:00', 8, 2, 1, 3),
-       ('Formation chien visiteur - Avancé', 'Préparation pour les chiens qui aiment le contact et pourraient rendre visite aux personnes isolées',
-        '2025-07-10 10:00:00', '2025-07-10 12:00:00', 5, 2, 1, 5),
-       ('Préparation concours', 'Vous voulez participer à des compétitions? On vous donne toutes les clés pour réussir',
-        '2025-09-15 13:00:00', '2025-09-15 16:00:00', 4, 2, 1, 3),
-       ('Perfectionnement obéissance', 'Pour les chiens qui ont déjà de bonnes bases, on va aller plus loin ensemble',
-        '2025-11-05 14:00:00', '2025-11-05 17:00:00', 6, 2, 1, 3),
-       ('Initiation au pistage', 'Découvrez comment utiliser le flair incroyable de votre chien pour des activités stimulantes',
-        '2026-02-22 10:00:00', '2026-02-22 12:00:00', 5, 2, 1, 3),
+    -- Age Range 3 (Adults) - 5 courses after May 22, 2025
+    ('Trucs et astuces avancés',
+     'Une journée pour apprendre des techniques qui impressionneront vos amis et faciliteront votre vie',
+     '2025-06-18 13:00:00', '2025-06-18 17:00:00', 8, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Formation chien visiteur - Avancé',
+     'Préparation pour les chiens qui aiment le contact et pourraient rendre visite aux personnes isolées',
+     '2025-07-10 10:00:00', '2025-07-10 12:00:00', 5, 2, 1, 5, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Préparation concours', 'Vous voulez participer à des compétitions? On vous donne toutes les clés pour réussir',
+     '2025-09-15 13:00:00', '2025-09-15 16:00:00', 4, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Perfectionnement obéissance', 'Pour les chiens qui ont déjà de bonnes bases, on va aller plus loin ensemble',
+     '2025-11-05 14:00:00', '2025-11-05 17:00:00', 6, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Initiation au pistage',
+     'Découvrez comment utiliser le flair incroyable de votre chien pour des activités stimulantes',
+     '2026-02-22 10:00:00', '2026-02-22 12:00:00', 5, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
 
-       -- Age Range 4 (Seniors) - 5 courses before May 22, 2025
-       ('Bien-être des seniors - Introduction', 'Premiers pas pour adapter les activités à votre chien senior',
-        '2025-04-15 11:00:00', '2025-04-15 12:00:00', 6, 3, 1, 6),
-       ('Exercices doux pour seniors', 'Activités physiques adaptées pour maintenir la mobilité de votre chien âgé',
-        '2025-04-22 11:00:00', '2025-04-22 12:00:00', 6, 3, 1, 6),
-       ('Stimulation mentale pour seniors', 'Jeux et activités pour garder l''esprit de votre chien senior actif',
-        '2025-05-01 11:00:00', '2025-05-01 12:00:00', 6, 3, 1, 6),
-       ('Nutrition et soins des seniors', 'Conseils pour adapter l''alimentation et les soins aux besoins des chiens âgés',
-        '2025-05-08 11:00:00', '2025-05-08 12:00:00', 6, 3, 1, 6),
-       ('Confort et qualité de vie', 'Aménagements et astuces pour améliorer le quotidien de votre chien senior',
-        '2025-05-15 11:00:00', '2025-05-15 12:00:00', 6, 3, 1, 6),
+    -- Age Range 4 (Seniors) - 5 courses before May 22, 2025
+    ('Bien-être des seniors - Introduction', 'Premiers pas pour adapter les activités à votre chien senior',
+     '2025-04-15 11:00:00', '2025-04-15 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Exercices doux pour seniors', 'Activités physiques adaptées pour maintenir la mobilité de votre chien âgé',
+     '2025-04-22 11:00:00', '2025-04-22 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Stimulation mentale pour seniors', 'Jeux et activités pour garder l''esprit de votre chien senior actif',
+     '2025-05-01 11:00:00', '2025-05-01 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Nutrition et soins des seniors', 'Conseils pour adapter l''alimentation et les soins aux besoins des chiens âgés',
+     '2025-05-08 11:00:00', '2025-05-08 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Confort et qualité de vie', 'Aménagements et astuces pour améliorer le quotidien de votre chien senior',
+     '2025-05-15 11:00:00', '2025-05-15 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
 
-       -- Age Range 4 (Seniors) - 5 courses after May 22, 2025
-       ('Bien-être des seniors - Avancé', 'Activités douces et stimulantes adaptées à nos compagnons plus âgés',
-        '2025-07-25 11:00:00', '2025-07-25 12:00:00', 6, 3, 1, 6),
-       ('Massage canin pour seniors', 'Techniques de massage pour soulager les douleurs articulaires des chiens âgés',
-        '2025-08-22 11:00:00', '2025-08-22 12:00:00', 6, 3, 1, 6),
-       ('Adaptation aux changements', 'Aider votre chien senior à s''adapter aux changements liés à l''âge',
-        '2025-10-10 11:00:00', '2025-10-10 12:00:00', 6, 3, 1, 6),
-       ('Jeux adaptés aux seniors', 'Activités ludiques spécialement conçues pour les chiens âgés',
-        '2025-12-05 11:00:00', '2025-12-05 12:00:00', 6, 3, 1, 6),
-       ('Promenades pour seniors', 'Comment adapter les sorties aux capacités de votre chien âgé',
-        '2026-03-20 11:00:00', '2026-03-20 12:00:00', 6, 3, 1, 6);
+    -- Age Range 4 (Seniors) - 5 courses after May 22, 2025
+    ('Bien-être des seniors - Avancé', 'Activités douces et stimulantes adaptées à nos compagnons plus âgés',
+     '2025-07-25 11:00:00', '2025-07-25 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Massage canin pour seniors', 'Techniques de massage pour soulager les douleurs articulaires des chiens âgés',
+     '2025-08-22 11:00:00', '2025-08-22 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adaptation aux changements', 'Aider votre chien senior à s''adapter aux changements liés à l''âge',
+     '2025-10-10 11:00:00', '2025-10-10 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeux adaptés aux seniors', 'Activités ludiques spécialement conçues pour les chiens âgés',
+     '2025-12-05 11:00:00', '2025-12-05 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Promenades pour seniors', 'Comment adapter les sorties aux capacités de votre chien âgé',
+     '2026-03-20 11:00:00', '2026-03-20 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
 
-INSERT INTO breed (name, avatar_url)
-VALUES ('Berger Australien', '/breed/1/image'),
-       ('Golden Retriever', '/breed/2/image'),
-       ('Staffordshire Bull Terrier', '/breed/3/image'),
-       ('Berger Belge', '/breed/4/image'),                       -- Note: Souvent dominé par le Malinois, mais regroupe les 4 variétés
-       ('Labrador Retriever', '/breed/5/image'),
-       ('Berger Allemand', '/breed/6/image'),
-       ('Setter Anglais', '/breed/7/image'),
-       ('Épagneul Breton', '/breed/8/image'),
-       ('Beagle', '/breed/9/image'),
-       ('Cavalier King Charles Spaniel', '/breed/10/image'),
-       ('Bouledogue Français', '/breed/11/image'),
-       ('Cocker Spaniel Anglais', '/breed/12/image'),
-       ('Teckel', '/breed/13/image'),                             -- Regroupe les différentes tailles/poils
-       ('Yorkshire Terrier', '/breed/14/image'),
-       ('Cane Corso', '/breed/15/image'),
-       ('Husky de Sibérie', '/breed/16/image'),
-       ('Shih Tzu', '/breed/17/image'),
-       ('American Staffordshire Terrier', '/breed/18/image'),
-       ('Chihuahua', '/breed/19/image'),
-       ('Jack Russell Terrier', '/breed/20/image'),
-       ('Border Collie', '/breed/21/image'),
-       ('Pointer Anglais', '/breed/22/image'),                    -- Souvent appelé simplement Pointer
-       ('Dogue Allemand', '/breed/23/image'),
-       ('Rottweiler', '/breed/24/image'),
-       ('Berger Blanc Suisse', '/breed/25/image'),
-       ('Samoyède', '/breed/26/image'),
-       ('West Highland White Terrier', '/breed/27/image'),        -- Westie
-       ('Basset Hound', '/breed/28/image'),
-       ('Dalmatien', '/breed/29/image'),
-       ('Akita Inu', '/breed/30/image'),
-       ('Shiba Inu', '/breed/31/image'),
-       ('Bichon Frisé', '/breed/32/image'),
-       ('Bichon Maltais', '/breed/33/image'),
-       ('Lhassa Apso', '/breed/34/image'),
-       ('Shar Pei', '/breed/35/image'),
-       ('Chow Chow', '/breed/36/image'),
-       ('Dobermann', '/breed/37/image'),
-       ('Leonberg', '/breed/38/image'),
-       ('Terre-Neuve', '/breed/39/image'),
-       ('Bouvier Bernois', '/breed/40/image'),
-       ('Saint-Bernard', '/breed/41/image'),
-       ('Welsh Corgi Pembroke', '/breed/42/image'),
-       ('Setter Irlandais Rouge', '/breed/43/image'),
-       ('Braque Allemand', '/breed/44/image'),
-       ('Braque de Weimar', '/breed/45/image'),
-       ('Griffon Korthals', '/breed/46/image'),
-       ('Braque Français', '/breed/47/image'),                    -- Type Gascogne et Pyrénées
-       ('Barbet', '/breed/48/image'),
-       ('Coton de Tuléar', '/breed/49/image'),
-       ('Spitz Allemand', '/breed/50/image'),                     -- Regroupe Nain (Pomeranian), Petit, Moyen, Grand, Loup
-       ('Pékinois', '/breed/51/image'),
-       ('Carlin', '/breed/52/image'),
-       ('Bull Terrier', '/breed/53/image'),
-       ('Fox Terrier', '/breed/54/image'),                        -- Poil Lisse et Poil Dur
-       ('Scottish Terrier', '/breed/55/image'),
-       ('Schnauzer', '/breed/56/image'),                          -- Nain, Moyen, Géant
-       ('Airedale Terrier', '/breed/57/image'),
-       ('Berger des Pyrénées', '/breed/58/image'),                -- Face Rase et Poil Long
-       ('Colley à poil long', '/breed/59/image'),                 -- Collie
-       ('Whippet', '/breed/60/image'),
-       ('Lévrier Afghan', '/breed/61/image'),
-       ('Greyhound', '/breed/62/image'),                          -- Lévrier Anglais
-       ('Borzoi', '/breed/63/image'),                             -- Lévrier Russe
-       ('Basenji', '/breed/64/image'),
-       ('Rhodesian Ridgeback', '/breed/65/image'),
-       ('Dogue de Bordeaux', '/breed/66/image'),
-       ('Bullmastiff', '/breed/67/image'),
-       ('Mastiff', '/breed/68/image'),                            -- Old English Mastiff
-       ('Pinscher Nain', '/breed/69/image'),
-       ('Chien d''eau Portugais', '/breed/70/image'),
-       ('Lagotto Romagnolo', '/breed/71/image'),
-       ('Berger Picard', '/breed/72/image'),
-       ('Beauceron', '/breed/73/image'),                          -- Berger de Beauce
-       ('Berger Hollandais', '/breed/74/image'),
-       ('Komondor', '/breed/75/image'),
-       ('Kuvasz', '/breed/76/image'),
-       ('Mâtin des Pyrénées', '/breed/77/image'),                 -- Chien de Montagne des Pyrénées
-       ('Mâtin Espagnol', '/breed/78/image'),
-       ('Dogue du Tibet', '/breed/79/image'),
-       ('Fila Brasileiro', '/breed/80/image'),
-       ('Akita Américain', '/breed/81/image'),
-       ('Malamute de l''Alaska', '/breed/82/image'),
-       ('Groenlandais', '/breed/83/image'),                       -- Chien du Groenland
-       ('Chien Finnois de Laponie', '/breed/84/image'),
-       ('Spitz Finlandais', '/breed/85/image'),
-       ('Spitz des Visigoths', '/breed/86/image'),                -- Vallhund Suédois
-       ('Chien Norvégien de Macareux', '/breed/87/image'),        -- Lundehund
-       ('Elkhound Norvégien', '/breed/88/image'),                 -- Chien d'élan Norvégien
-       ('Eurasier', '/breed/89/image'),
-       ('Hovawart', '/breed/90/image'),
-       ('Landseer', '/breed/91/image'),
-       ('Retriever à poil plat', '/breed/92/image'),              -- Flat-Coated Retriever
-       ('Retriever de la Baie de Chesapeake', '/breed/93/image'), -- Chesapeake Bay Retriever
-       ('Retriever à poil bouclé', '/breed/94/image'),            -- Curly-Coated Retriever
-       ('Retriever de la Nouvelle-Écosse', '/breed/95/image'),    -- Nova Scotia Duck Tolling Retriever
-       ('Épagneul d''eau Irlandais', '/breed/96/image'),
-       ('Épagneul du Tibet', '/breed/97/image'),                  -- Tibetan Spaniel
-       ('Épagneul Japonais', '/breed/98/image'),                  -- Chin
-       ('Épagneul King Charles', '/breed/99/image'),              -- différent du Cavalier
-       ('Épagneul Papillon', '/breed/100/image'),                  -- Continental Toy Spaniel Papillon
-       ('Épagneul Phalène', '/breed/101/image'),                   -- Continental Toy Spaniel Phalène
-       ('Petit Chien Lion', '/breed/102/image'),
-       ('Griffon Belge', '/breed/103/image'),
-       ('Griffon Bruxellois', '/breed/104/image'),
-       ('Petit Brabançon', '/breed/105/image'),
-       ('Terrier Irlandais', '/breed/106/image'),
-       ('Terrier Kerry Blue', '/breed/107/image'),
-       ('Terrier Soft Coated Wheaten', '/breed/108/image'),
-       ('Terrier Tibétain', '/breed/109/image'),
-       ('Terrier Noir Russe', '/breed/110/image'),
-       ('Bedlington Terrier', '/breed/111/image'),
-       ('Border Terrier', '/breed/112/image'),
-       ('Cairn Terrier', '/breed/113/image'),
-       ('Dandie Dinmont Terrier', '/breed/114/image'),
-       ('Lakeland Terrier', '/breed/115/image'),
-       ('Manchester Terrier', '/breed/116/image'),
-       ('Norfolk Terrier', '/breed/117/image'),
-       ('Norwich Terrier', '/breed/118/image'),
-       ('Sealyham Terrier', '/breed/119/image'),
-       ('Skye Terrier', '/breed/120/image'),
-       ('Terrier Australien', '/breed/121/image'),
-       ('Terrier Tchèque', '/breed/122/image'),                    -- Cesky Terrier
-       ('Terrier Japonais', '/breed/123/image'),                   -- Nihon Teria
-       ('Terrier Brésilien', '/breed/124/image'),
-       ('Basset Artésien Normand', '/breed/125/image'),
-       ('Basset Bleu de Gascogne', '/breed/126/image'),
-       ('Basset Fauve de Bretagne', '/breed/127/image'),
-       ('Grand Basset Griffon Vendéen', '/breed/128/image'),
-       ('Petit Basset Griffon Vendéen', '/breed/129/image'),
-       ('Briquet Griffon Vendéen', '/breed/130/image'),
-       ('Chien d''Artois', '/breed/131/image'),
-       ('Porcelaine', '/breed/132/image'),
-       ('Billy', '/breed/133/image'),
-       ('Français Blanc et Noir', '/breed/134/image'),
-       ('Français Tricolore', '/breed/135/image'),
-       ('Français Blanc et Orange', '/breed/136/image'),
-       ('Grand Anglo-Français Tricolore', '/breed/137/image'),
-       ('Grand Anglo-Français Blanc et Noir', '/breed/138/image'),
-       ('Grand Anglo-Français Blanc et Orange', '/breed/139/image'),
-       ('Grand Bleu de Gascogne', '/breed/140/image'),
-       ('Grand Gascon Saintongeois', '/breed/141/image'),
-       ('Griffon Bleu de Gascogne', '/breed/142/image'),
-       ('Griffon Fauve de Bretagne', '/breed/143/image'),
-       ('Griffon Nivernais', '/breed/144/image'),
-       ('Poitevin', '/breed/145/image'),
-       ('Chien de Saint-Hubert', '/breed/146/image'),              -- Bloodhound
-       ('Sloughi', '/breed/147/image'),                            -- Lévrier Arabe
-       ('Azawakh', '/breed/148/image'),                            -- Lévrier Touareg
-       ('Galgo Espagnol', '/breed/149/image'),                     -- Lévrier Espagnol
-       ('Irish Wolfhound', '/breed/150/image'),                    -- Lévrier Irlandais
-       ('Deerhound', '/breed/151/image'),                          -- Lévrier Écossais
-       ('Petit Lévrier Italien', '/breed/152/image'),              -- Italian Greyhound
-       ('Saluki', '/breed/153/image');-- Lévrier Persan
+INSERT INTO breed (name, avatar_url, created_date, last_modified_date, created_by, last_modified_by)
+VALUES ('Berger Australien', '/breed/1/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Golden Retriever', '/breed/2/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Staffordshire Bull Terrier', '/breed/3/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Berger Belge', '/breed/4/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Labrador Retriever', '/breed/5/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Berger Allemand', '/breed/6/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Setter Anglais', '/breed/7/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Épagneul Breton', '/breed/8/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Beagle', '/breed/9/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Cavalier King Charles Spaniel', '/breed/10/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Bouledogue Français', '/breed/11/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Cocker Spaniel Anglais', '/breed/12/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Teckel', '/breed/13/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Yorkshire Terrier', '/breed/14/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Cane Corso', '/breed/15/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Husky de Sibérie', '/breed/16/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Shih Tzu', '/breed/17/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('American Staffordshire Terrier', '/breed/18/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Chihuahua', '/breed/19/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Jack Russell Terrier', '/breed/20/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Border Collie', '/breed/21/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Pointer Anglais', '/breed/22/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Dogue Allemand', '/breed/23/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Rottweiler', '/breed/24/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Berger Blanc Suisse', '/breed/25/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Samoyède', '/breed/26/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('West Highland White Terrier', '/breed/27/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Basset Hound', '/breed/28/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Dalmatien', '/breed/29/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Akita Inu', '/breed/30/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Shiba Inu', '/breed/31/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Bichon Frisé', '/breed/32/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Bichon Maltais', '/breed/33/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Lhassa Apso', '/breed/34/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Shar Pei', '/breed/35/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Chow Chow', '/breed/36/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Dobermann', '/breed/37/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Leonberg', '/breed/38/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Terre-Neuve', '/breed/39/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Bouvier Bernois', '/breed/40/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Saint-Bernard', '/breed/41/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Welsh Corgi Pembroke', '/breed/42/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Setter Irlandais Rouge', '/breed/43/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Braque Allemand', '/breed/44/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Braque de Weimar', '/breed/45/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Griffon Korthals', '/breed/46/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Braque Français', '/breed/47/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Barbet', '/breed/48/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Coton de Tuléar', '/breed/49/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Spitz Allemand', '/breed/50/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Pékinois', '/breed/51/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Carlin', '/breed/52/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Bull Terrier', '/breed/53/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Fox Terrier', '/breed/54/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Scottish Terrier', '/breed/55/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Schnauzer', '/breed/56/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Airedale Terrier', '/breed/57/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Berger des Pyrénées', '/breed/58/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Colley à poil long', '/breed/59/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Whippet', '/breed/60/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Lévrier Afghan', '/breed/61/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Greyhound', '/breed/62/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Borzoi', '/breed/63/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Basenji', '/breed/64/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Rhodesian Ridgeback', '/breed/65/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Dogue de Bordeaux', '/breed/66/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Bullmastiff', '/breed/67/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Mastiff', '/breed/68/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Pinscher Nain', '/breed/69/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Chien d''eau Portugais', '/breed/70/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Lagotto Romagnolo', '/breed/71/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Berger Picard', '/breed/72/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Beauceron', '/breed/73/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Berger Hollandais', '/breed/74/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Komondor', '/breed/75/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Kuvasz', '/breed/76/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Mâtin des Pyrénées', '/breed/77/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Mâtin Espagnol', '/breed/78/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Dogue du Tibet', '/breed/79/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Fila Brasileiro', '/breed/80/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Akita Américain', '/breed/81/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Malamute de l''Alaska', '/breed/82/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Groenlandais', '/breed/83/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Chien Finnois de Laponie', '/breed/84/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Spitz Finlandais', '/breed/85/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Spitz des Visigoths', '/breed/86/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Chien Norvégien de Macareux', '/breed/87/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Elkhound Norvégien', '/breed/88/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Eurasier', '/breed/89/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Hovawart', '/breed/90/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Landseer', '/breed/91/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Retriever à poil plat', '/breed/92/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Retriever de la Baie de Chesapeake', '/breed/93/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Retriever à poil bouclé', '/breed/94/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Retriever de la Nouvelle-Écosse', '/breed/95/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Épagneul d''eau Irlandais', '/breed/96/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Épagneul du Tibet', '/breed/97/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Épagneul Japonais', '/breed/98/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Épagneul King Charles', '/breed/99/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Épagneul Papillon', '/breed/100/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Épagneul Phalène', '/breed/101/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Petit Chien Lion', '/breed/102/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Griffon Belge', '/breed/103/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Griffon Bruxellois', '/breed/104/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Petit Brabançon', '/breed/105/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Terrier Irlandais', '/breed/106/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Terrier Kerry Blue', '/breed/107/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Terrier Soft Coated Wheaten', '/breed/108/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Terrier Tibétain', '/breed/109/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Terrier Noir Russe', '/breed/110/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Bedlington Terrier', '/breed/111/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Border Terrier', '/breed/112/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Cairn Terrier', '/breed/113/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Dandie Dinmont Terrier', '/breed/114/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Lakeland Terrier', '/breed/115/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Manchester Terrier', '/breed/116/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Norfolk Terrier', '/breed/117/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Norwich Terrier', '/breed/118/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Sealyham Terrier', '/breed/119/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Skye Terrier', '/breed/120/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Terrier Australien', '/breed/121/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Terrier Tchèque', '/breed/122/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Terrier Japonais', '/breed/123/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Terrier Brésilien', '/breed/124/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Basset Artésien Normand', '/breed/125/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Basset Bleu de Gascogne', '/breed/126/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Basset Fauve de Bretagne', '/breed/127/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Grand Basset Griffon Vendéen', '/breed/128/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Petit Basset Griffon Vendéen', '/breed/129/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Briquet Griffon Vendéen', '/breed/130/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Chien d''Artois', '/breed/131/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Porcelaine', '/breed/132/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Billy', '/breed/133/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Français Blanc et Noir', '/breed/134/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Français Tricolore', '/breed/135/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Français Blanc et Orange', '/breed/136/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Grand Anglo-Français Tricolore', '/breed/137/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Grand Anglo-Français Blanc et Noir', '/breed/138/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Grand Anglo-Français Blanc et Orange', '/breed/139/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Grand Bleu de Gascogne', '/breed/140/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Grand Gascon Saintongeois', '/breed/141/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Griffon Bleu de Gascogne', '/breed/142/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Griffon Fauve de Bretagne', '/breed/143/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Griffon Nivernais', '/breed/144/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Poitevin', '/breed/145/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Chien de Saint-Hubert', '/breed/146/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Sloughi', '/breed/147/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Azawakh', '/breed/148/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Galgo Espagnol', '/breed/149/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Irish Wolfhound', '/breed/150/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Deerhound', '/breed/151/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Petit Lévrier Italien', '/breed/152/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Saluki', '/breed/153/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM');
 
-INSERT INTO dog (name, birth_date, gender, chip_number, user_id, is_anonymized)
-VALUES ('Rex', '2025-02-15', 'MALE', 'CHIP123456', 4, false),
-       ('Nala', '2017-08-22', 'FEMALE', 'CHIP789012', 4, false),
-       ('Oscar', '2021-02-10', 'STERILIZED_MALE', 'CHIP345678', 5, false),
-       ('Lola', '2018-11-30', 'FEMALE', 'CHIP901234', 5, false),
-       ('Filou', '2022-01-05', 'MALE', 'CHIP567890', 6, false),
-       ('Mia', '2020-07-18', 'STERILIZED_FEMALE', 'CHIP234567', 6, false);
+INSERT INTO dog (name, birth_date, gender, chip_number, user_id, is_anonymized, created_date, last_modified_date,
+                 created_by, last_modified_by)
+VALUES ('Rex', '2025-02-15', 'MALE', 'CHIP123456', 4, false, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Nala', '2017-08-22', 'FEMALE', 'CHIP789012', 4, false, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Oscar', '2021-02-10', 'STERILIZED_MALE', 'CHIP345678', 5, false, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Lola', '2018-11-30', 'FEMALE', 'CHIP901234', 5, false, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Filou', '2022-01-05', 'MALE', 'CHIP567890', 6, false, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+       ('Mia', '2020-07-18', 'STERILIZED_FEMALE', 'CHIP234567', 6, false, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
 
-INSERT INTO dog_breed (dog_id, breed_id)
-VALUES (1, 1),  -- Rex est un Labrador Retriever
-       (2, 3),  -- Nala est un Golden Retriever
-       (3, 2),  -- Oscar est un Berger Allemand
-       (3, 5),  -- Oscar est aussi en partie Bulldog (croisé)
-       (4, 6),  -- Lola est un Caniche
-       (5, 8),  -- Filou est un Rottweiler
-       (6, 10), -- Mia est un Boxer
-       (6, 16); -- Mia est aussi en partie Chihuahua (croisé)
+INSERT INTO dog_breed (dog_id, breed_id, breed_order)
+VALUES (1, 1, 0),  -- Chien 1, race 1, première race
+       (2, 3, 0),  -- Chien 2, race 3, première race
+       (3, 2, 0),  -- Chien 3, race 2, première race
+       (3, 5, 1),  -- Chien 3, race 5, deuxième race
+       (4, 6, 0),  -- Chien 4, race 6, première race
+       (5, 8, 0),  -- Chien 5, race 8, première race
+       (6, 10, 0), -- Chien 6, race 10, première race
+       (6, 16, 1); -- Chien 6, race 16, deuxième race
+
 
 INSERT INTO dog_weight (measurement_date, weight_value, unit, dog_id)
 VALUES ('2023-01-10', 25.55, 'KILOGRAM', 1), -- Poids de Rex le 10 Jan 2023
@@ -344,13 +375,13 @@ VALUES ('2023-01-10', 25.55, 'KILOGRAM', 1), -- Poids de Rex le 10 Jan 2023
 
 -- Insert common dog vaccines with their renewal periods
 INSERT INTO vaccine (vaccine_name, renew_delay)
-VALUES ('Rage', 36),                        -- Vaccin contre la rage, renouvelé tous les 3 ans
+VALUES ('Rage', 36),                       -- Vaccin contre la rage, renouvelé tous les 3 ans
        ('CHPPIL (Carré, Hépatite, Parvovirose, Parainfluenza, Leptospirose)',
-        12),                                -- Vaccin CHPPIL, renouvelé annuellement
+        12),                               -- Vaccin CHPPIL, renouvelé annuellement
        ('Bordetella (Toux du Chenil)', 6), -- Vaccin Bordetella, renouvelé tous les 6 mois
-       ('Leptospirose', 12),                -- Vaccin contre la leptospirose, renouvelé annuellement
-       ('Maladie de Lyme', 12),             -- Vaccin contre la maladie de Lyme, renouvelé annuellement
-       ('Grippe Canine', 12),               -- Vaccin contre la grippe canine, renouvelé annuellement
+       ('Leptospirose', 12),               -- Vaccin contre la leptospirose, renouvelé annuellement
+       ('Maladie de Lyme', 12),            -- Vaccin contre la maladie de Lyme, renouvelé annuellement
+       ('Grippe Canine', 12),              -- Vaccin contre la grippe canine, renouvelé annuellement
        ('Coronavirus', 12);
 -- Vaccin contre le coronavirus, renouvelé annuellement
 
@@ -408,90 +439,67 @@ VALUES
     ('Antihistaminique', '10mg', '12:00:00', '2023-07-15', '2023-08-15', 'Allergies saisonnières', 6);
 
 -- Insert registrations for dogs in courses
-INSERT INTO registration (registration_date, status, dog_id, course_id)
-VALUES
-    -- Inscriptions de Rex (dog_id 1) - 2 cours passés (avant le 22 mai 2025)
-    ('2025-04-20 09:30:00', 'CONFIRMED', 1, 2), -- Rex inscrit à Chiots - Premiers pas (25 avril 2025)
-    ('2025-05-05 14:15:00', 'CONFIRMED', 1, 4), -- Rex inscrit à Chiots - Découverte sensorielle (8 mai 2025)
-
-    -- Inscriptions de Rex (dog_id 1) - 3 cours à venir (après le 22 mai 2025)
-    ('2025-05-25 10:45:00', 'CONFIRMED', 1, 6), -- Rex inscrit à Chiots - Communication canine (15 juin 2025)
-    ('2025-06-20 09:45:00', 'CONFIRMED', 1, 7), -- Rex inscrit à Chiots - Manipulation et soins (5 juillet 2025)
-    ('2025-07-25 14:30:00', 'CONFIRMED', 1, 8), -- Rex inscrit à Chiots - Socialisation avancée (10 août 2025)
-
-    -- Inscriptions de Nala (dog_id 2) - Réduit à 3 cours avant le 23 mai 2025
-    ('2025-05-01 11:00:00', 'CONFIRMED', 2, 5), -- Nala inscrite à Obéissance du quotidien
-    ('2025-04-10 16:30:00', 'CONFIRMED', 2, 11), -- Nala inscrite à Bien-être des seniors - Introduction
-    ('2025-05-13 09:45:00', 'CONFIRMED', 2, 15), -- Nala inscrite à Confort et qualité de vie
-    -- Removed duplicate for course 17 (already registered on line 479)
-    -- Removed duplicate for course 21 (keeping PENDING status on line 484)
-    ('2025-08-18 11:45:00', 'CONFIRMED', 2, 22), -- Nala inscrite à Massage canin pour seniors
-    ('2025-10-05 09:30:00', 'CONFIRMED', 2, 23), -- Nala inscrite à Adaptation aux changements
-    ('2025-12-01 10:15:00', 'CONFIRMED', 2, 24), -- Nala inscrite à Jeux adaptés aux seniors
-    ('2026-03-15 11:00:00', 'CONFIRMED', 2, 25), -- Nala inscrite à Promenades pour seniors
-    -- Current date for registration_date, PENDING status, dog_id 2 (Nala)
-    -- Removed duplicate for course 17 (already registered on line 426)
-    (CURRENT_TIMESTAMP, 'PENDING', 2, 18), -- Préparation aux sports canins
-    (CURRENT_TIMESTAMP, 'PENDING', 2, 19), -- Techniques de concentration
-    (CURRENT_TIMESTAMP, 'PENDING', 2, 20), -- Formation chien visiteur - Introduction
-
-    -- Inscriptions d'Oscar (dog_id 3)
-    ('2025-05-05 10:00:00', 'CONFIRMED', 3, 5), -- Oscar inscrit à Obéissance du quotidien
-    ('2025-04-22 11:15:00', 'CONFIRMED', 3, 12), -- Oscar inscrit à Exercices doux pour seniors
-    ('2025-05-08 11:30:00', 'CONFIRMED', 3, 14), -- Oscar inscrit à Nutrition et soins des seniors
-    ('2025-06-05 15:45:00', 'CONFIRMED', 3, 15), -- Oscar inscrit à Trucs et astuces avancés
-    ('2025-07-22 14:30:00', 'CONFIRMED', 3, 21), -- Oscar inscrit à Bien-être des seniors - Avancé
-
-    -- Inscriptions de Lola (dog_id 4)
-    ('2025-04-25 13:30:00', 'CONFIRMED', 4, 1), -- Lola inscrite à Chiots - Éveil et Socialisation
-    ('2025-04-15 11:15:00', 'CONFIRMED', 4, 11), -- Lola inscrite à Bien-être des seniors - Introduction
-    ('2025-05-01 11:30:00', 'CONFIRMED', 4, 13), -- Lola inscrite à Stimulation mentale pour seniors
-    ('2025-06-25 11:15:00', 'PENDING', 4, 17),   -- Lola en attente pour Formation chien visiteur - Avancé
-    ('2025-08-20 10:30:00', 'CONFIRMED', 4, 22), -- Lola inscrite à Massage canin pour seniors
-
-    -- Inscriptions de Filou (dog_id 5)
-    ('2025-04-22 11:30:00', 'CONFIRMED', 5, 12), -- Filou inscrit à Exercices doux pour seniors
-    ('2025-05-20 09:45:00', 'CONFIRMED', 5, 11), -- Filou inscrit à Bien-être des seniors - Introduction
-    ('2025-07-10 14:00:00', 'CONFIRMED', 5, 19), -- Filou inscrit à Bien-être des seniors - Avancé
-    ('2025-10-08 11:30:00', 'CONFIRMED', 5, 23), -- Filou inscrit à Adaptation aux changements
-
-    -- Inscriptions de Mia (dog_id 6)
-    ('2025-05-10 10:30:00', 'CONFIRMED', 6, 5), -- Mia inscrite à Obéissance du quotidien
-    ('2025-04-28 11:45:00', 'CONFIRMED', 6, 13), -- Mia inscrite à Stimulation mentale pour seniors
-    ('2025-05-08 11:30:00', 'CONFIRMED', 6, 14), -- Mia inscrite à Nutrition et soins des seniors
-    ('2025-06-01 13:45:00', 'CANCELLED', 6, 15), -- Mia a annulé Trucs et astuces avancés
-    ('2025-07-15 11:30:00', 'CONFIRMED', 6, 19), -- Mia inscrite à Bien-être des seniors - Avancé
-    ('2025-12-03 10:00:00', 'CONFIRMED', 6, 24), -- Mia inscrite à Jeux adaptés aux seniors
-
-    -- Autres inscriptions pour les cours (2025-2026)
-    ('2025-05-18 10:30:00', 'CONFIRMED', 2, 3), -- Nala inscrite à Chiots - Jeux d'éveil
-    ('2025-06-25 09:45:00', 'CONFIRMED', 3, 6), -- Oscar inscrit à Chiots - Communication canine
-    ('2025-07-25 10:30:00', 'CONFIRMED', 4, 7), -- Lola inscrite à Chiots - Manipulation et soins
-    ('2025-08-30 14:45:00', 'CONFIRMED', 5, 8), -- Filou inscrit à Chiots - Socialisation avancée
-    ('2025-09-25 09:15:00', 'PENDING', 6, 9),  -- Mia en attente pour Chiots - Préparation à l'adolescence
-
-    ('2025-07-20 11:30:00', 'CONFIRMED', 2, 12), -- Nala inscrite à Obéissance de base - Niveau 1
-    ('2025-08-05 15:30:00', 'CONFIRMED', 3, 13), -- Oscar inscrit à Obéissance de base - Niveau 2
-    ('2026-01-05 11:00:00', 'CONFIRMED', 4, 14), -- Lola inscrite à Marche en laisse sans traction
-    ('2025-08-10 09:30:00', 'PENDING', 5, 15),  -- Filou en attente pour Rappel efficace
-    ('2025-08-15 14:00:00', 'CONFIRMED', 6, 16), -- Mia inscrite à Découverte de l'agilité
-
-    ('2025-08-15 15:00:00', 'CONFIRMED', 2, 17), -- Nala inscrite à Parcours d'agilité
-    ('2025-07-25 13:45:00', 'CONFIRMED', 3, 18), -- Oscar inscrit à Jeux d'intelligence canine
-    ('2026-01-05 10:00:00', 'CONFIRMED', 4, 19), -- Lola inscrite à Rappel en toutes situations
-    ('2025-06-15 09:30:00', 'CONFIRMED', 5, 20), -- Filou inscrit à Balades éducatives
-
-    ('2025-08-05 14:15:00', 'PENDING', 2, 21),  -- Nala en attente pour Obéissance avancée - Niveau 1
-    ('2025-08-10 11:00:00', 'CONFIRMED', 3, 22), -- Oscar inscrit à Obéissance avancée - Niveau 2
-    ('2025-07-30 11:45:00', 'CONFIRMED', 4, 23), -- Lola inscrite à Préparation aux sports canins
-    ('2025-07-25 10:00:00', 'CONFIRMED', 5, 24), -- Filou inscrit à Techniques de concentration
-    ('2025-08-15 09:30:00', 'CONFIRMED', 6, 25), -- Mia inscrite à Formation chien visiteur - Introduction
-
-    ('2025-08-15 16:30:00', 'CONFIRMED', 2, 26), -- Nala inscrite à Trucs et astuces avancés
-    ('2025-07-10 13:00:00', 'CONFIRMED', 3, 27), -- Oscar inscrit à Formation chien visiteur - Avancé
-    ('2025-08-15 14:30:00', 'CONFIRMED', 4, 28), -- Lola inscrite à Préparation concours
-    ('2025-06-15 10:15:00', 'CONFIRMED', 5, 29), -- Filou inscrit à Perfectionnement obéissance
-    ('2025-08-05 15:30:00', 'CONFIRMED', 6, 30); -- Mia inscrite à Initiation au pistage
+INSERT INTO registration (registration_date, status, dog_id, course_id, last_modified_date, created_by,
+                          last_modified_by)
+VALUES ('2025-04-20 09:30:00', 'CONFIRMED', 1, 2, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-05-05 14:15:00', 'CONFIRMED', 1, 4, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-05-25 10:45:00', 'CONFIRMED', 1, 6, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-06-20 09:45:00', 'CONFIRMED', 1, 7, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-07-25 14:30:00', 'CONFIRMED', 1, 8, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-05-01 11:00:00', 'CONFIRMED', 2, 5, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-04-10 16:30:00', 'CONFIRMED', 2, 11, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-05-13 09:45:00', 'CONFIRMED', 2, 15, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-08-18 11:45:00', 'CONFIRMED', 2, 22, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-10-05 09:30:00', 'CONFIRMED', 2, 23, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-12-01 10:15:00', 'CONFIRMED', 2, 24, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2026-03-15 11:00:00', 'CONFIRMED', 2, 25, NOW(), 'SYSTEM', 'SYSTEM'),
+       (CURRENT_TIMESTAMP, 'PENDING', 2, 18, NOW(), 'SYSTEM', 'SYSTEM'),
+       (CURRENT_TIMESTAMP, 'PENDING', 2, 19, NOW(), 'SYSTEM', 'SYSTEM'),
+       (CURRENT_TIMESTAMP, 'PENDING', 2, 20, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-05-05 10:00:00', 'CONFIRMED', 3, 5, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-04-22 11:15:00', 'CONFIRMED', 3, 12, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-05-08 11:30:00', 'CONFIRMED', 3, 14, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-06-05 15:45:00', 'CONFIRMED', 3, 15, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-07-22 14:30:00', 'CONFIRMED', 3, 21, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-04-25 13:30:00', 'CONFIRMED', 4, 1, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-04-15 11:15:00', 'CONFIRMED', 4, 11, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-05-01 11:30:00', 'CONFIRMED', 4, 13, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-06-25 11:15:00', 'PENDING', 4, 17, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-08-20 10:30:00', 'CONFIRMED', 4, 22, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-04-22 11:30:00', 'CONFIRMED', 5, 12, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-05-20 09:45:00', 'CONFIRMED', 5, 11, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-07-10 14:00:00', 'CONFIRMED', 5, 19, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-10-08 11:30:00', 'CONFIRMED', 5, 23, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-05-10 10:30:00', 'CONFIRMED', 6, 5, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-04-28 11:45:00', 'CONFIRMED', 6, 13, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-05-08 11:30:00', 'CONFIRMED', 6, 14, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-06-01 13:45:00', 'CANCELLED', 6, 15, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-07-15 11:30:00', 'CONFIRMED', 6, 19, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-12-03 10:00:00', 'CONFIRMED', 6, 24, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-05-18 10:30:00', 'CONFIRMED', 2, 3, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-06-25 09:45:00', 'CONFIRMED', 3, 6, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-07-25 10:30:00', 'CONFIRMED', 4, 7, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-08-30 14:45:00', 'CONFIRMED', 5, 8, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-09-25 09:15:00', 'PENDING', 6, 9, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-07-20 11:30:00', 'CONFIRMED', 2, 12, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-08-05 15:30:00', 'CONFIRMED', 3, 13, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2026-01-05 11:00:00', 'CONFIRMED', 4, 14, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-08-10 09:30:00', 'PENDING', 5, 15, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-08-15 14:00:00', 'CONFIRMED', 6, 16, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-08-15 15:00:00', 'CONFIRMED', 2, 17, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-07-25 13:45:00', 'CONFIRMED', 3, 18, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2026-01-05 10:00:00', 'CONFIRMED', 4, 19, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-06-15 09:30:00', 'CONFIRMED', 5, 20, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-08-05 14:15:00', 'PENDING', 2, 21, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-08-10 11:00:00', 'CONFIRMED', 3, 22, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-07-30 11:45:00', 'CONFIRMED', 4, 23, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-07-25 10:00:00', 'CONFIRMED', 5, 24, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-08-15 09:30:00', 'CONFIRMED', 6, 25, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-08-15 16:30:00', 'CONFIRMED', 2, 26, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-07-10 13:00:00', 'CONFIRMED', 3, 27, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-08-15 14:30:00', 'CONFIRMED', 4, 28, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-06-15 10:15:00', 'CONFIRMED', 5, 29, NOW(), 'SYSTEM', 'SYSTEM'),
+       ('2025-08-05 15:30:00', 'CONFIRMED', 6, 30, NOW(), 'SYSTEM', 'SYSTEM');
 
 
 INSERT INTO veterinary_visit (visit_date, diagnosis, reason_for_visit, treatment, veterinarian, dog_id)

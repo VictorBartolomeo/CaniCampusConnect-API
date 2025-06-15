@@ -2,7 +2,6 @@ package org.example.canicampusconnectapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.constraints.Positive;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.example.canicampusconnectapi.dao.CoachDao;
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
 import org.example.canicampusconnectapi.model.users.Coach;
@@ -10,9 +9,7 @@ import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsCoach;
 import org.example.canicampusconnectapi.service.registration.RegistrationService;
 import org.example.canicampusconnectapi.view.admin.AdminViewCoach;
-import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,10 +20,11 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
+@IsClubOwner
 public class CoachController {
 
-    private final RegistrationService registrationService;
-    private final CoachDao coachDao;
+    protected RegistrationService registrationService;
+    protected CoachDao coachDao;
 
     public CoachController(RegistrationService registrationService, CoachDao coachDao) {
         this.registrationService = registrationService;
@@ -41,29 +39,21 @@ public class CoachController {
     public ResponseEntity<Coach> getCoach(@PathVariable Long id) {
 
         Optional<Coach> optionalCoach = coachDao.findById(id);
-        if (optionalCoach.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(optionalCoach.get(), HttpStatus.OK);
+        return optionalCoach
+                .map(coach -> new ResponseEntity<>(coach, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
     }
 
-    @IsClubOwner
     @GetMapping("/coachs")
     @JsonView(AdminViewCoach.class)
     public List<Coach> getAll() {
         return coachDao.findAll();
     }
 
-    @IsClubOwner
-    @PostMapping("/coach")
-    public ResponseEntity<Coach> createCoach(@RequestBody Coach coach) {
-        coachDao.save(coach);
-        return new ResponseEntity<>(coach, HttpStatus.CREATED);
-    }
+    //J'ai mis le POST dans le AuthController avec les register Owner ca me parait plus pertinent
 
-    @IsClubOwner
+
     @DeleteMapping("coach/{id}")
     public ResponseEntity<Coach> deleteCoach(@PathVariable Long id) {
 
@@ -77,13 +67,10 @@ public class CoachController {
     }
 
     //Put change tout l'objet
-
     @IsCoach
     @PutMapping("/coach/{id}")
-    public ResponseEntity<Coach> updateCoach(
-            @PathVariable Long id,
-            @RequestBody @Validated(Coach.onUpdateCoach.class) Coach coach) {
-
+    @JsonView(AdminViewCoach.class)
+    public ResponseEntity<Coach> updateCoach(@PathVariable Long id, @RequestBody @Validated(Coach.onUpdateCoach.class) Coach coach) {
         Optional<Coach> optionalCoach = coachDao.findById(id);
         if (optionalCoach.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -93,15 +80,15 @@ public class CoachController {
 
         coach.setId(id);
         coach.setPassword(existingCoach.getPassword());
-        coach.setRegistrationDate(existingCoach.getRegistrationDate());
-        coach.setCourse(existingCoach.getCourse());
         coach.setEmailValidated(existingCoach.isEmailValidated());
         coach.setEmailValidatedAt(existingCoach.getEmailValidatedAt());
-        coach.setActive(existingCoach.isActive());
 
-        coachDao.save(coach);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        Coach updatedCoach = coachDao.save(coach);
+        updatedCoach.setPassword(null); // Masquer dans la réponse
+
+        return new ResponseEntity<>(updatedCoach, HttpStatus.OK);
     }
+
 
     /**
      * Récupère toutes les registrations en attente pour les cours FUTURS d'un coach.

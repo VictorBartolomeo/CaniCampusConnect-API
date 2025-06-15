@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
+import org.example.canicampusconnectapi.security.annotation.rgpd.RgpdEntity;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.hibernate.annotations.ColumnDefault;
@@ -19,6 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@RgpdEntity(identifierField = "id") // ✅ Marquer comme entité RGPD
 @PrimaryKeyJoinColumn(name = "user_id")
 @EntityListeners(AuditingEntityListener.class)
 public class Owner extends User {
@@ -34,7 +36,7 @@ public class Owner extends User {
     @ColumnDefault("TRUE")
     @Column(nullable = false, name = "is_active")
     @JsonView({OwnerViewDog.class, OwnerView.class})
-    protected boolean isActive = isActive();
+    protected boolean isActive = true;
 
     @OneToMany(mappedBy ="owner")
     protected List<Dog> dogs;

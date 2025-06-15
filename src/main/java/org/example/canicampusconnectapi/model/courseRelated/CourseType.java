@@ -16,6 +16,8 @@ import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
+import org.example.canicampusconnectapi.view.utilities.AgeRangeView;
+import org.example.canicampusconnectapi.view.utilities.CourseTypeView;
 
 @Getter
 @Setter
@@ -25,16 +27,16 @@ public class CourseType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_type_id")
-    @JsonView(AdminView.class)
+    @JsonView({AdminView.class, CourseTypeView.class})
     protected Long id;
 
     @Column(nullable = false, length = 255)
     @NotNull(message = "Le nom du type de cours ne peut être vide", groups = Course.CreateCourse.class)
-    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class})
+    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AgeRangeView.class, CourseTypeView.class})
     protected String name;
 
     @Column(columnDefinition = "TEXT")
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class, CourseTypeView.class})
     protected String description;
 
     @OneToMany(mappedBy = "courseType")
@@ -43,7 +45,7 @@ public class CourseType {
     @ManyToOne
     @JoinColumn(name = "age_range_id", nullable = false)
     @NotNull(message = "Le tranche d'age doit être renseignée", groups = Course.CreateCourse.class)
-    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
+    @JsonView({OwnerViewDog.class,OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class, CourseTypeView.class})
     protected AgeRange ageRange;
 
 
