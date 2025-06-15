@@ -13,6 +13,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -35,7 +36,7 @@ public class Breed {
     protected String avatarUrl;
 
     @ManyToMany(mappedBy = "breeds", fetch = FetchType.LAZY)
-    protected Set<Dog> dogs;
+    protected List<Dog> dogs;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
