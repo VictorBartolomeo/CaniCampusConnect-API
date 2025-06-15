@@ -46,6 +46,7 @@ public interface RegistrationService {
     boolean deleteById(Long id);
 
     List<Registration> findPendingRegistrationsByCoachId(Long coachId);
+
     /**
      * Expire automatiquement les registrations en attente pour des cours passés
      * et retourne seulement les registrations pending pour des cours futurs
@@ -57,4 +58,11 @@ public interface RegistrationService {
      */
     void expirePastPendingRegistrations();
 
+    // ✅ AJOUTEZ CETTE MÉTHODE
+    /**
+     * Supprime toutes les registrations associées à un cours.
+     *
+     * @param courseId L'ID du cours dont il faut supprimer les registrations.
+     */
+    void deleteAllByCourseId(Long courseId);
 }
