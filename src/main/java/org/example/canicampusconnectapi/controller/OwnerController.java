@@ -9,6 +9,7 @@ import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
 import org.example.canicampusconnectapi.service.rgpd.RgpdService;
 import org.example.canicampusconnectapi.service.security.OwnerSecurityService;
+import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
+@IsClubOwner
 public class OwnerController {
 
     protected UserDao userDao;
@@ -35,36 +37,61 @@ public class OwnerController {
         this.ownerDao = ownerDao;
         this.userDao = userDao;
         this.ownerSecurityService = ownerSecurityService;
-        this.rgpdService = rgpdService; // ✅ Injection
+        this.rgpdService = rgpdService;
     }
 
 
     @GetMapping("/owner/{id}")
-    @JsonView(OwnerViewDog.class)
-    public ResponseEntity<Owner> getOwner(@PathVariable Long id, @AuthenticationPrincipal AppUserDetails userDetails) {
+    @JsonView(OwnerView.class)
+    public ResponseEntity<?> getOwner(@PathVariable Long id, @AuthenticationPrincipal AppUserDetails userDetails) {
+        try {
+            // Vérifier l'authentification
+            if (userDetails == null || userDetails.getUserId() == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Utilisateur non authentifié"));
+            }
 
-        // Vérification de sécurité
-        if (!ownerSecurityService.isOwnerSelfOrAdmin(id, userDetails)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            // Vérifier si l'utilisateur est ClubOwner
+            boolean isClubOwner = userDetails.getAuthorities().stream()
+                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_CLUB_OWNER"));
+
+            if (isClubOwner) {
+                // ClubOwner peut accéder à n'importe quel owner
+                Optional<Owner> optionalOwner = ownerDao.findById(id);
+                if (optionalOwner.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(Map.of("error", "Owner avec l'ID " + id + " introuvable"));
+                }
+                return ResponseEntity.ok(optionalOwner.get());
+            } else {
+                // Owner ne peut accéder qu'à son propre profil
+                if (!id.equals(userDetails.getUserId())) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                            .body(Map.of("error", "Accès refusé : vous ne pouvez accéder qu'à votre propre profil"));
+                }
+
+                Optional<Owner> optionalOwner = ownerDao.findById(id);
+                if (optionalOwner.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(Map.of("error", "Votre profil est introuvable"));
+                }
+                return ResponseEntity.ok(optionalOwner.get());
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Erreur serveur"));
         }
-
-        Optional<Owner> optionalOwner = ownerDao.findById(id);
-        if (optionalOwner.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(optionalOwner.get(), HttpStatus.OK);
     }
 
-    // GET owners - Accessible uniquement aux admins
-    @IsClubOwner
+
+    @JsonView(OwnerView.class)
     @GetMapping("/owners")
     public List<Owner> getAll() {
         return ownerDao.findAll();
     }
 
-    // DELETE owner/{id} - Accessible uniquement aux admins
-    @IsClubOwner
+    @IsOwner
     @DeleteMapping("/owner/{id}")
     public ResponseEntity<Map<String, String>> deleteOwner(
             @PathVariable Long id,
@@ -106,6 +133,7 @@ public class OwnerController {
     }
 
 
+    @IsOwner
     @PutMapping("/owner/{id}")
     public ResponseEntity<Owner> updateOwner(@PathVariable Long id,
                                              @RequestBody @Validated(Owner.OnUpdateFromOwner.class) Owner owner,
