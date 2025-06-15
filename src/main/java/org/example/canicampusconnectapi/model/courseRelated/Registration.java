@@ -47,33 +47,33 @@ public class Registration {
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
     @NotNull(message = "Le chien ne peut pas être vide")
-    @JsonView({OwnerViewCourse.class, CoachView.class,CoachViewRegistrations.class})
+    @JsonView({CoachView.class,CoachViewRegistrations.class})
     protected Dog dog;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    @JsonView({OwnerViewDog.class, OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
+    @JsonView({OwnerViewDog.class,CoachView.class,CoachViewRegistrations.class})
     protected Instant registrationDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 255)
     @NotNull(message = "Le statut ne peut pas être vide",
             groups = {RegistrationStatusValidation.class})
-    @JsonView({OwnerViewDog.class, OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
+    @JsonView({OwnerViewDog.class,CoachView.class,CoachViewRegistrations.class})
     protected RegistrationStatus status;
 
     @CreatedBy
     @Column(nullable = false, updatable = false, length = 150)
-    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class})
+    @JsonView({OwnerViewDog.class, CoachView.class, CoachViewRegistrations.class})
     private String createdBy;
 
     @LastModifiedDate
     @Column(nullable = false)
-    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class})
+    @JsonView({OwnerViewDog.class, CoachView.class, CoachViewRegistrations.class})
     private LocalDateTime lastModifiedDate;
 
     @LastModifiedBy
     @Column(nullable = false, length = 150)
-    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class})
+    @JsonView({OwnerViewDog.class, CoachView.class, CoachViewRegistrations.class})
     private String lastModifiedBy;
 }
