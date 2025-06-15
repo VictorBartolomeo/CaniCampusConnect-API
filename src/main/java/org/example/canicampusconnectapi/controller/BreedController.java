@@ -35,6 +35,7 @@ public class BreedController {
         this.breedService = breedService;
     }
 
+    @IsOwner
     @GetMapping("/breed/{id}")
     @JsonView(OwnerViewDog.class)
     public ResponseEntity<Breed> getBreed(@PathVariable Short id) {
@@ -51,12 +52,14 @@ public class BreedController {
         return ResponseEntity.ok(breeds);
     }
 
+    @IsClubOwner
     @PostMapping("/breed")
     public ResponseEntity<Breed> createBreed(@RequestBody @Valid Breed breed) {
         Breed savedBreed = breedService.save(breed);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBreed);
     }
 
+    @IsClubOwner
     @DeleteMapping("/breed/{id}")
     public ResponseEntity<Void> deleteBreed(@PathVariable Short id) {
         if (breedService.existsById(id)) {
@@ -66,6 +69,7 @@ public class BreedController {
         return ResponseEntity.notFound().build();
     }
 
+    @IsClubOwner
     @PutMapping("/breed/{id}")
     public ResponseEntity<Breed> updateBreed(@PathVariable Short id, @RequestBody @Valid Breed breed) {
         return breedService.findById(id)
@@ -77,7 +81,7 @@ public class BreedController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // 📸 GESTION DES IMAGES
+@IsOwner
     @PostMapping("/breed/{id}/image")
     public ResponseEntity<String> uploadBreedImage(
             @PathVariable Short id,
@@ -126,6 +130,7 @@ public class BreedController {
     }
 
 
+    @IsOwner
     @JsonView(OwnerViewDog.class)
     @GetMapping("/breed/{id}/image")
     public ResponseEntity<Resource> getBreedImage(@PathVariable Short id) {

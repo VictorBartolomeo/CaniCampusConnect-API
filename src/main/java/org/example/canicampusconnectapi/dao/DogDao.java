@@ -27,4 +27,8 @@ public interface DogDao extends JpaRepository<Dog, Long> {
 
     @Query("SELECT d FROM Dog d WHERE d.isAnonymized = false")
     List<Dog> findAllNotAnonymized();
+
+    @Query("SELECT d FROM Dog d WHERE d.id = :dogId AND d.owner.id = :ownerId AND d.isAnonymized = false")
+    Optional<Dog> findByIdAndOwnerId(@Param("dogId") Long dogId, @Param("ownerId") Long ownerId);
+
 }

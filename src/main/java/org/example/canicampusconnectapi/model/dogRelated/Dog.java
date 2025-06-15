@@ -20,6 +20,8 @@ import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -115,6 +117,26 @@ public class Dog {
     @Column
     @LastModifiedBy
     private String anonymizedBy;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    @JsonView({AdminViewDog.class})
+    private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    @JsonView({AdminViewDog.class})
+    private LocalDateTime lastModifiedDate;
+
+    @CreatedBy
+    @Column(nullable = false, updatable = false, length = 150)
+    @JsonView({AdminViewDog.class})
+    private String createdBy;
+
+    @LastModifiedBy
+    @Column(nullable = false, length = 150)
+    @JsonView({AdminViewDog.class})
+    private String lastModifiedBy;
 
     public boolean isActive() {
         return !this.isAnonymized;

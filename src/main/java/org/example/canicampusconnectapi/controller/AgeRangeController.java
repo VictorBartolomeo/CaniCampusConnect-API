@@ -2,6 +2,7 @@ package org.example.canicampusconnectapi.controller;
 
 import org.example.canicampusconnectapi.dao.AgeRangeDao;
 import org.example.canicampusconnectapi.model.courseRelated.AgeRange;
+import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,21 +36,7 @@ public class AgeRangeController {
         return ageRangeDao.findAll();
     }
 
-    @GetMapping("/ageranges/for-age/{age}")
-    public List<AgeRange> getAgeRangesForAge(@PathVariable int age) {
-        return ageRangeDao.findByMinAgeLessThanEqualAndMaxAgeGreaterThanEqual(age, age);
-    }
-
-    @GetMapping("/ageranges/older-than/{minAge}")
-    public List<AgeRange> getAgeRangesForOlderDogs(@PathVariable int minAge) {
-        return ageRangeDao.findByMinAgeGreaterThanEqual(minAge);
-    }
-
-    @GetMapping("/ageranges/younger-than/{maxAge}")
-    public List<AgeRange> getAgeRangesForYoungerDogs(@PathVariable int maxAge) {
-        return ageRangeDao.findByMaxAgeLessThanEqual(maxAge);
-    }
-
+    @IsClubOwner
     @PostMapping("/agerange")
     public ResponseEntity<AgeRange> createAgeRange(@RequestBody AgeRange ageRange) {
         // Check if an age range with the same min and max age already exists
@@ -67,6 +54,7 @@ public class AgeRangeController {
         return new ResponseEntity<>(ageRange, HttpStatus.CREATED);
     }
 
+    @IsClubOwner
     @DeleteMapping("/agerange/{id}")
     public ResponseEntity<Void> deleteAgeRange(@PathVariable Long id) {
         Optional<AgeRange> optionalAgeRange = ageRangeDao.findById(id);
@@ -84,6 +72,7 @@ public class AgeRangeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @IsClubOwner
     @PutMapping("/agerange/{id}")
     public ResponseEntity<Void> updateAgeRange(@PathVariable Long id, @RequestBody AgeRange ageRange) {
         Optional<AgeRange> optionalAgeRange = ageRangeDao.findById(id);

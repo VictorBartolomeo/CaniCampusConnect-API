@@ -11,14 +11,20 @@ import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
 import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 
 @Getter
 @Setter
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"dog_id", "course_id"})
 })
@@ -55,4 +61,19 @@ public class Registration {
             groups = {RegistrationStatusValidation.class})
     @JsonView({OwnerViewDog.class, OwnerViewCourse.class,CoachView.class,CoachViewRegistrations.class})
     protected RegistrationStatus status;
+
+    @CreatedBy
+    @Column(nullable = false, updatable = false, length = 150)
+    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class})
+    private String createdBy;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class})
+    private LocalDateTime lastModifiedDate;
+
+    @LastModifiedBy
+    @Column(nullable = false, length = 150)
+    @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class})
+    private String lastModifiedBy;
 }

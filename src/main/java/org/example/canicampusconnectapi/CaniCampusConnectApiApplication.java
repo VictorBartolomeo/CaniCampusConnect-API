@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.TimeZone;
 
-@EnableJpaAuditing
+@EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @SpringBootApplication
 @EnableScheduling
 public class CaniCampusConnectApiApplication extends SpringBootServletInitializer {
@@ -42,5 +42,3 @@ public class CaniCampusConnectApiApplication extends SpringBootServletInitialize
     }
 
 }
-
-

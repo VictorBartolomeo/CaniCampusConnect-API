@@ -1,5 +1,6 @@
 package org.example.canicampusconnectapi.service.dog;
 
+import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import java.time.LocalDate;
 import java.util.List;
@@ -67,5 +68,24 @@ public interface DogService {
      */
     long calculateAgeInMonths(LocalDate birthDate);
 
-    Dog getDogByOwnerIdAndDogId (Long ownerId, Long dogId);
+
+    /**
+     * Retrieves a dog by ID only if it belongs to the specified owner.
+     * @param dogId The ID of the dog.
+     * @param ownerId The ID of the owner.
+     * @return An Optional containing the dog if found and owned by the user, otherwise empty.
+     */
+    Optional<Dog> getDogByIdAndOwnerId(Long dogId, Long ownerId);
+
+
+    /**
+     * Retrieves a dog by ID only if it belongs to the specified owner.
+     * Throws exception if not found.
+     * @param ownerId The ID of the owner.
+     * @param dogId The ID of the dog.
+     * @return The dog if found and owned by the user.
+     * @throws ResourceNotFound if the dog is not found or doesn't belong to the owner.
+     */
+    Dog getDogByOwnerIdAndDogId(Long ownerId, Long dogId);
+
 }
