@@ -20,6 +20,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
+@IsClubOwner
 public class CoachController {
 
     protected RegistrationService registrationService;
@@ -44,7 +45,6 @@ public class CoachController {
 
     }
 
-    @IsClubOwner
     @GetMapping("/coachs")
     @JsonView(AdminViewCoach.class)
     public List<Coach> getAll() {
@@ -53,7 +53,7 @@ public class CoachController {
 
     //J'ai mis le POST dans le AuthController avec les register Owner ca me parait plus pertinent
 
-    @IsClubOwner
+
     @DeleteMapping("coach/{id}")
     public ResponseEntity<Coach> deleteCoach(@PathVariable Long id) {
 
