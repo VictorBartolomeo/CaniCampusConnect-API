@@ -47,19 +47,19 @@ public class Registration {
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
     @NotNull(message = "Le chien ne peut pas être vide")
-    @JsonView({CoachView.class,CoachViewRegistrations.class})
+    @JsonView({CoachView.class,CoachViewRegistrations.class, OwnerViewCourse.class})
     protected Dog dog;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    @JsonView({OwnerViewDog.class,CoachView.class,CoachViewRegistrations.class})
+    @JsonView({OwnerViewDog.class,CoachView.class,CoachViewRegistrations.class, OwnerViewCourse.class})
     protected Instant registrationDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 255)
     @NotNull(message = "Le statut ne peut pas être vide",
             groups = {RegistrationStatusValidation.class})
-    @JsonView({OwnerViewDog.class,CoachView.class,CoachViewRegistrations.class})
+    @JsonView({OwnerViewDog.class,CoachView.class,CoachViewRegistrations.class, OwnerViewCourse.class})
     protected RegistrationStatus status;
 
     @CreatedBy

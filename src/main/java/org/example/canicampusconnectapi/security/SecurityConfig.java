@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/register").permitAll()
-                        .requestMatchers("/breed/*/image").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/breed/*/image").permitAll() // ✅ Cette ligne sera prioritaire
                         .requestMatchers("/user/*/avatar").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/change-password").authenticated()
                         .anyRequest()

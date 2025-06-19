@@ -89,7 +89,7 @@ public class Course {
     protected CourseType courseType;
 
     @OneToMany(mappedBy = "course")
-    @JsonView({CoachView.class})
+    @JsonView({CoachView.class, OwnerViewCourse.class})
     protected List<Registration> registrations;
 
     @CreatedDate
