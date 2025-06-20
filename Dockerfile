@@ -14,4 +14,4 @@ COPY .env .env
 EXPOSE 8080
 
 # Commande pour exécuter l'application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "canicampusconnect_api.jar"]
