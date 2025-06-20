@@ -14,12 +14,12 @@ public class BreedOrderSerializer extends JsonSerializer<List<Breed>> {
 
     @Override
     public void serialize(List<Breed> breeds, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+        //TODO Réviser les serializers
         gen.writeStartArray();
 
         for (Breed breed : breeds) {
             gen.writeStartObject();
 
-            // ✅ Sérialiser SEULEMENT les champs nécessaires
             gen.writeNumberField("id", breed.getId());
             gen.writeStringField("name", breed.getName());
 
