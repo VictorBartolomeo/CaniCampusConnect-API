@@ -1,19 +1,19 @@
 -- Au lieu de l'ancien INSERT
 INSERT INTO user (firstname, lastname, email, password, phone, email_validated, created_date, last_modified_date,
                   created_by, last_modified_by)
-VALUES ('PrénomAdmin', 'NomAdmin', 'admin@admin.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
+VALUES ('Victor', 'Monteragioni', 'victor.monteragioni@ccc.fr', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
         '0611111111', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
-       ('Marin', 'Tintin', 'coach@coach.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
+       ('Stéphane', 'Scheeres', 'stephane.scheeres@ccc.fr', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
         '0622222222', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
-       ('PrénomCoach2', 'NomCoach2', 'coach2@coach.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
+       ('Tetiana', 'Lombardi', 'tetiana.lombardi@ccc.fr', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
         '0633333333', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
-       ('Propriétaire1', 'Utilisateur1', 'owner3@user.com',
+       ('Axel', 'MOMPER', 'axel.momper@ccc.fr',
         '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0677777777', true, NOW(), NOW(), 'SYSTEM',
         'SYSTEM'),
-       ('Propriétaire2', 'Utilisateur2', 'owner4@user.com',
+       ('Lucas', 'OLIVAREZ', 'lucas.olivarez@ccc.fr',
         '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0644444444', true, NOW(), NOW(), 'SYSTEM',
         'SYSTEM'),
-       ('Propriétaire3', 'Utilisateur3', 'owner5@user.com',
+       ('Gaetan', 'ROUYER', 'gaetan.rouyer@ccc.fr',
         '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0655555555', true, NOW(), NOW(), 'SYSTEM',
         'SYSTEM');
 
