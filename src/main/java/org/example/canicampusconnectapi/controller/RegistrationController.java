@@ -3,11 +3,17 @@ package org.example.canicampusconnectapi.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
+import lombok.RequiredArgsConstructor;
+import org.example.canicampusconnectapi.model.courseRelated.AgeRange;
+import org.example.canicampusconnectapi.model.courseRelated.Course;
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
+import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
+import org.example.canicampusconnectapi.security.AppUserDetails;
 import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsCoach;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
+import org.example.canicampusconnectapi.service.dog.DogService;
 import org.example.canicampusconnectapi.service.registration.RegistrationService;
 import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerView;
@@ -18,22 +24,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
 @IsClubOwner
+@RequiredArgsConstructor
 public class RegistrationController {
 
     // Groupe de validation pour mise à jour du statut uniquement
     public interface StatusUpdateValidation extends Default {}
 
     protected RegistrationService registrationService;
+    protected DogService dogService;
 
     @Autowired
     public RegistrationController(org.example.canicampusconnectapi.service.registration.RegistrationService registrationService) {
@@ -174,6 +187,7 @@ public class RegistrationController {
         }
     }
 
+
     // Update a registration
     @IsCoach
     @PutMapping("/registration/{id}")
@@ -190,14 +204,44 @@ public class RegistrationController {
         }
     }
 
-    // Delete a registration
     @DeleteMapping("/registration/{id}")
-    public ResponseEntity<Void> deleteRegistration(@PathVariable Long id) {
-        boolean deleted = registrationService.deleteById(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> deleteRegistration(
+            @PathVariable Long id,
+            @AuthenticationPrincipal AppUserDetails userDetails) {
+
+        try {
+            Optional<Registration> registrationOpt = registrationService.findById(id);
+            if (registrationOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Registration registration = registrationOpt.get();
+
+            if (userDetails == null || userDetails.getUserId() == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            boolean isClubOwner = userDetails.getAuthorities().stream()
+                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_CLUB_OWNER"));
+
+            if (isClubOwner) {
+                boolean deleted = registrationService.deleteById(id);
+                return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+            } else {
+                if (!registration.getDog().getOwner().getId().equals(userDetails.getUserId())) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                }
+
+                if (registration.getCourse().getStartDatetime().isBefore(Instant.now())) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Cours déjà commencé
+                }
+
+                boolean deleted = registrationService.deleteById(id);
+                return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
