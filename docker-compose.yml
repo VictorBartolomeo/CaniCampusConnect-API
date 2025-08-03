@@ -5,7 +5,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx-proxy.conf:/etc/nginx/nginx.conf
+      - ./nginx-proxy-dev.conf:/etc/nginx/nginx.conf
       - ./certs:/etc/nginx/certs
     depends_on:
       - front
@@ -38,6 +38,8 @@ services:
 
   db:
     image: mysql:5.7
+    ports:
+      - "3306:3306"
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
