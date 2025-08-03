@@ -1,9 +1,7 @@
 package org.example.canicampusconnectapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import jakarta.validation.Valid;
-import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
-import org.example.canicampusconnectapi.common.exception.UnauthorizedAccessException;
+import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.security.AppUserDetails;
@@ -15,7 +13,6 @@ import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +62,7 @@ public class DogController {
                 Dog dog = dogService.getDogByOwnerIdAndDogId(userDetails.getUserId(), id);
                 return ResponseEntity.ok(dog);
             }
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Chien introuvable ou accès non autorisé"));
         } catch (Exception e) {
@@ -92,7 +89,7 @@ public class DogController {
 
             List<Dog> dogs = dogService.getDogsByOwner(userDetails.getUserId());
             return ResponseEntity.ok(dogs);
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Propriétaire introuvable"));
         } catch (Exception e) {
@@ -112,7 +109,7 @@ public class DogController {
 
             List<Dog> dogs = dogService.getDogsByOwner(ownerId);
             return ResponseEntity.ok(dogs);
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Propriétaire avec l'ID " + ownerId + " introuvable"));
         } catch (Exception e) {
@@ -157,7 +154,7 @@ public class DogController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "Données invalides : " + e.getMessage()));
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Race ou propriétaire introuvable"));
         } catch (Exception e) {
@@ -187,7 +184,7 @@ public class DogController {
                     "dogId", id.toString(),
                     "anonymizedBy", userDetails.getUsername()
             ));
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(Map.of(
                     "message", "Chien non trouvé",
                     "action", "error"
@@ -210,7 +207,7 @@ public class DogController {
         try {
             Dog updatedDog = dogService.updateDog(id, dog);
             return new ResponseEntity<>(updatedDog, HttpStatus.OK);
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
