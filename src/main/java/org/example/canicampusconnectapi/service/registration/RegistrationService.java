@@ -58,7 +58,6 @@ public interface RegistrationService {
      */
     void expirePastPendingRegistrations();
 
-    // ✅ AJOUTEZ CETTE MÉTHODE
     /**
      * Supprime toutes les registrations associées à un cours.
      *
