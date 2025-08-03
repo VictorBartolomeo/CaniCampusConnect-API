@@ -50,17 +50,17 @@ public class Registration {
     @JsonView({CoachView.class,CoachViewRegistrations.class, OwnerViewCourse.class})
     protected Dog dog;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    @JsonView({OwnerViewDog.class,CoachView.class,CoachViewRegistrations.class, OwnerViewCourse.class})
-    protected Instant registrationDate;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 255)
     @NotNull(message = "Le statut ne peut pas être vide",
             groups = {RegistrationStatusValidation.class})
     @JsonView({OwnerViewDog.class,CoachView.class,CoachViewRegistrations.class, OwnerViewCourse.class})
     protected RegistrationStatus status;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    @JsonView({OwnerViewDog.class,CoachView.class,CoachViewRegistrations.class, OwnerViewCourse.class})
+    protected Instant registrationDate;
 
     @CreatedBy
     @Column(nullable = false, updatable = false, length = 150)
