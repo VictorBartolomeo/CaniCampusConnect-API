@@ -70,7 +70,7 @@ public class Course {
     protected int maxCapacity;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "coach_id", nullable = false)
     @NotNull(message = "Vous devez renseigner un coach", groups = {CreateCourse.class})
     @JsonView({OwnerViewDog.class, OwnerViewCourse.class, CoachViewRegistrations.class})
     protected Coach coach;
