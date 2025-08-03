@@ -1,7 +1,7 @@
 package org.example.canicampusconnectapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
+import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.healthRecord.DogWeight;
 import org.example.canicampusconnectapi.security.AppUserDetails;
@@ -72,7 +72,7 @@ public class DogWeightController {
                 return ResponseEntity.ok(dogWeights);
             }
 
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Chien avec l'ID " + dogId + " introuvable"));
         } catch (Exception e) {
@@ -122,7 +122,7 @@ public class DogWeightController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "Données invalides : " + e.getMessage()));
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Chien introuvable"));
         } catch (Exception e) {
@@ -136,7 +136,7 @@ public class DogWeightController {
         try {
             dogWeightService.deleteDogWeight(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -146,7 +146,7 @@ public class DogWeightController {
         try {
             DogWeight updatedDogWeight = dogWeightService.updateDogWeight(id, dogWeight);
             return new ResponseEntity<>(updatedDogWeight, HttpStatus.OK);
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

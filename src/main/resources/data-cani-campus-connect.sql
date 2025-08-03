@@ -1,21 +1,20 @@
--- Au lieu de l'ancien INSERT
 INSERT INTO user (firstname, lastname, email, password, phone, email_validated, created_date, last_modified_date,
-                  created_by, last_modified_by)
-VALUES ('PrénomAdmin', 'NomAdmin', 'admin@admin.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
-        '0611111111', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
-       ('Marin', 'Tintin', 'coach@coach.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
-        '0622222222', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
-       ('PrénomCoach2', 'NomCoach2', 'coach2@coach.com', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
-        '0633333333', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
-       ('Propriétaire1', 'Utilisateur1', 'owner3@user.com',
+                  created_by, last_modified_by, is_anonymized)
+VALUES ('Victor', 'Monteragioni', 'victor.monteragioni@ccc.fr', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
+        '0611111111', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM',false),
+       ('Stéphane', 'Scheeres', 'stephane.scheeres@ccc.fr', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
+        '0622222222', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM',false),
+       ('Tetiana', 'Lombardi', 'tetiana.lombardi@ccc.fr', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
+        '0633333333', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM',false),
+       ('Axel', 'MOMPER', 'axel.momper@ccc.fr',
         '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0677777777', true, NOW(), NOW(), 'SYSTEM',
-        'SYSTEM'),
-       ('Propriétaire2', 'Utilisateur2', 'owner4@user.com',
+        'SYSTEM',false),
+       ('Lucas', 'OLIVAREZ', 'lucas.olivarez@ccc.fr',
         '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0644444444', true, NOW(), NOW(), 'SYSTEM',
-        'SYSTEM'),
-       ('Propriétaire3', 'Utilisateur3', 'owner5@user.com',
+        'SYSTEM',false),
+       ('Gaetan', 'ROUYER', 'gaetan.rouyer@ccc.fr',
         '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0655555555', true, NOW(), NOW(), 'SYSTEM',
-        'SYSTEM');
+        'SYSTEM',false);
 
 INSERT INTO club_owner (user_id)
 VALUES (1);
@@ -40,14 +39,19 @@ VALUES (0, 12, 'Chiot'),  -- 0-12 mois (chiots)
 
 INSERT INTO course_type (name, description, age_range_id)
 VALUES ('Socialisation des Chiots', 'Socialisation de base et introduction à l''éducation pour chiots', 1),
-       ('Obéissance de Base', 'Commandes fondamentales et éducation comportementale pour tous les chiens', 2),
-       ('Obéissance Avancée', 'Commandes complexes et entraînement sans laisse pour chiens bien éduqués', 3),
-       ('Entraînement d''Agilité', 'Parcours d''obstacles pour chiens sportifs', 2),
-       ('Formation de Chien Thérapeutique',
+       ('Obéissance - Jeune Chien', 'Commandes fondamentales et éducation comportementale pour tous les chiens', 2),
+       ('Ring - Jeune Chien', 'Initiation au ring pour les jeunes chiens', 2),
+       ('Obéissance - Adulte', 'Commandes fondamentales et éducation comportementale pour tous les chiens', 3),
+       ('Obéissance Avancée - Adulte', 'Commandes complexes et entraînement sans laisse pour chiens bien éduqués', 3),
+       ('Ring - Adulte', 'Entrainement compétition de ring', 3),
+       ('Entraînement d''Agilité - Jeune Chien', 'Parcours d''obstacles pour chiens sportifs', 2),
+       ('Entraînement d''Agilité', 'Parcours d''obstacles pour chiens sportifs', 3),
+       ('Formation de Chien Thérapeutique - Adulte',
         'Formation pour chiens destinés à devenir des animaux thérapeutiques certifiés', 3),
-       ('Bien-être des Chiens Seniors', 'Exercices doux et stimulation mentale pour chiens âgés', 4);
+       ('Bien-être des Chiens Seniors', 'Exercices doux et stimulation mentale pour chiens âgés', 4),
+       ('Rappel - Seniors', 'Exercices doux et stimulation mentale pour chiens âgés', 4);
 
-INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, user_id, club_id, course_type_id,
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
                     created_date, last_modified_date, created_by, last_modified_by)
 VALUES
     -- Age Range 1 (Puppies) - 5 courses before May 22, 2025
@@ -56,19 +60,19 @@ VALUES
      '2025-05-15 10:00:00', '2025-05-15 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Chiots - Premiers pas',
      'Cours d''introduction pour les tout jeunes chiots, axé sur la socialisation de base et la découverte de l''environnement',
-     '2025-04-25 09:00:00', '2025-04-25 10:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+     '2025-04-25 09:00:00', '2025-04-25 10:30:00', 8, 3, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Chiots - Jeux d''éveil', 'Activités ludiques pour stimuler le développement cognitif et social de votre chiot',
      '2025-05-01 14:00:00', '2025-05-01 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Chiots - Découverte sensorielle',
      'Exposer votre chiot à différentes textures, sons et environnements pour une meilleure adaptation',
-     '2025-05-08 10:00:00', '2025-05-08 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+     '2025-05-08 10:00:00', '2025-05-08 11:30:00', 8, 3, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Chiots - Bases de l''éducation', 'Premiers apprentissages pour une bonne cohabitation avec votre chiot',
-     '2025-05-18 09:00:00', '2025-05-18 10:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+     '2025-05-18 09:00:00', '2025-05-18 10:30:00', 8, 3, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
 
     -- Age Range 1 (Puppies) - 5 courses after May 22, 2025
     ('Chiots - Communication canine',
      'Apprendre à comprendre le langage corporel de votre chiot et à communiquer efficacement avec lui',
-     '2025-06-15 10:00:00', '2025-06-15 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+     '2025-06-15 10:00:00', '2025-06-15 11:30:00', 8, 3, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Chiots - Manipulation et soins',
      'Habituer votre chiot à être manipulé pour les soins quotidiens et les visites vétérinaires',
      '2025-07-05 14:00:00', '2025-07-05 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
@@ -80,15 +84,15 @@ VALUES
      '2025-10-15 09:00:00', '2025-10-15 10:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Chiots - Jeux et apprentissage',
      'Utilisation de jeux pour développer les capacités cognitives et la socialisation des chiots',
-     '2026-01-20 14:00:00', '2026-01-20 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+     '2026-01-20 14:00:00', '2026-01-20 15:30:00', 8, 3, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
 
     -- Age Range 2 (Young dogs) - 5 courses before May 22, 2025
     ('Obéissance de base - Niveau 1', 'Apprentissage des commandes fondamentales pour jeunes chiens',
      '2025-04-20 14:00:00', '2025-04-20 16:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Obéissance de base - Niveau 2', 'Renforcement des commandes de base et introduction à de nouvelles commandes',
-     '2025-04-27 14:00:00', '2025-04-27 16:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+     '2025-04-27 14:00:00', '2025-04-27 16:00:00', 10, 2, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Marche en laisse sans traction', 'Techniques pour apprendre à votre jeune chien à marcher correctement en laisse',
-     '2025-05-04 09:00:00', '2025-05-04 11:00:00', 8, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+     '2025-05-04 09:00:00', '2025-05-04 11:00:00', 8, 2, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Rappel efficace', 'Méthodes pour obtenir un rappel fiable avec votre jeune chien',
      '2025-05-11 14:00:00', '2025-05-11 16:00:00', 8, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Obéissance du quotidien',
@@ -101,10 +105,10 @@ VALUES
      '2025-06-05 09:00:00', '2025-06-05 11:00:00', 6, 3, 1, 4, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Parcours d''agilité',
      'On va travailler sur des parcours plus complexes pour les chiens qui ont déjà découvert l''agilité',
-     '2025-07-20 09:00:00', '2025-07-20 11:30:00', 5, 3, 1, 4, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+     '2025-07-20 09:00:00', '2025-07-20 11:30:00', 5, 2, 1, 4, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Jeux d''intelligence canine',
      'Des activités ludiques pour stimuler le cerveau de votre chien et renforcer votre lien',
-     '2025-08-28 10:00:00', '2025-08-28 12:00:00', 8, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+     '2025-08-28 10:00:00', '2025-08-28 12:00:00', 8, 2, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Rappel en toutes situations',
      'Fini les angoisses au parc! Apprenez à avoir un rappel fiable même avec des distractions',
      '2025-10-10 14:00:00', '2025-10-10 16:00:00', 6, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
@@ -117,12 +121,12 @@ VALUES
     ('Obéissance avancée - Niveau 2', 'Travail à distance et avec distractions pour chiens adultes bien éduqués',
      '2025-04-25 13:00:00', '2025-04-25 16:00:00', 8, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Préparation aux sports canins', 'Introduction aux différentes disciplines sportives canines pour chiens adultes',
-     '2025-05-02 10:00:00', '2025-05-02 13:00:00', 6, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+     '2025-05-02 10:00:00', '2025-05-02 13:00:00', 6, 3, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Techniques de concentration', 'Améliorer la concentration de votre chien adulte dans différents environnements',
      '2025-05-09 14:00:00', '2025-05-09 17:00:00', 6, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Formation chien visiteur - Introduction',
      'Première approche pour les chiens adultes qui pourraient devenir chiens visiteurs',
-     '2025-05-16 10:00:00', '2025-05-16 12:00:00', 5, 2, 1, 5, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+     '2025-05-16 10:00:00', '2025-05-16 12:00:00', 5, 3, 1, 5, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
 
     -- Age Range 3 (Adults) - 5 courses after May 22, 2025
     ('Trucs et astuces avancés',
@@ -139,7 +143,7 @@ VALUES
      'Découvrez comment utiliser le flair incroyable de votre chien pour des activités stimulantes',
      '2026-02-22 10:00:00', '2026-02-22 12:00:00', 5, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
 
-    -- Age Range 4 (Seniors) - 5 courses before May 22, 2025
+    -- Age Range 4 (Seniors)
     ('Bien-être des seniors - Introduction', 'Premiers pas pour adapter les activités à votre chien senior',
      '2025-04-15 11:00:00', '2025-04-15 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Exercices doux pour seniors', 'Activités physiques adaptées pour maintenir la mobilité de votre chien âgé',
@@ -151,7 +155,7 @@ VALUES
     ('Confort et qualité de vie', 'Aménagements et astuces pour améliorer le quotidien de votre chien senior',
      '2025-05-15 11:00:00', '2025-05-15 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
 
-    -- Age Range 4 (Seniors) - 5 courses after May 22, 2025
+    -- Age Range 4 (Seniors)
     ('Bien-être des seniors - Avancé', 'Activités douces et stimulantes adaptées à nos compagnons plus âgés',
      '2025-07-25 11:00:00', '2025-07-25 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Massage canin pour seniors', 'Techniques de massage pour soulager les douleurs articulaires des chiens âgés',
@@ -161,7 +165,93 @@ VALUES
     ('Jeux adaptés aux seniors', 'Activités ludiques spécialement conçues pour les chiens âgés',
      '2025-12-05 11:00:00', '2025-12-05 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
     ('Promenades pour seniors', 'Comment adapter les sorties aux capacités de votre chien âgé',
-     '2026-03-20 11:00:00', '2026-03-20 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
+     '2026-03-20 11:00:00', '2026-03-20 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Premiers pas en ville', 'Apprenez à votre chiot à se comporter en milieu urbain avec des bruits et des distractions',
+     '2025-09-05 10:00:00', '2025-09-05 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Jeux de groupe', 'Séance de socialisation où les chiots apprennent à jouer ensemble sous supervision',
+     '2025-09-12 14:00:00', '2025-09-12 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Découverte des textures', 'Exposez votre chiot à différentes surfaces et textures pour développer sa confiance',
+     '2025-09-19 10:00:00', '2025-09-19 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Prévention des problèmes', 'Techniques pour éviter les comportements indésirables avant qu''ils ne s''installent',
+     '2025-09-26 14:00:00', '2025-09-26 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Autocontrôle', 'Apprenez à votre chiot à gérer son excitation et à se calmer sur demande',
+     '2025-10-03 10:00:00', '2025-10-03 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Manipulation et toilettage', 'Habituez votre chiot aux manipulations nécessaires pour les soins quotidiens',
+     '2025-10-10 14:00:00', '2025-10-10 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Enrichissement mental', 'Activités et jeux pour stimuler l''intelligence de votre chiot',
+     '2025-10-17 10:00:00', '2025-10-17 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Signaux d''apaisement', 'Apprenez à reconnaître et à répondre aux signaux de communication de votre chiot',
+     '2025-10-24 14:00:00', '2025-10-24 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Préparation aux visites vétérinaires', 'Rendez les visites chez le vétérinaire moins stressantes pour votre chiot',
+     '2025-10-31 10:00:00', '2025-10-31 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Renforcement positif avancé', 'Techniques avancées de renforcement positif pour l''éducation de votre chiot',
+     '2025-11-07 14:00:00', '2025-11-07 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+
+    -- Age Range 2 (Jeunes chiens) - 10 cours supplémentaires
+    ('Jeunes chiens - Contrôle des impulsions', 'Apprenez à votre chien à contrôler ses impulsions dans diverses situations',
+     '2025-09-07 09:00:00', '2025-09-07 11:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Travail de flair', 'Développez les capacités olfactives naturelles de votre chien avec des jeux de recherche',
+     '2025-09-14 14:00:00', '2025-09-14 16:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Obéissance en extérieur', 'Transférez les compétences d''obéissance dans des environnements extérieurs',
+     '2025-09-21 09:00:00', '2025-09-21 11:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Comportement en laisse', 'Techniques avancées pour une marche parfaite en laisse sans traction',
+     '2025-09-28 14:00:00', '2025-09-28 16:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Initiation au clicker', 'Découvrez le dressage au clicker pour une communication précise avec votre chien',
+     '2025-10-05 09:00:00', '2025-10-05 11:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Agilité - Parcours intermédiaire', 'Progressez dans les parcours d''agilité avec des enchaînements plus complexes',
+     '2025-10-12 14:00:00', '2025-10-12 16:30:00', 6, 3, 1, 4, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Agilité - Techniques avancées', 'Perfectionnez vos techniques de conduite en agilité pour plus d''efficacité',
+     '2025-10-19 09:00:00', '2025-10-19 11:30:00', 6, 3, 1, 4, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Rester seul à la maison', 'Aidez votre chien à gérer l''anxiété de séparation et à rester seul sereinement',
+     '2025-10-26 14:00:00', '2025-10-26 16:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Gestion des distractions', 'Maintenez l''attention de votre chien même dans des environnements très stimulants',
+     '2025-11-02 09:00:00', '2025-11-02 11:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Comportement social', 'Améliorez les interactions de votre chien avec d''autres chiens et personnes',
+     '2025-11-09 14:00:00', '2025-11-09 16:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+
+    -- Age Range 3 (Adultes) - 10 cours supplémentaires
+    ('Adultes - Obéissance avancée en groupe', 'Travaillez l''obéissance de votre chien en présence d''autres chiens',
+     '2025-09-06 13:00:00', '2025-09-06 16:00:00', 8, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Travail à distance', 'Apprenez à diriger votre chien à distance avec des signaux visuels et sonores',
+     '2025-09-13 13:00:00', '2025-09-13 16:00:00', 8, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Préparation aux sports canins', 'Découvrez différentes disciplines sportives adaptées à votre chien',
+     '2025-09-20 10:00:00', '2025-09-20 13:00:00', 6, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Formation chien visiteur - Niveau 1', 'Première étape pour former votre chien à devenir un chien visiteur en établissement',
+     '2025-09-27 10:00:00', '2025-09-27 12:00:00', 5, 2, 1, 5, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Formation chien visiteur - Niveau 2', 'Approfondissement des compétences pour les chiens visiteurs',
+     '2025-10-04 10:00:00', '2025-10-04 12:00:00', 5, 2, 1, 5, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Initiation au pistage', 'Découvrez les bases du pistage et du travail de flair avec votre chien',
+     '2025-10-11 13:00:00', '2025-10-11 16:00:00', 8, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Techniques de concentration', 'Améliorez la concentration de votre chien dans des environnements distractifs',
+     '2025-10-18 13:00:00', '2025-10-18 16:00:00', 8, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Travail de précision', 'Perfectionnez les exercices d''obéissance avec une précision accrue',
+     '2025-10-25 10:00:00', '2025-10-25 13:00:00', 6, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Formation chien visiteur - Mise en situation', 'Préparation aux situations réelles pour les chiens visiteurs',
+     '2025-11-01 10:00:00', '2025-11-01 12:00:00', 5, 2, 1, 5, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Comportement urbain avancé', 'Perfectionnez le comportement de votre chien en milieu urbain très fréquenté',
+     '2025-11-08 13:00:00', '2025-11-08 16:00:00', 8, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+
+    -- Age Range 4 (Seniors) - 10 cours supplémentaires
+    ('Seniors - Exercices adaptés', 'Programme d''exercices spécialement conçus pour les besoins des chiens âgés',
+     '2025-09-04 11:00:00', '2025-09-04 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Stimulation cognitive', 'Jeux et activités pour maintenir l''acuité mentale de votre chien senior',
+     '2025-09-11 11:00:00', '2025-09-11 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Gestion de la douleur', 'Techniques douces pour aider votre chien à gérer les douleurs liées à l''âge',
+     '2025-09-18 11:00:00', '2025-09-18 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Adaptation de l''environnement', 'Conseils pour adapter votre maison aux besoins changeants de votre chien âgé',
+     '2025-09-25 11:00:00', '2025-09-25 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Nutrition spécifique', 'Informations sur les besoins nutritionnels particuliers des chiens seniors',
+     '2025-10-02 11:00:00', '2025-10-02 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Mobilité réduite', 'Exercices et astuces pour les chiens à mobilité réduite',
+     '2025-10-09 11:00:00', '2025-10-09 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Massage thérapeutique', 'Apprenez des techniques de massage pour soulager votre chien senior',
+     '2025-10-16 11:00:00', '2025-10-16 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Enrichissement sensoriel', 'Activités adaptées pour stimuler les sens de votre chien âgé',
+     '2025-10-23 11:00:00', '2025-10-23 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Soins palliatifs', 'Informations sur les soins de fin de vie et le confort de votre compagnon',
+     '2025-10-30 11:00:00', '2025-10-30 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Activités douces en groupe', 'Séances de groupe adaptées aux capacités des chiens seniors',
+     '2025-11-06 11:00:00', '2025-11-06 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
 
 INSERT INTO breed (name, avatar_url, created_date, last_modified_date, created_by, last_modified_by)
 VALUES ('Berger Australien', '/breed/1/image', NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
@@ -335,8 +425,7 @@ VALUES (1, 1, 0),  -- Chien 1, race 1, première race
        (4, 6, 0),  -- Chien 4, race 6, première race
        (5, 8, 0),  -- Chien 5, race 8, première race
        (6, 10, 0), -- Chien 6, race 10, première race
-       (6, 16, 1); -- Chien 6, race 16, deuxième race
-
+       (6, 16, 1);
 
 INSERT INTO dog_weight (measurement_date, weight_value, unit, dog_id)
 VALUES ('2023-01-10', 25.55, 'KILOGRAM', 1), -- Poids de Rex le 10 Jan 2023
@@ -371,9 +460,7 @@ VALUES ('2023-01-10', 25.55, 'KILOGRAM', 1), -- Poids de Rex le 10 Jan 2023
        ('2023-01-30', 20.50, 'KILOGRAM', 6), -- Poids de Mia le 30 Jan 2023
        ('2023-06-10', 21.20, 'KILOGRAM', 6), -- Poids de Mia le 10 Juin 2023
        ('2023-12-05', 21.80, 'KILOGRAM', 6);
--- Poids de Mia le 5 Déc 2023
 
--- Insert common dog vaccines with their renewal periods
 INSERT INTO vaccine (vaccine_name, renew_delay)
 VALUES ('Rage', 36),                       -- Vaccin contre la rage, renouvelé tous les 3 ans
        ('CHPPIL (Carré, Hépatite, Parvovirose, Parainfluenza, Leptospirose)',
@@ -383,9 +470,7 @@ VALUES ('Rage', 36),                       -- Vaccin contre la rage, renouvelé 
        ('Maladie de Lyme', 12),            -- Vaccin contre la maladie de Lyme, renouvelé annuellement
        ('Grippe Canine', 12),              -- Vaccin contre la grippe canine, renouvelé annuellement
        ('Coronavirus', 12);
--- Vaccin contre le coronavirus, renouvelé annuellement
 
--- Insert vaccination records for dogs
 INSERT INTO vaccination (vaccination_date, batch_number, veterinarian, dog_id, vaccine_id)
 VALUES ('2023-01-15', 'RAB123456', 'Dr. Dupont', 1, 1),   -- Vaccination contre la rage de Rex
        ('2023-02-10', 'DHPP789012', 'Dr. Martin', 1, 2),  -- Vaccination CHPPIL de Rex
@@ -404,9 +489,7 @@ VALUES ('2023-01-15', 'RAB123456', 'Dr. Dupont', 1, 1),   -- Vaccination contre 
        ('2023-01-30', 'RAB678901', 'Dr. Bernard', 6, 1),  -- Vaccination contre la rage de Mia
        ('2023-02-25', 'DHPP678901', 'Dr. Bernard', 6, 2), -- Vaccination CHPPIL de Mia
        ('2023-03-20', 'BOR789012', 'Dr. Bernard', 6, 3);
--- Vaccination Bordetella de Mia
 
--- Insert medication treatments for dogs
 INSERT INTO medication_treatment (medication_name, dosage, frequency, start_date, end_date, treatment_reason, dog_id)
 VALUES
     -- Traitements de Rex
@@ -438,7 +521,6 @@ VALUES
     ('Médicament pour la thyroïde', '0.5mg', '08:00:00', '2023-04-10', NULL, 'Hypothyroïdie', 6),
     ('Antihistaminique', '10mg', '12:00:00', '2023-07-15', '2023-08-15', 'Allergies saisonnières', 6);
 
--- Insert registrations for dogs in courses
 INSERT INTO registration (registration_date, status, dog_id, course_id, last_modified_date, created_by,
                           last_modified_by)
 VALUES ('2025-04-20 09:30:00', 'CONFIRMED', 1, 2, NOW(), 'SYSTEM', 'SYSTEM'),
@@ -453,8 +535,8 @@ VALUES ('2025-04-20 09:30:00', 'CONFIRMED', 1, 2, NOW(), 'SYSTEM', 'SYSTEM'),
        ('2025-10-05 09:30:00', 'CONFIRMED', 2, 23, NOW(), 'SYSTEM', 'SYSTEM'),
        ('2025-12-01 10:15:00', 'CONFIRMED', 2, 24, NOW(), 'SYSTEM', 'SYSTEM'),
        ('2026-03-15 11:00:00', 'CONFIRMED', 2, 25, NOW(), 'SYSTEM', 'SYSTEM'),
-       (CURRENT_TIMESTAMP, 'PENDING', 2, 18, NOW(), 'SYSTEM', 'SYSTEM'),
-       (CURRENT_TIMESTAMP, 'PENDING', 2, 19, NOW(), 'SYSTEM', 'SYSTEM'),
+       (CURRENT_TIMESTAMP, 'CONFIRMED', 2, 18, NOW(), 'SYSTEM', 'SYSTEM'),
+       (CURRENT_TIMESTAMP, 'CONFIRMED', 2, 19, NOW(), 'SYSTEM', 'SYSTEM'),
        (CURRENT_TIMESTAMP, 'PENDING', 2, 20, NOW(), 'SYSTEM', 'SYSTEM'),
        ('2025-05-05 10:00:00', 'CONFIRMED', 3, 5, NOW(), 'SYSTEM', 'SYSTEM'),
        ('2025-04-22 11:15:00', 'CONFIRMED', 3, 12, NOW(), 'SYSTEM', 'SYSTEM'),
@@ -500,7 +582,6 @@ VALUES ('2025-04-20 09:30:00', 'CONFIRMED', 1, 2, NOW(), 'SYSTEM', 'SYSTEM'),
        ('2025-08-15 14:30:00', 'CONFIRMED', 4, 28, NOW(), 'SYSTEM', 'SYSTEM'),
        ('2025-06-15 10:15:00', 'CONFIRMED', 5, 29, NOW(), 'SYSTEM', 'SYSTEM'),
        ('2025-08-05 15:30:00', 'CONFIRMED', 6, 30, NOW(), 'SYSTEM', 'SYSTEM');
-
 
 INSERT INTO veterinary_visit (visit_date, diagnosis, reason_for_visit, treatment, veterinarian, dog_id)
 VALUES
@@ -565,6 +646,242 @@ VALUES
     ('2023-07-10', 'Allergies saisonnières', 'Démangeaisons, éternuements et yeux larmoyants',
      'Prescription d''antihistaminique, recommandation de temps limité à l''extérieur pendant les jours à forte concentration de pollen',
      'Dr. Moreau', 6);
+
+-- Ajout de 40 cours supplémentaires
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
+                    created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+    -- Age Range 1 (Chiots) - 10 cours supplémentaires
+    ('Chiots - Premiers pas en ville', 'Apprenez à votre chiot à se comporter en milieu urbain avec des bruits et des distractions',
+     '2025-09-05 10:00:00', '2025-09-05 11:30:00', 8, 3, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Jeux de groupe', 'Séance de socialisation où les chiots apprennent à jouer ensemble sous supervision',
+     '2025-09-12 14:00:00', '2025-09-12 15:30:00', 8, 3, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Découverte des textures', 'Exposez votre chiot à différentes surfaces et textures pour développer sa confiance',
+     '2025-09-19 10:00:00', '2025-09-19 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Prévention des problèmes', 'Techniques pour éviter les comportements indésirables avant qu''ils ne s''installent',
+     '2025-09-26 14:00:00', '2025-09-26 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Autocontrôle', 'Apprenez à votre chiot à gérer son excitation et à se calmer sur demande',
+     '2025-10-03 10:00:00', '2025-10-03 11:30:00', 8, 3, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Manipulation et toilettage', 'Habituez votre chiot aux manipulations nécessaires pour les soins quotidiens',
+     '2025-10-10 14:00:00', '2025-10-10 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Enrichissement mental', 'Activités et jeux pour stimuler l''intelligence de votre chiot',
+     '2025-10-17 10:00:00', '2025-10-17 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Signaux d''apaisement', 'Apprenez à reconnaître et à répondre aux signaux de communication de votre chiot',
+     '2025-10-24 14:00:00', '2025-10-24 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Préparation aux visites vétérinaires', 'Rendez les visites chez le vétérinaire moins stressantes pour votre chiot',
+     '2025-10-31 10:00:00', '2025-10-31 11:30:00', 8, 3, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Renforcement positif avancé', 'Techniques avancées de renforcement positif pour l''éducation de votre chiot',
+     '2025-11-07 14:00:00', '2025-11-07 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+
+    -- Age Range 2 (Jeunes chiens) - 10 cours supplémentaires
+    ('Jeunes chiens - Contrôle des impulsions', 'Apprenez à votre chien à contrôler ses impulsions dans diverses situations',
+     '2025-09-07 09:00:00', '2025-09-07 11:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Travail de flair', 'Développez les capacités olfactives naturelles de votre chien avec des jeux de recherche',
+     '2025-09-14 14:00:00', '2025-09-14 16:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Obéissance en extérieur', 'Transférez les compétences d''obéissance dans des environnements extérieurs',
+     '2025-09-21 09:00:00', '2025-09-21 11:00:00', 10, 2, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Comportement en laisse', 'Techniques avancées pour une marche parfaite en laisse sans traction',
+     '2025-09-28 14:00:00', '2025-09-28 16:00:00', 10, 2, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Initiation au clicker', 'Découvrez le dressage au clicker pour une communication précise avec votre chien',
+     '2025-10-05 09:00:00', '2025-10-05 11:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Agilité - Parcours intermédiaire', 'Progressez dans les parcours d''agilité avec des enchaînements plus complexes',
+     '2025-10-12 14:00:00', '2025-10-12 16:30:00', 6, 3, 1, 4, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Agilité - Techniques avancées', 'Perfectionnez vos techniques de conduite en agilité pour plus d''efficacité',
+     '2025-10-19 09:00:00', '2025-10-19 11:30:00', 6, 3, 1, 4, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Rester seul à la maison', 'Aidez votre chien à gérer l''anxiété de séparation et à rester seul sereinement',
+     '2025-10-26 14:00:00', '2025-10-26 16:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Gestion des distractions', 'Maintenez l''attention de votre chien même dans des environnements très stimulants',
+     '2025-11-02 09:00:00', '2025-11-02 11:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Comportement social', 'Améliorez les interactions de votre chien avec d''autres chiens et personnes',
+     '2025-11-09 14:00:00', '2025-11-09 16:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+
+    -- Age Range 3 (Adultes) - 10 cours supplémentaires
+    ('Adultes - Obéissance avancée en groupe', 'Travaillez l''obéissance de votre chien en présence d''autres chiens',
+     '2025-09-06 13:00:00', '2025-09-06 16:00:00', 8, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Travail à distance', 'Apprenez à diriger votre chien à distance avec des signaux visuels et sonores',
+     '2025-09-13 13:00:00', '2025-09-13 16:00:00', 8, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Préparation aux sports canins', 'Découvrez différentes disciplines sportives adaptées à votre chien',
+     '2025-09-20 10:00:00', '2025-09-20 13:00:00', 6, 3, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Formation chien visiteur - Niveau 1', 'Première étape pour former votre chien à devenir un chien visiteur en établissement',
+     '2025-09-27 10:00:00', '2025-09-27 12:00:00', 5, 2, 1, 5, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Formation chien visiteur - Niveau 2', 'Approfondissement des compétences pour les chiens visiteurs',
+     '2025-10-04 10:00:00', '2025-10-04 12:00:00', 5, 3, 1, 5, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Initiation au pistage', 'Découvrez les bases du pistage et du travail de flair avec votre chien',
+     '2025-10-11 13:00:00', '2025-10-11 16:00:00', 8, 3, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Techniques de concentration', 'Améliorez la concentration de votre chien dans des environnements distractifs',
+     '2025-10-18 13:00:00', '2025-10-18 16:00:00', 8, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Travail de précision', 'Perfectionnez les exercices d''obéissance avec une précision accrue',
+     '2025-10-25 10:00:00', '2025-10-25 13:00:00', 6, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Formation chien visiteur - Mise en situation', 'Préparation aux situations réelles pour les chiens visiteurs',
+     '2025-11-01 10:00:00', '2025-11-01 12:00:00', 5, 2, 1, 5, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Comportement urbain avancé', 'Perfectionnez le comportement de votre chien en milieu urbain très fréquenté',
+     '2025-11-08 13:00:00', '2025-11-08 16:00:00', 8, 3, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+
+    -- Age Range 4 (Seniors) - 10 cours supplémentaires
+    ('Seniors - Exercices adaptés', 'Programme d''exercices spécialement conçus pour les besoins des chiens âgés',
+     '2025-09-04 11:00:00', '2025-09-04 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Stimulation cognitive', 'Jeux et activités pour maintenir l''acuité mentale de votre chien senior',
+     '2025-09-11 11:00:00', '2025-09-11 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Gestion de la douleur', 'Techniques douces pour aider votre chien à gérer les douleurs liées à l''âge',
+     '2025-09-18 11:00:00', '2025-09-18 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Adaptation de l''environnement', 'Conseils pour adapter votre maison aux besoins changeants de votre chien âgé',
+     '2025-09-25 11:00:00', '2025-09-25 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Nutrition spécifique', 'Informations sur les besoins nutritionnels particuliers des chiens seniors',
+     '2025-10-02 11:00:00', '2025-10-02 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Mobilité réduite', 'Exercices et astuces pour les chiens à mobilité réduite',
+     '2025-10-09 11:00:00', '2025-10-09 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Massage thérapeutique', 'Apprenez des techniques de massage pour soulager votre chien senior',
+     '2025-10-16 11:00:00', '2025-10-16 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Enrichissement sensoriel', 'Activités adaptées pour stimuler les sens de votre chien âgé',
+     '2025-10-23 11:00:00', '2025-10-23 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Soins palliatifs', 'Informations sur les soins de fin de vie et le confort de votre compagnon',
+     '2025-10-30 11:00:00', '2025-10-30 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Activités douces en groupe', 'Séances de groupe adaptées aux capacités des chiens seniors',
+     '2025-11-06 11:00:00', '2025-11-06 12:00:00', 6, 3, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
+
+-- New courses for all existing course types with different age ranges
+-- Current date for reference: 2025-08-03
+
+-- New courses for all existing course types with different age ranges
+-- Current date for reference: 2025-08-03
+
+-- New courses for CourseType 1: Socialisation des Chiots (Age Range 1: 0-12 months)
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
+                    created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+    ('Chiots - Découverte du monde', 'Un cours spécial pour les très jeunes chiots qui découvrent leur environnement pour la première fois',
+     '2025-09-15 10:00:00', '2025-09-15 11:30:00', 8, 3, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Chiots - Premiers contacts', 'Séance de socialisation pour les chiots de moins de 4 mois, axée sur les interactions positives',
+     '2025-10-05 14:00:00', '2025-10-05 15:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
+
+-- New courses for CourseType 2: Obéissance - Jeune Chien (Age Range 2: 13-36 months)
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
+                    created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+    ('Jeunes chiens - Bases de l''obéissance', 'Apprentissage des commandes fondamentales pour les jeunes chiens en pleine croissance',
+     '2025-09-20 09:00:00', '2025-09-20 11:00:00', 10, 3, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Jeunes chiens - Concentration et attention', 'Techniques pour développer la concentration de votre jeune chien dans différents environnements',
+     '2025-10-10 14:00:00', '2025-10-10 16:00:00', 10, 2, 1, 2, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
+
+-- New courses for CourseType 3: Ring - Jeune Chien (Age Range 2: 13-36 months)
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
+                    created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+    ('Ring débutant - Jeunes chiens', 'Introduction aux bases du ring pour les jeunes chiens énergiques',
+     '2025-09-25 13:00:00', '2025-09-25 15:00:00', 8, 3, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Ring - Techniques de base', 'Apprentissage des techniques fondamentales du ring adaptées aux jeunes chiens',
+     '2025-10-15 13:00:00', '2025-10-15 15:00:00', 8, 2, 1, 3, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
+
+-- New courses for CourseType 4: Obéissance - Adulte (Age Range 3: 37-84 months)
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
+                    created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+    ('Adultes - Perfectionnement obéissance', 'Renforcement des commandes et travail sur la précision pour chiens adultes',
+     '2025-09-18 14:00:00', '2025-09-18 16:00:00', 8, 2, 1, 4, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Obéissance en environnement complexe', 'Travail d''obéissance dans des environnements avec distractions pour chiens adultes',
+     '2025-10-08 14:00:00', '2025-10-08 16:00:00', 8, 2, 1, 4, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
+
+-- New courses for CourseType 5: Obéissance Avancée - Adulte (Age Range 3: 37-84 months)
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
+                    created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+    ('Adultes - Obéissance de compétition', 'Préparation aux compétitions d''obéissance pour chiens adultes expérimentés',
+     '2025-09-22 13:00:00', '2025-09-22 16:00:00', 6, 2, 1, 5, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Adultes - Travail à distance avancé', 'Techniques avancées pour diriger votre chien à distance avec précision',
+     '2025-10-12 13:00:00', '2025-10-12 16:00:00', 6, 2, 1, 5, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
+
+-- New courses for CourseType 6: Ring - Adulte (Age Range 3: 37-84 months)
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
+                    created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+    ('Ring avancé - Adultes', 'Techniques avancées de ring pour chiens adultes expérimentés',
+     '2025-09-27 10:00:00', '2025-09-27 13:00:00', 6, 2, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Ring - Préparation compétition', 'Entraînement intensif pour les chiens adultes se préparant aux compétitions de ring',
+     '2025-10-17 10:00:00', '2025-10-17 13:00:00', 6, 2, 1, 6, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
+
+-- New courses for CourseType 7: Entraînement d'Agilité - Jeune Chien (Age Range 2: 13-36 months)
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
+                    created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+    ('Agilité débutant - Jeunes chiens', 'Introduction aux obstacles d''agilité pour jeunes chiens dynamiques',
+     '2025-09-30 09:00:00', '2025-09-30 11:00:00', 6, 3, 1, 7, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Agilité - Parcours simples', 'Apprentissage des premiers enchaînements d''obstacles pour jeunes chiens',
+     '2025-10-20 09:00:00', '2025-10-20 11:00:00', 6, 3, 1, 7, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
+
+-- New courses for CourseType 8: Entraînement d'Agilité (Age Range 3: 37-84 months)
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
+                    created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+    ('Agilité avancée - Adultes', 'Parcours complexes et techniques de conduite avancées pour chiens adultes',
+     '2025-10-02 13:00:00', '2025-10-02 15:30:00', 6, 3, 1, 8, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Agilité - Préparation compétition', 'Entraînement intensif pour les chiens adultes se préparant aux compétitions d''agilité',
+     '2025-10-22 13:00:00', '2025-10-22 15:30:00', 6, 3, 1, 8, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
+
+-- New courses for CourseType 9: Formation de Chien Thérapeutique - Adulte (Age Range 3: 37-84 months)
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
+                    created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+    ('Formation chien visiteur - Fondamentaux', 'Bases essentielles pour former votre chien adulte à devenir un chien visiteur',
+     '2025-10-05 10:00:00', '2025-10-05 12:00:00', 5, 2, 1, 9, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Formation chien thérapeutique - Avancé', 'Techniques avancées pour les chiens adultes déjà initiés au travail thérapeutique',
+     '2025-10-25 10:00:00', '2025-10-25 12:00:00', 5, 2, 1, 9, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
+
+-- New courses for CourseType 10: Bien-être des Chiens Seniors (Age Range 4: 85+ months)
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
+                    created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+    ('Seniors - Maintien de la forme', 'Exercices doux adaptés pour maintenir la forme physique des chiens seniors',
+     '2025-10-07 11:00:00', '2025-10-07 12:00:00', 6, 3, 1, 10, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Bien-être et confort', 'Techniques pour améliorer le confort et la qualité de vie de votre chien senior',
+     '2025-10-27 11:00:00', '2025-10-27 12:00:00', 6, 3, 1, 10, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
+
+-- New courses for CourseType 11: Rappel - Seniors (Age Range 4: 85+ months)
+INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
+                    created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+    ('Seniors - Rappel adapté', 'Techniques de rappel spécialement adaptées aux capacités des chiens seniors',
+     '2025-10-09 11:00:00', '2025-10-09 12:00:00', 6, 3, 1, 11, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+    ('Seniors - Communication efficace', 'Améliorer la communication avec votre chien senior pour un rappel plus efficace',
+     '2025-10-29 11:00:00', '2025-10-29 12:00:00', 6, 3, 1, 11, NOW(), NOW(), 'SYSTEM', 'SYSTEM');
+
+-- Create registrations for the new courses
+-- We'll create registrations for all 6 dogs (IDs 1-6) for some of the new courses
+
+-- Get the IDs of the newly inserted courses (assuming they start from ID 101)
+-- Note: In a real scenario, you would need to get the actual IDs of the newly inserted courses
+
+-- Registrations for the new courses (assuming course IDs start from 101)
+INSERT INTO registration (registration_date, status, dog_id, course_id, last_modified_date, created_by, last_modified_by)
+VALUES
+-- Dog 1 (Rex) registrations
+('2025-08-03 10:00:00', 'CONFIRMED', 1, 101, NOW(), 'SYSTEM', 'SYSTEM'),
+('2025-08-03 10:15:00', 'CONFIRMED', 1, 107, NOW(), 'SYSTEM', 'SYSTEM'),
+('2025-08-03 10:30:00', 'PENDING', 1, 113, NOW(), 'SYSTEM', 'SYSTEM'),
+
+-- Dog 2 (Nala) registrations
+('2025-08-03 11:00:00', 'CONFIRMED', 2, 119, NOW(), 'SYSTEM', 'SYSTEM'),
+('2025-08-03 11:15:00', 'CONFIRMED', 2, 121, NOW(), 'SYSTEM', 'SYSTEM'),
+('2025-08-03 11:30:00', 'PENDING', 2, 123, NOW(), 'SYSTEM', 'SYSTEM'),
+
+-- Dog 3 (Oscar) registrations
+('2025-08-03 12:00:00', 'CONFIRMED', 3, 103, NOW(), 'SYSTEM', 'SYSTEM'),
+('2025-08-03 12:15:00', 'CONFIRMED', 3, 109, NOW(), 'SYSTEM', 'SYSTEM'),
+('2025-08-03 12:30:00', 'PENDING', 3, 115, NOW(), 'SYSTEM', 'SYSTEM'),
+
+-- Dog 4 (Lola) registrations
+('2025-08-03 13:00:00', 'CONFIRMED', 4, 105, NOW(), 'SYSTEM', 'SYSTEM'),
+('2025-08-03 13:15:00', 'CONFIRMED', 4, 111, NOW(), 'SYSTEM', 'SYSTEM'),
+('2025-08-03 13:30:00', 'PENDING', 4, 117, NOW(), 'SYSTEM', 'SYSTEM'),
+
+-- Dog 5 (Filou) registrations
+('2025-08-03 14:00:00', 'CONFIRMED', 5, 102, NOW(), 'SYSTEM', 'SYSTEM'),
+('2025-08-03 14:15:00', 'CONFIRMED', 5, 108, NOW(), 'SYSTEM', 'SYSTEM'),
+('2025-08-03 14:30:00', 'PENDING', 5, 114, NOW(), 'SYSTEM', 'SYSTEM'),
+
+-- Dog 6 (Mia) registrations
+('2025-08-03 15:00:00', 'CONFIRMED', 6, 104, NOW(), 'SYSTEM', 'SYSTEM'),
+('2025-08-03 15:15:00', 'CONFIRMED', 6, 110, NOW(), 'SYSTEM', 'SYSTEM'),
+('2025-08-03 15:30:00', 'PENDING', 6, 116, NOW(), 'SYSTEM', 'SYSTEM');
 
 
 ############################ VIEWS ############################

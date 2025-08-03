@@ -55,12 +55,12 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register").permitAll()
+                        .requestMatchers("/login", "/owner/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/breed/*/image").permitAll() // ✅ Cette ligne sera prioritaire
                         .requestMatchers("/user/*/avatar").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/change-password").authenticated()
                         .anyRequest()
-                        .permitAll())
+                        .authenticated())
                 .build();
     }
 
@@ -88,4 +88,3 @@ public class SecurityConfig {
     }
 
 }
-

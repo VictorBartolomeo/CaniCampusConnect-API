@@ -1,6 +1,6 @@
 package org.example.canicampusconnectapi.service.dog;
 
-import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
+import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import java.time.LocalDate;
 import java.util.List;
@@ -25,7 +25,7 @@ public interface DogService {
      * Retrieves all dogs belonging to a specific owner.
      * @param ownerId The ID of the owner.
      * @return A list of dogs belonging to the owner.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the owner is not found.
+     * @throws ResourceNotFoundException if the owner is not found.
      */
     List<Dog> getDogsByOwner(Long ownerId);
 
@@ -33,7 +33,7 @@ public interface DogService {
      * Creates a new dog. Validates owner existence.
      * @param dog The dog object to create. Must have a valid owner ID set.
      * @return The created dog with its generated ID.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the specified owner does not exist.
+     * @throws ResourceNotFoundException if the specified owner does not exist.
      * @throws IllegalArgumentException if the owner information is missing.
      */
     Dog createDog(Dog dog);
@@ -41,7 +41,7 @@ public interface DogService {
     /**
      * Anonymizes a dog by its ID.
      * @param id The ID of the dog to anonymize.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the dog with the given ID does not exist.
+     * @throws ResourceNotFoundException if the dog with the given ID does not exist.
      */
     void deleteDog(Long id);
 
@@ -57,7 +57,7 @@ public interface DogService {
      * @param id The ID of the dog to update.
      * @param dog The dog data to update. Owner can be updated if provided.
      * @return The updated dog.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the dog or the specified new owner does not exist.
+     * @throws ResourceNotFoundException if the dog or the specified new owner does not exist.
      */
     Dog updateDog(Long id, Dog dog);
 
@@ -84,7 +84,7 @@ public interface DogService {
      * @param ownerId The ID of the owner.
      * @param dogId The ID of the dog.
      * @return The dog if found and owned by the user.
-     * @throws ResourceNotFound if the dog is not found or doesn't belong to the owner.
+     * @throws ResourceNotFoundException if the dog is not found or doesn't belong to the owner.
      */
     Dog getDogByOwnerIdAndDogId(Long ownerId, Long dogId);
 

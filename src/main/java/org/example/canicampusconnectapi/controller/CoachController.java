@@ -45,7 +45,7 @@ public class CoachController {
 
     }
 
-    @GetMapping("/coachs")
+    @GetMapping("/coaches")
     @JsonView(AdminViewCoach.class)
     public List<Coach> getAll() {
         return coachDao.findAll();

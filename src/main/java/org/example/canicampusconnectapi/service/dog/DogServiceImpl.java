@@ -1,7 +1,7 @@
 package org.example.canicampusconnectapi.service.dog;
 
 import jakarta.transaction.Transactional;
-import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
+import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
 import org.example.canicampusconnectapi.common.exception.UnauthorizedAccessException;
 import org.example.canicampusconnectapi.dao.BreedDao;
 import org.example.canicampusconnectapi.dao.DogDao;
@@ -9,7 +9,6 @@ import org.example.canicampusconnectapi.dao.OwnerDao;
 import org.example.canicampusconnectapi.model.dogRelated.Breed;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.users.Owner;
-import org.example.canicampusconnectapi.service.dog.DogService;
 import org.example.canicampusconnectapi.service.rgpd.RgpdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +48,7 @@ public class DogServiceImpl implements DogService {
     @Override
     public List<Dog> getDogsByOwner(Long ownerId) {
         Owner owner = ownerDao.findById(ownerId)
-                .orElseThrow(() -> new ResourceNotFound("Owner not found with id: " + ownerId));
+                .orElseThrow(() -> new ResourceNotFoundException("Owner not found with id: " + ownerId));
         return dogDao.findByOwner(owner);
     }
 
@@ -62,7 +60,7 @@ public class DogServiceImpl implements DogService {
         }
 
         Owner owner = ownerDao.findById(dog.getOwner().getId())
-                .orElseThrow(() -> new ResourceNotFound("Owner not found with id: " + dog.getOwner().getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Owner not found with id: " + dog.getOwner().getId()));
 
         dog.setOwner(owner);
         dog.setId(null);
@@ -74,7 +72,7 @@ public class DogServiceImpl implements DogService {
             for (Breed breed : dog.getBreeds()) {
                 if (breed.getId() != null) {
                     Breed existingBreed = breedDao.findById(breed.getId())
-                            .orElseThrow(() -> new ResourceNotFound("Race non trouvée avec l'ID: " + breed.getId()));
+                            .orElseThrow(() -> new ResourceNotFoundException("Race non trouvée avec l'ID: " + breed.getId()));
                     validatedBreeds.add(existingBreed);
                 }
             }
@@ -100,7 +98,7 @@ public class DogServiceImpl implements DogService {
     @Transactional
     public Dog updateDog(Long id, Dog dogDetails) {
         Dog existingDog = dogDao.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Chien non trouvé avec l'ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Chien non trouvé avec l'ID: " + id));
 
         existingDog.setName(dogDetails.getName());
         existingDog.setBirthDate(dogDetails.getBirthDate());
@@ -109,7 +107,7 @@ public class DogServiceImpl implements DogService {
 
         if (dogDetails.getOwner() != null && dogDetails.getOwner().getId() != null) {
             Owner owner = ownerDao.findById(dogDetails.getOwner().getId())
-                    .orElseThrow(() -> new ResourceNotFound("Propriétaire non trouvé avec l'ID: " + dogDetails.getOwner().getId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Propriétaire non trouvé avec l'ID: " + dogDetails.getOwner().getId()));
             existingDog.setOwner(owner);
         }
 
@@ -122,18 +120,17 @@ public class DogServiceImpl implements DogService {
                 throw new IllegalArgumentException("Le chien ne peut pas avoir plus de 3 races");
             }
 
-            // ✅ CORRECTION : Utiliser ArrayList au lieu de LinkedHashSet
             List<Breed> newBreeds = new ArrayList<>();
 
             for (Breed breed : dogDetails.getBreeds()) {
                 if (breed.getId() != null) {
                     Breed existingBreed = breedDao.findById(breed.getId())
-                            .orElseThrow(() -> new ResourceNotFound("Race non trouvée avec l'ID: " + breed.getId()));
+                            .orElseThrow(() -> new ResourceNotFoundException("Race non trouvée avec l'ID: " + breed.getId()));
                     newBreeds.add(existingBreed);
                 }
                 else if (breed.getName() != null && !breed.getName().isEmpty()) {
                     Breed existingBreed = breedDao.findByName(breed.getName())
-                            .orElseThrow(() -> new ResourceNotFound("Race non trouvée avec le nom: " + breed.getName()));
+                            .orElseThrow(() -> new ResourceNotFoundException("Race non trouvée avec le nom: " + breed.getName()));
                     newBreeds.add(existingBreed);
                 }
             }
@@ -162,7 +159,7 @@ public class DogServiceImpl implements DogService {
         Optional<Dog> dogExists = dogDao.findByIdAndNotAnonymized(dogId);
 
         if (dogExists.isEmpty()) {
-            throw new ResourceNotFound("Chien non trouvé avec l'ID: " + dogId);
+            throw new ResourceNotFoundException("Chien non trouvé avec l'ID: " + dogId);
         }
 
         // Ensuite vérifier la propriété
@@ -179,6 +176,6 @@ public class DogServiceImpl implements DogService {
     @Override
     public Dog getDogByOwnerIdAndDogId(Long ownerId, Long dogId) {
         return dogDao.findByIdAndOwnerId(dogId, ownerId)
-                .orElseThrow(() -> new ResourceNotFound("Dog not found with id: " + dogId + " for owner: " + ownerId));
+                .orElseThrow(() -> new ResourceNotFoundException("Dog not found with id: " + dogId + " for owner: " + ownerId));
     }
 }

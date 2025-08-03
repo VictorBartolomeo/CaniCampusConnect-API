@@ -1,14 +1,9 @@
 package org.example.canicampusconnectapi.dao;
 
-import org.example.canicampusconnectapi.model.courseRelated.Course;
-import org.example.canicampusconnectapi.model.courseRelated.CourseType;
-import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
 import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import java.time.Instant;
 import java.util.List;
 
@@ -45,6 +40,7 @@ public interface RegistrationDao extends JpaRepository<Registration, Long> {
     boolean existsByCourseIdAndDogId(Long courseId, Long dogId);
 
     List<Registration> findByCourseCoachIdAndStatus(Long coachId, RegistrationStatus status);
+
     /**
      * Trouve les registrations par coach, statut et date de début de cours après une date donnée
      */
@@ -57,5 +53,4 @@ public interface RegistrationDao extends JpaRepository<Registration, Long> {
     List<Registration> findByStatusAndCourseStartDatetimeBefore(
             RegistrationStatus status, Instant dateTime);
     List<Registration> findByDogIdAndCourseId(Long dogId, Long courseId);
-
 }

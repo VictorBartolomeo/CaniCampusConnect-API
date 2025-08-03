@@ -1,7 +1,7 @@
 package org.example.canicampusconnectapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
+import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.security.AppUserDetails;
@@ -12,7 +12,6 @@ import org.example.canicampusconnectapi.service.course.CourseService;
 import org.example.canicampusconnectapi.service.dog.DogService;
 import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.owner.OwnerViewCourse;
-import org.example.canicampusconnectapi.view.owner.OwnerViewDog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,7 +75,7 @@ public class CourseController {
             List<Course> courses = courseService.getCoursesByDogId(dogId);
             return ResponseEntity.ok(courses);
 
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Chien avec l'ID " + dogId + " introuvable"));
         } catch (Exception e) {
@@ -105,7 +104,7 @@ public class CourseController {
         try {
             List<Course> courses = courseService.getCoursesByCoach(coachId);
             return new ResponseEntity<>(courses, HttpStatus.OK);
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -117,7 +116,7 @@ public class CourseController {
         try {
             List<Course> upcomingCourses = courseService.getUpcomingCoursesByCoach(coachId);
             return new ResponseEntity<>(upcomingCourses, HttpStatus.OK);
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -128,11 +127,13 @@ public class CourseController {
         try {
             List<Course> courses = courseService.getCoursesByAgeRange(ageRangeId);
             return new ResponseEntity<>(courses, HttpStatus.OK);
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
+    @IsOwner
+    @JsonView(OwnerViewCourse.class)
     @GetMapping("/courses/upcoming")
     public List<Course> getUpcomingCourses() {
         return courseService.getUpcomingCourses();
@@ -146,7 +147,7 @@ public class CourseController {
             return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -160,7 +161,7 @@ public class CourseController {
                     Map.of("message", "Course and all associated registrations deleted successfully"),
                     HttpStatus.NO_CONTENT
             );
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(
                     Map.of("error", "Course not found with id: " + id),
                     HttpStatus.NOT_FOUND
@@ -178,7 +179,7 @@ public class CourseController {
         try {
             Course updatedCourse = courseService.updateCourse(id, course);
             return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

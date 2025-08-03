@@ -1,7 +1,7 @@
 package org.example.canicampusconnectapi.service.dogweight;
 
+import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
 import org.example.canicampusconnectapi.model.healthRecord.DogWeight;
-import org.example.canicampusconnectapi.model.dogRelated.Dog;
 
 import java.util.Date;
 import java.util.List;
@@ -32,7 +32,7 @@ public interface DogWeightService {
      *
      * @param dogId The ID of the dog.
      * @return A list of weight records for the dog, ordered by measurement date (descending).
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the dog is not found.
+     * @throws ResourceNotFoundException if the dog is not found.
      */
     List<DogWeight> getDogWeightsByDog(Long dogId);
 
@@ -52,7 +52,7 @@ public interface DogWeightService {
      * @param startDate The start date.
      * @param endDate The end date.
      * @return A list of weight records for the dog between the specified dates.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the dog is not found.
+     * @throws ResourceNotFoundException if the dog is not found.
      */
     List<DogWeight> getDogWeightsByDogBetweenDates(Long dogId, Date startDate, Date endDate);
 
@@ -61,7 +61,7 @@ public interface DogWeightService {
      *
      * @param dogWeight The dog weight object to create. Must have a valid dog ID set.
      * @return The created dog weight record with its generated ID.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the specified dog does not exist.
+     * @throws ResourceNotFoundException if the specified dog does not exist.
      * @throws IllegalArgumentException if the dog information is missing.
      */
     DogWeight createDogWeight(DogWeight dogWeight);
@@ -70,7 +70,7 @@ public interface DogWeightService {
      * Deletes a dog weight record by its ID.
      *
      * @param id The ID of the dog weight record to delete.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the dog weight record with the given ID does not exist.
+     * @throws ResourceNotFoundException if the dog weight record with the given ID does not exist.
      */
     void deleteDogWeight(Long id);
 
@@ -80,7 +80,7 @@ public interface DogWeightService {
      * @param id The ID of the dog weight record to update.
      * @param dogWeight The dog weight data to update. Dog can be updated if provided.
      * @return The updated dog weight record.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the dog weight record or the specified new dog does not exist.
+     * @throws ResourceNotFoundException if the dog weight record or the specified new dog does not exist.
      */
     DogWeight updateDogWeight(Long id, DogWeight dogWeight);
 
@@ -89,7 +89,7 @@ public interface DogWeightService {
      *
      * @param dogId The ID of the dog.
      * @return A list of weight records for the dog from the last 7 days.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the dog is not found.
+     * @throws ResourceNotFoundException if the dog is not found.
      */
     List<DogWeight> getDogWeightsFromLast7Days(Long dogId);
 
@@ -98,7 +98,7 @@ public interface DogWeightService {
      *
      * @param dogId The ID of the dog.
      * @return A list of weight records for the dog from the last 3 months.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the dog is not found.
+     * @throws ResourceNotFoundException if the dog is not found.
      */
     List<DogWeight> getDogWeightsFromLast3Months(Long dogId);
 
@@ -107,7 +107,7 @@ public interface DogWeightService {
      *
      * @param dogId The ID of the dog.
      * @return A list of weight records for the dog from the last 6 months.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the dog is not found.
+     * @throws ResourceNotFoundException if the dog is not found.
      */
     List<DogWeight> getDogWeightsFromLast6Months(Long dogId);
 
@@ -116,7 +116,7 @@ public interface DogWeightService {
      *
      * @param dogId The ID of the dog.
      * @return A list of weight records for the dog from the last 12 months.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the dog is not found.
+     * @throws ResourceNotFoundException if the dog is not found.
      */
     List<DogWeight> getDogWeightsFromLast12Months(Long dogId);
 }

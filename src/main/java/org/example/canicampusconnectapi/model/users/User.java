@@ -28,15 +28,15 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@RgpdEntity(identifierField = "id") // ✅ Marquer comme entité RGPD
+@RgpdEntity(identifierField = "id")
 @EntityListeners(AuditingEntityListener.class)
 @Inheritance(strategy = InheritanceType.JOINED)
-
 public class User {
 
-    public interface OnUpdateFromOwner {
-    }
+    // GROUPES DE VALIDATION
+    public interface OnUpdateFromOwner {}
     public interface OnUpdatePassword {}
+    public interface OnUpdateFromAdmin {}
 
     private static final String REGEX_STRONG_PASSWORD =
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*\\W).{8,64}$";
@@ -47,39 +47,38 @@ public class User {
     @JsonView({AdminViewCoach.class})
     protected Long id;
 
-    @PersonalData(anonymizeWith = "ANONYMIZED") // ✅ Données à anonymiser
+    @PersonalData(anonymizeWith = "ANONYMIZED")
     @Column(nullable = false, unique = true, length = 150)
-    @NotBlank(message = "L'email ne peut pas être vide", groups = {Owner.onCreateOwner.class, OnUpdateFromOwner.class, Coach.onCreateCoach.class, Coach.onUpdateCoach.class})
-    @Email(message = "L'email n'est pas au format valide")
+    @NotBlank(message = "L'email ne peut pas être vide", groups = {Owner.onCreateOwner.class, OnUpdateFromOwner.class, OnUpdateFromAdmin.class, Coach.onCreateCoach.class, Coach.onUpdateCoach.class})
+    @Email(message = "L'email n'est pas au format valide", groups = {OnUpdateFromAdmin.class, OnUpdateFromOwner.class})
     @JsonView({OwnerViewDog.class, OwnerView.class, CoachView.class, AdminViewCoach.class})
     protected String email;
 
-    @PersonalData(anonymizeWith = "Utilisateur") // ✅ Données à anonymiser
+    @PersonalData(anonymizeWith = "Utilisateur")
     @Column(nullable = false, length = 100)
-    @NotBlank(message = "Le prénom ne peut pas être vide", groups = {Owner.onCreateOwner.class, OnUpdateFromOwner.class, Coach.onCreateCoach.class, Coach.onUpdateCoach.class})
+    @NotBlank(message = "Le prénom ne peut pas être vide", groups = {Owner.onCreateOwner.class, OnUpdateFromOwner.class, OnUpdateFromAdmin.class, Coach.onCreateCoach.class, Coach.onUpdateCoach.class})
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewCoach.class})
     protected String firstname;
 
-    @PersonalData(anonymizeWith = "Anonymisé") // ✅ Données à anonymiser
+    @PersonalData(anonymizeWith = "Anonymisé")
     @Column(nullable = false, length = 100)
-    @NotBlank(message = "Le nom de famille ne peut pas être vide", groups = {Owner.onCreateOwner.class, OnUpdateFromOwner.class, Coach.onCreateCoach.class, Coach.onUpdateCoach.class})
+    @NotBlank(message = "Le nom de famille ne peut pas être vide", groups = {Owner.onCreateOwner.class, OnUpdateFromOwner.class, OnUpdateFromAdmin.class, Coach.onCreateCoach.class, Coach.onUpdateCoach.class})
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewCoach.class})
     protected String lastname;
 
-
-    @Column(nullable = false, length = 255) //taille de 255 caractères pour prévenir le mot de passe hashé
+    @Column(nullable = false, length = 255)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(message = "Le mot de passe ne peut pas être vide", groups = {Owner.onCreateOwner.class, OnUpdatePassword.class, Coach.onCreateCoach.class})
     @Size(min = 8, max = 64, message = "Le mot de passe doit contenir entre 8 et 64 caractères")
     @Pattern(regexp = REGEX_STRONG_PASSWORD, message = "Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial")
     protected String password;
 
-    @PersonalData(anonymizeWith = "ANONYMIZED") // ✅ Données à anonymiser
+    @PersonalData(anonymizeWith = "ANONYMIZED")
     @Column(nullable = true, length = 50)
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewCoach.class})
     protected String phone;
 
-    @PersonalData(anonymizeWith = "ANONYMIZED") // ✅ Données à anonymiser
+    @PersonalData(anonymizeWith = "ANONYMIZED")
     @Column(length = 500)
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewCoach.class})
     protected String avatarUrl;
@@ -111,4 +110,8 @@ public class User {
     @Column(nullable = false, length = 150)
     @JsonView({AdminViewCoach.class})
     private String lastModifiedBy;
+
+    @Column(nullable = false)
+    @JsonView({AdminViewCoach.class})
+    private boolean isAnonymized = false;
 }

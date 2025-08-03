@@ -1,6 +1,6 @@
 package org.example.canicampusconnectapi.service.dogweight;
 
-import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
+import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
 import org.example.canicampusconnectapi.dao.DogDao;
 import org.example.canicampusconnectapi.dao.DogWeightDao;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
@@ -39,7 +39,7 @@ public class DogWeightServiceImpl implements DogWeightService {
     @Override
     public List<DogWeight> getDogWeightsByDog(Long dogId) {
         Dog dog = dogDao.findById(dogId)
-                .orElseThrow(() -> new ResourceNotFound("Dog not found with id: " + dogId));
+                .orElseThrow(() -> new ResourceNotFoundException("Dog not found with id: " + dogId));
         return dogWeightDao.findByDogOrderByMeasurementDateDesc(dog);
     }
 
@@ -51,7 +51,7 @@ public class DogWeightServiceImpl implements DogWeightService {
     @Override
     public List<DogWeight> getDogWeightsByDogBetweenDates(Long dogId, Date startDate, Date endDate) {
         Dog dog = dogDao.findById(dogId)
-                .orElseThrow(() -> new ResourceNotFound("Dog not found with id: " + dogId));
+                .orElseThrow(() -> new ResourceNotFoundException("Dog not found with id: " + dogId));
         return dogWeightDao.findByDogAndMeasurementDateBetween(dog, startDate, endDate);
     }
 
@@ -63,7 +63,7 @@ public class DogWeightServiceImpl implements DogWeightService {
         }
 
         Dog dog = dogDao.findById(dogWeight.getDog().getId())
-                .orElseThrow(() -> new ResourceNotFound("Dog not found with id: " + dogWeight.getDog().getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Dog not found with id: " + dogWeight.getDog().getId()));
 
         // Ensure the full dog object is set before saving
         dogWeight.setDog(dog);
@@ -76,7 +76,7 @@ public class DogWeightServiceImpl implements DogWeightService {
     @Transactional
     public void deleteDogWeight(Long id) {
         if (!dogWeightDao.existsById(id)) {
-            throw new ResourceNotFound("Dog weight record not found with id: " + id);
+            throw new ResourceNotFoundException("Dog weight record not found with id: " + id);
         }
         dogWeightDao.deleteById(id);
     }
@@ -85,7 +85,7 @@ public class DogWeightServiceImpl implements DogWeightService {
     @Transactional
     public DogWeight updateDogWeight(Long id, DogWeight dogWeightDetails) {
         DogWeight existingDogWeight = dogWeightDao.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Dog weight record not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Dog weight record not found with id: " + id));
 
         // Update basic fields
         existingDogWeight.setWeightValue(dogWeightDetails.getWeightValue());
@@ -98,7 +98,7 @@ public class DogWeightServiceImpl implements DogWeightService {
             // Check if the dog is changing
             if (!dogWeightDetails.getDog().getId().equals(existingDogWeight.getDog().getId())) {
                 Dog newDog = dogDao.findById(dogWeightDetails.getDog().getId())
-                        .orElseThrow(() -> new ResourceNotFound("Dog not found with id: " + dogWeightDetails.getDog().getId()));
+                        .orElseThrow(() -> new ResourceNotFoundException("Dog not found with id: " + dogWeightDetails.getDog().getId()));
                 existingDogWeight.setDog(newDog);
             }
             // If the ID is the same, no need to fetch or update the dog relationship
