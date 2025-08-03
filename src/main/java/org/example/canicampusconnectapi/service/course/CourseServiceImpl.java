@@ -1,6 +1,6 @@
 package org.example.canicampusconnectapi.service.course;
 
-import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
+import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
 import org.example.canicampusconnectapi.dao.AgeRangeDao;
 import org.example.canicampusconnectapi.dao.ClubDao;
 import org.example.canicampusconnectapi.dao.CoachDao;
@@ -59,7 +59,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> getCoursesByCoach(Long coachId) {
         Coach coach = coachDao.findById(coachId)
-                .orElseThrow(() -> new ResourceNotFound("Coach not found with id: " + coachId));
+                .orElseThrow(() -> new ResourceNotFoundException("Coach not found with id: " + coachId));
 
         Club defaultClub = getDefaultClub();
         return courseDao.findByClubAndCoach(defaultClub, coach);
@@ -75,7 +75,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> getCoursesByCourseType(Long courseTypeId) {
         CourseType courseType = courseTypeDao.findById(courseTypeId)
-                .orElseThrow(() -> new ResourceNotFound("Course type not found with id: " + courseTypeId));
+                .orElseThrow(() -> new ResourceNotFoundException("Course type not found with id: " + courseTypeId));
 
         Club defaultClub = getDefaultClub();
         return courseDao.findByClubAndCourseType(defaultClub, courseType);
@@ -96,7 +96,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> getCoursesByAgeRange(Long ageRangeId) {
         AgeRange ageRange = ageRangeDao.findById(ageRangeId)
-                .orElseThrow(() -> new ResourceNotFound("Age range not found with id: " + ageRangeId));
+                .orElseThrow(() -> new ResourceNotFoundException("Age range not found with id: " + ageRangeId));
 
         Club defaultClub = getDefaultClub();
 
@@ -117,7 +117,7 @@ public class CourseServiceImpl implements CourseService {
         }
 
         Coach coach = coachDao.findById(course.getCoach().getId())
-                .orElseThrow(() -> new ResourceNotFound("Coach not found with id: " + course.getCoach().getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Coach not found with id: " + course.getCoach().getId()));
 
         Club defaultClub = getDefaultClub();
 
@@ -126,7 +126,7 @@ public class CourseServiceImpl implements CourseService {
         }
 
         CourseType courseType = courseTypeDao.findById(course.getCourseType().getId())
-                .orElseThrow(() -> new ResourceNotFound("Course type not found with id: " + course.getCourseType().getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Course type not found with id: " + course.getCourseType().getId()));
 
         // Set the full objects before saving
         course.setCoach(coach);
@@ -143,7 +143,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public Course updateCourse(Long id, Course courseDetails) {
         Course existingCourse = courseDao.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Course not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + id));
 
         // Update basic fields
         existingCourse.setTitle(courseDetails.getTitle());
@@ -155,7 +155,7 @@ public class CourseServiceImpl implements CourseService {
         // Handle coach update only if provided in the request
         if (courseDetails.getCoach() != null && courseDetails.getCoach().getId() != null) {
             Coach coach = coachDao.findById(courseDetails.getCoach().getId())
-                    .orElseThrow(() -> new ResourceNotFound("Coach not found with id: " + courseDetails.getCoach().getId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Coach not found with id: " + courseDetails.getCoach().getId()));
             existingCourse.setCoach(coach);
         }
 
@@ -166,7 +166,7 @@ public class CourseServiceImpl implements CourseService {
         // Handle course type update only if provided in the request
         if (courseDetails.getCourseType() != null && courseDetails.getCourseType().getId() != null) {
             CourseType courseType = courseTypeDao.findById(courseDetails.getCourseType().getId())
-                    .orElseThrow(() -> new ResourceNotFound("Course type not found with id: " + courseDetails.getCourseType().getId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Course type not found with id: " + courseDetails.getCourseType().getId()));
             existingCourse.setCourseType(courseType);
         }
 
@@ -177,17 +177,17 @@ public class CourseServiceImpl implements CourseService {
      * Helper method to get the default club (ID 1).
      *
      * @return The default club.
-     * @throws ResourceNotFound if the default club does not exist.
+     * @throws ResourceNotFoundException if the default club does not exist.
      */
     private Club getDefaultClub() {
         return clubDao.findById(1)
-                .orElseThrow(() -> new ResourceNotFound("Default club not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Default club not found"));
     }
 
     @Override
     public List<Course> getUpcomingCoursesByCoach(Long coachId) {
         Coach coach = coachDao.findById(coachId)
-                .orElseThrow(() -> new ResourceNotFound("Coach not found with ID: " + coachId));
+                .orElseThrow(() -> new ResourceNotFoundException("Coach not found with ID: " + coachId));
 
         Instant now = Instant.now();
         return courseDao.findByCoachIdAndStartDatetimeAfter(coachId, now);
@@ -205,7 +205,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public void deleteCourse(Long id) {
         Course course = courseDao.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Course not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + id));
 
         // ✅ Supprimer toutes les registrations liées à ce cours
         registrationService.deleteAllByCourseId(id);
