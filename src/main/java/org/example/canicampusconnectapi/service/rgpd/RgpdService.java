@@ -2,7 +2,7 @@ package org.example.canicampusconnectapi.service.rgpd;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import org.example.canicampusconnectapi.common.exception.ResourceNotFound;
+import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.security.annotation.rgpd.PersonalData;
@@ -32,7 +32,7 @@ public class RgpdService {
 
         T entity = entityManager.find(entityClass, id);
         if (entity == null) {
-            throw new ResourceNotFound("Entité non trouvée avec l'ID: " + id);
+            throw new ResourceNotFoundException("Entité non trouvée avec l'ID: " + id);
         }
 
         // ✅ Anonymiser l'entité principale
