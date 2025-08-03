@@ -1,11 +1,12 @@
 package org.example.canicampusconnectapi.service.registration;
 
+import lombok.RequiredArgsConstructor;
 import org.example.canicampusconnectapi.dao.CourseDao;
 import org.example.canicampusconnectapi.dao.RegistrationDao;
-import org.example.canicampusconnectapi.model.courseRelated.Course;
+import org.example.canicampusconnectapi.factory.RegistrationFactory;
 import org.example.canicampusconnectapi.model.courseRelated.Registration;
 import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.canicampusconnectapi.validator.RegistrationValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,63 +15,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class RegistrationServiceImpl implements RegistrationService {
 
     private final RegistrationDao registrationDao;
     private final CourseDao courseDao;
-
-    @Autowired
-    public RegistrationServiceImpl(RegistrationDao registrationDao, CourseDao courseDao) {
-        this.registrationDao = registrationDao;
-        this.courseDao = courseDao;
-    }
+    private final RegistrationValidator registrationValidator;
+    private final RegistrationFactory registrationFactory;
 
     /**
-     * Crée une nouvelle inscription pour un chien à un cours.
-     * Vérifie si le cours n'est pas plein avant l'inscription.
-     * Met le statut de l'inscription en PENDING par défaut.
+     * Crée une nouvelle inscription
      */
     @Override
     @Transactional
     public Registration create(Registration registration) {
-        List<Registration> existingRegistrations = registrationDao.findByDogIdAndCourseId(
-                registration.getDog().getId(),
-                registration.getCourse().getId()
-        );
-
-        if (!existingRegistrations.isEmpty()) {
-            throw new IllegalArgumentException("Ce chien est déjà inscrit à ce cours");
-        }
-
-        // Vérifier si l'objet registration est valide
-        if (registration.getCourse() == null || registration.getDog() == null) {
-            throw new IllegalArgumentException("Le cours et le chien doivent être spécifiés");
-        }
-
-        // Récupérer le cours complet pour vérifier la capacité
-        Course course = courseDao.findById(registration.getCourse().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Cours introuvable"));
-
-        // Vérifier que la jauge du cours n'est pas pleine
-        long confirmedRegistrations = registrationDao.countByCourseIdAndStatus(
-                course.getId(), RegistrationStatus.CONFIRMED);
-
-        if (confirmedRegistrations >= course.getMaxCapacity()) {
-            throw new RuntimeException("Le cours est complet, impossible de s'inscrire");
-        }
-
-        // Vérifier que le chien n'est pas déjà inscrit à ce cours
-        if (registrationDao.existsByCourseIdAndDogId(
-                course.getId(), registration.getDog().getId())) {
-            throw new RuntimeException("Ce chien est déjà inscrit à ce cours");
-        }
-
-        // Régler les valeurs par défaut
-        registration.setStatus(RegistrationStatus.PENDING);
-        registration.setRegistrationDate(Instant.now());
-
-        // Sauvegarder l'inscription
-        return registrationDao.save(registration);
+        registrationValidator.validateRegistrationCreation(registration);
+        Registration preparedRegistration = registrationFactory.prepareNewRegistration(registration);
+        return registrationDao.save(preparedRegistration);
     }
 
     /**
@@ -80,17 +41,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Transactional
     public Optional<Registration> update(Long id, Registration details) {
         return registrationDao.findById(id).map(existingRegistration -> {
-            // Si on met à jour vers CONFIRMED, vérifier que le cours n'est pas plein
             if (details.getStatus() == RegistrationStatus.CONFIRMED &&
                     existingRegistration.getStatus() != RegistrationStatus.CONFIRMED) {
-
-                Course course = existingRegistration.getCourse();
-                long confirmedRegistrations = registrationDao.countByCourseIdAndStatus(
-                        course.getId(), RegistrationStatus.CONFIRMED);
-
-                if (confirmedRegistrations >= course.getMaxCapacity()) {
-                    throw new RuntimeException("Le cours est complet, impossible de confirmer cette inscription");
-                }
+                registrationValidator.validateCourseCapacity(existingRegistration.getCourse().getId());
             }
 
             // Ne mettre à jour que le statut pour le moment
@@ -103,34 +56,39 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     /**
-     * Met à jour uniquement le statut d'une inscription.
-     * Méthode dédiée pour simplifier la mise à jour du statut.
+     * Méthode respectant OCP : ouverte à l'extension, fermée à la modification.
+     * La logique de validation peut être étendue sans modifier cette méthode.
      */
     @Override
     @Transactional
-    public Optional<Registration> updateStatus(Long id, RegistrationStatus status) {
+    public Optional<Registration> updateStatus(Long id, RegistrationStatus newStatus) {
+        validateStatusNotNull(newStatus);
+
+        return registrationDao.findById(id)
+                .map(existingRegistration -> updateRegistrationStatus(existingRegistration, newStatus));
+    }
+
+    private void validateStatusNotNull(RegistrationStatus status) {
         if (status == null) {
             throw new IllegalArgumentException("Le statut ne peut pas être null");
         }
-
-        return registrationDao.findById(id).map(existingRegistration -> {
-            // Si on passe à CONFIRMED, vérifier que le cours n'est pas plein
-            if (status == RegistrationStatus.CONFIRMED &&
-                    existingRegistration.getStatus() != RegistrationStatus.CONFIRMED) {
-
-                Course course = existingRegistration.getCourse();
-                long confirmedRegistrations = registrationDao.countByCourseIdAndStatus(
-                        course.getId(), RegistrationStatus.CONFIRMED);
-
-                if (confirmedRegistrations >= course.getMaxCapacity()) {
-                    throw new RuntimeException("Le cours est complet, impossible de confirmer cette inscription");
-                }
-            }
-
-            existingRegistration.setStatus(status);
-            return registrationDao.save(existingRegistration);
-        });
     }
+
+    private Registration updateRegistrationStatus(Registration registration, RegistrationStatus newStatus) {
+        if (isConfirmationRequest(registration.getStatus(), newStatus)) {
+            registrationValidator.validateCourseCapacity(registration.getCourse().getId());
+        }
+
+        registration.setStatus(newStatus);
+        return registrationDao.save(registration);
+    }
+
+    private boolean isConfirmationRequest(RegistrationStatus currentStatus, RegistrationStatus newStatus) {
+        return newStatus == RegistrationStatus.CONFIRMED &&
+                currentStatus != RegistrationStatus.CONFIRMED;
+    }
+
+    // ========== TOUTES VOS MÉTHODES ORIGINALES CONSERVÉES ==========
 
     @Override
     public Optional<Registration> findById(Long id) {
@@ -222,7 +180,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         return registrationDao.findByCourseCoachIdAndStatus(coachId, RegistrationStatus.PENDING);
     }
 
-
     /**
      * Trouve les registrations en attente pour des cours futurs d'un coach.
      * Expire automatiquement celles pour des cours passés.
@@ -251,11 +208,11 @@ public class RegistrationServiceImpl implements RegistrationService {
         List<Registration> expiredRegistrations = registrationDao
                 .findByStatusAndCourseStartDatetimeBefore(RegistrationStatus.PENDING, now);
 
-        // Les marquer comme REJECTED
-        for (Registration registration : expiredRegistrations) {
+        // Les marquer comme REFUSED (utilisation d'un Stream pour être plus moderne)
+        expiredRegistrations.forEach(registration -> {
             registration.setStatus(RegistrationStatus.REFUSED);
             registrationDao.save(registration);
-        }
+        });
     }
 
     @Override
