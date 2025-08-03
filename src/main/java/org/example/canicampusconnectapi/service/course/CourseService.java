@@ -1,7 +1,7 @@
 package org.example.canicampusconnectapi.service.course;
 
+import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
-import org.example.canicampusconnectapi.model.courseRelated.AgeRange;
 
 import java.time.Instant;
 import java.util.List;
@@ -32,7 +32,7 @@ public interface CourseService {
      *
      * @param coachId The ID of the coach.
      * @return A list of courses for the coach.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the coach is not found.
+     * @throws ResourceNotFoundException if the coach is not found.
      */
     List<Course> getCoursesByCoach(Long coachId);
 
@@ -41,7 +41,7 @@ public interface CourseService {
      *
      * @param clubId The ID of the club (usually 1 for default club).
      * @return A list of courses for the club.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the club is not found.
+     * @throws ResourceNotFoundException if the club is not found.
      */
     List<Course> getCoursesByClub(Integer clubId);
 
@@ -50,7 +50,7 @@ public interface CourseService {
      *
      * @param courseTypeId The ID of the course type.
      * @return A list of courses of the specified type.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the course type is not found.
+     * @throws ResourceNotFoundException if the course type is not found.
      */
     List<Course> getCoursesByCourseType(Long courseTypeId);
 
@@ -75,7 +75,7 @@ public interface CourseService {
      *
      * @param ageRangeId The ID of the age range.
      * @return A list of courses for the specified age range.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the age range is not found.
+     * @throws ResourceNotFoundException if the age range is not found.
      */
     List<Course> getCoursesByAgeRange(Long ageRangeId);
 
@@ -84,7 +84,7 @@ public interface CourseService {
      *
      * @param course The course object to create. Must have valid coach and course type IDs set.
      * @return The created course with its generated ID.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the specified coach, club, or course type does not exist.
+     * @throws ResourceNotFoundException if the specified coach, club, or course type does not exist.
      * @throws IllegalArgumentException                                           if the coach or course type information is missing.
      */
     Course createCourse(Course course);
@@ -93,7 +93,7 @@ public interface CourseService {
      * Deletes a course by its ID.
      *
      * @param id The ID of the course to delete.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the course with the given ID does not exist.
+     * @throws ResourceNotFoundException if the course with the given ID does not exist.
      */
     void deleteCourse(Long id);
 
@@ -103,7 +103,7 @@ public interface CourseService {
      * @param id     The ID of the course to update.
      * @param course The course data to update. Coach and course type can be updated if provided.
      * @return The updated course.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound if the course, coach, club, or course type does not exist.
+     * @throws ResourceNotFoundException if the course, coach, club, or course type does not exist.
      */
     Course updateCourse(Long id, Course course);
 
@@ -112,7 +112,7 @@ public interface CourseService {
      *
      * @param coachId L'ID du coach.
      * @return Une liste des cours à venir du coach.
-     * @throws org.example.canicampusconnectapi.common.exception.ResourceNotFound si le coach n'est pas trouvé.
+     * @throws ResourceNotFoundException si le coach n'est pas trouvé.
      */
     List<Course> getUpcomingCoursesByCoach(Long coachId);
 
