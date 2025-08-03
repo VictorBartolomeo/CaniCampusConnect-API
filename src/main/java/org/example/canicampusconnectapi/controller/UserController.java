@@ -1,42 +1,172 @@
-
 package org.example.canicampusconnectapi.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.example.canicampusconnectapi.dao.UserDao;
 import org.example.canicampusconnectapi.model.users.User;
+import org.example.canicampusconnectapi.security.AppUserDetails;
+import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
+import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
 import org.example.canicampusconnectapi.service.user.UserService;
+import org.example.canicampusconnectapi.view.admin.AdminViewCoach;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin
 @RestController
+@IsClubOwner
 public class UserController {
 
-
+    private final UserService userService;
     private final UserDao userDao;
     private final String avatarDir = "./uploads/users/";
 
     public UserController(UserService userService, UserDao userDao) {
+        this.userService = userService;
         this.userDao = userDao;
     }
 
+    /**
+     * Récupère tous les utilisateurs non anonymisés sans pagination
+     */
+    @GetMapping("/users")
+    @JsonView(AdminViewCoach.class)
+    public ResponseEntity<?> getAllUsersNoPagination() {
+        return ResponseEntity.ok(userService.getAllUsersNotAnonymized());
+    }
+
+    /**
+     * Récupère tous les coaches non anonymisés
+     */
+    @GetMapping("/users/coaches")
+    @JsonView(AdminViewCoach.class)
+    public ResponseEntity<?> getAllCoaches() {
+        return ResponseEntity.ok(userService.getAllCoachesNotAnonymized());
+    }
+
+    /**
+     * Récupère tous les propriétaires non anonymisés
+     */
+    @GetMapping("/users/owners")
+    @JsonView(AdminViewCoach.class)
+    public ResponseEntity<?> getAllOwners() {
+        return ResponseEntity.ok(userService.getAllOwnersNotAnonymized());
+    }
+
+    /**
+     * Récupère les statistiques des utilisateurs (excluant les anonymisés)
+     */
+    @GetMapping("/users/stats")
+    public ResponseEntity<UserService.UserStatsDto> getUserStats() {
+        return ResponseEntity.ok(userService.getUserStats());
+    }
+
+    /**
+     * Recherche d'utilisateurs non anonymisés par email ou nom
+     */
+    @GetMapping("/users/search")
+    @JsonView(AdminViewCoach.class)
+    public ResponseEntity<?> searchUsers(@RequestParam String query) {
+        return ResponseEntity.ok(userService.searchUsersNotAnonymized(query));
+    }
+
+    /**
+     * Récupère un utilisateur par ID (seulement si non anonymisé)
+     */
+    @GetMapping("/user/{id}")
+    @JsonView(AdminViewCoach.class)
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        return userService.getUserByIdIfNotAnonymized(id)
+                .map(user -> ResponseEntity.ok((Object) user))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body((Object) Map.of("error", "Utilisateur introuvable ou anonymisé")));
+    }
+
+    /**
+     * Récupère tous les utilisateurs avec leurs rôles (inclut les anonymisés pour l'admin)
+     */
+    @GetMapping("/users/with-roles")
+    public ResponseEntity<List<UserService.UserWithRoleDto>> getAllUsersWithRoles() {
+        return ResponseEntity.ok(userService.getAllUsersWithRoles());
+    }
+
+    @PutMapping("/user/{id}")
+    @JsonView(AdminViewCoach.class)
+    public ResponseEntity<User> updateUser(@PathVariable Long id,
+                                           @RequestBody @Validated(User.OnUpdateFromAdmin.class) User user) {
+        try {
+            User existingUser = userDao.findById(id).orElse(null);
+            if (existingUser == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            existingUser.setEmail(user.getEmail());
+            existingUser.setFirstname(user.getFirstname());
+            existingUser.setLastname(user.getLastname());
+            existingUser.setPhone(user.getPhone());
+            existingUser.setAvatarUrl(user.getAvatarUrl());
+
+            User updatedUser = userDao.save(existingUser);
+
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            System.err.println("Error updating user: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    /**
+     * Anonymise un utilisateur (conforme RGPD) - Ne supprime pas mais rend anonyme
+     */
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<Map<String, String>> anonymizeUser(
+            @PathVariable Long id,
+            @AuthenticationPrincipal AppUserDetails userDetails) {
+
+        Map<String, String> result = userService.anonymizeUser(id, userDetails.getUsername());
+
+        return switch (result.get("action")) {
+            case "error" -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+            case "already_anonymized" -> ResponseEntity.badRequest().body(result);
+            case "gdpr_anonymized" -> ResponseEntity.ok(result);
+            default -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        };
+    }
+
+    /**
+     * Avatar utilisateur - Accès public mais refuse les utilisateurs anonymisés
+     */
+    @Deprecated
+    @IsOwner
     @GetMapping("/user/{id}/avatar")
     public ResponseEntity<Resource> getUserAvatar(@PathVariable Long id) {
         try {
-            Optional<User> optionalUser = userDao.findById(id);
-            if (optionalUser.isEmpty()) {
+            // Vérifier si l'utilisateur existe et n'est pas anonymisé
+            if (userService.isUserAnonymized(id)) {
                 return ResponseEntity.notFound().build();
             }
+
+            if (userService.getUserByIdIfNotAnonymized(id).isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
             // Chercher le fichier avec les extensions courantes
             String[] extensions = {"png", "jpg", "jpeg", "webp"};
             for (String ext : extensions) {
