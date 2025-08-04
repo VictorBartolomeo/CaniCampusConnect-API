@@ -125,7 +125,8 @@ public class DogServiceImpl implements DogService {
             for (Breed breed : dogDetails.getBreeds()) {
                 if (breed.getId() != null) {
                     Breed existingBreed = breedDao.findById(breed.getId())
-                            .orElseThrow(() -> new ResourceNotFoundException("Race non trouvée avec l'ID: " + breed.getId()));
+                            .orElseThrow(() ->
+                                    new ResourceNotFoundException("Race non trouvée avec l'ID: " + breed.getId()));
                     newBreeds.add(existingBreed);
                 }
                 else if (breed.getName() != null && !breed.getName().isEmpty()) {
