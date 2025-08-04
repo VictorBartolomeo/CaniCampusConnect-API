@@ -204,6 +204,7 @@ public class RegistrationController {
         }
     }
 
+    // Delete a registration
     @DeleteMapping("/registration/{id}")
     public ResponseEntity<Void> deleteRegistration(
             @PathVariable Long id,
