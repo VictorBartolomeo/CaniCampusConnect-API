@@ -49,9 +49,19 @@ public class User {
 
     @PersonalData()
     @Column(nullable = false, unique = true, length = 150)
-    @NotBlank(message = "L'email ne peut pas être vide", groups = {Owner.onCreateOwner.class, OnUpdateFromOwner.class, OnUpdateFromAdmin.class, Coach.onCreateCoach.class, Coach.onUpdateCoach.class})
-    @Email(message = "L'email n'est pas au format valide", groups = {OnUpdateFromAdmin.class, OnUpdateFromOwner.class})
-    @JsonView({OwnerViewDog.class, OwnerView.class, CoachView.class, AdminViewCoach.class})
+    @NotBlank(message = "L'email ne peut pas être vide",
+            groups = {Owner.onCreateOwner.class,
+                    OnUpdateFromOwner.class,
+                    OnUpdateFromAdmin.class,
+                    Coach.onCreateCoach.class,
+                    Coach.onUpdateCoach.class})
+    @Email(message = "L'email n'est pas au format valide",
+            groups = {OnUpdateFromAdmin.class,
+                    OnUpdateFromOwner.class})
+    @JsonView({OwnerViewDog.class,
+            OwnerView.class,
+            CoachView.class,
+            AdminViewCoach.class})
     protected String email;
 
     @PersonalData(anonymizeWith = "Utilisateur")
