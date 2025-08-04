@@ -47,7 +47,7 @@ public class User {
     @JsonView({AdminViewCoach.class})
     protected Long id;
 
-    @PersonalData(anonymizeWith = "ANONYMIZED")
+    @PersonalData()
     @Column(nullable = false, unique = true, length = 150)
     @NotBlank(message = "L'email ne peut pas être vide", groups = {Owner.onCreateOwner.class, OnUpdateFromOwner.class, OnUpdateFromAdmin.class, Coach.onCreateCoach.class, Coach.onUpdateCoach.class})
     @Email(message = "L'email n'est pas au format valide", groups = {OnUpdateFromAdmin.class, OnUpdateFromOwner.class})
@@ -73,12 +73,12 @@ public class User {
     @Pattern(regexp = REGEX_STRONG_PASSWORD, message = "Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial")
     protected String password;
 
-    @PersonalData(anonymizeWith = "ANONYMIZED")
+    @PersonalData(anonymizeWith = "PHONE-ANONYMIZED")
     @Column(nullable = true, length = 50)
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewCoach.class})
     protected String phone;
 
-    @PersonalData(anonymizeWith = "ANONYMIZED")
+    @PersonalData()
     @Column(length = 500)
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewCoach.class})
     protected String avatarUrl;
