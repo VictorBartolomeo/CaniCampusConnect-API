@@ -16,7 +16,6 @@ public class AnonymizationStrategyFactory {
     private final List<AnonymizationStrategy> strategies;
 
     public AnonymizationStrategyFactory(List<AnonymizationStrategy> strategies) {
-        // Trier les stratégies par priorité (ordre croissant)
         this.strategies = strategies.stream()
                 .sorted(Comparator.comparingInt(AnonymizationStrategy::getPriority))
                 .toList();
