@@ -1,5 +1,8 @@
 package org.example.canicampusconnectapi.service.user;
 
+import lombok.RequiredArgsConstructor;
+import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
+import org.example.canicampusconnectapi.common.exception.RgpdAlreadyAnonymizedException;
 import org.example.canicampusconnectapi.dao.ClubOwnerDao;
 import org.example.canicampusconnectapi.dao.CoachDao;
 import org.example.canicampusconnectapi.dao.OwnerDao;
@@ -8,21 +11,20 @@ import org.example.canicampusconnectapi.model.users.Coach;
 import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.model.users.User;
 import org.example.canicampusconnectapi.service.rgpd.RgpdService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
@@ -31,22 +33,7 @@ public class UserServiceImpl implements UserService {
     private final OwnerDao ownerDao;
     private final RgpdService rgpdService;
     private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public UserServiceImpl(UserDao userDao, CoachDao coachDao, OwnerDao ownerDao,
-                           RgpdService rgpdService, PasswordEncoder passwordEncoder, ClubOwnerDao clubOwnerDao) {
-        this.userDao = userDao;
-        this.clubOwnerDao = clubOwnerDao;
-        this.coachDao = coachDao;
-        this.ownerDao = ownerDao;
-        this.rgpdService = rgpdService;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    @Override
-    public void deleteUser(Long id) {
-        rgpdService.anonymizeEntity(User.class, id);
-    }
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
     public boolean isUserAnonymized(Long id) {
@@ -169,50 +156,23 @@ public class UserServiceImpl implements UserService {
         return userDao.findById(id);
     }
 
+
     @Override
-    @Transactional
-    public Map<String, String> anonymizeUser(Long id, String anonymizedBy) {
-        Map<String, String> result = new HashMap<>();
+    public void anonymizeUser(Long id, String anonymizedBy) {
+        User user = userDao.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé avec l'ID: " + id));
 
-        try {
-            // Vérifier si l'utilisateur existe
-            Optional<User> optionalUser = userDao.findById(id);
-            if (optionalUser.isEmpty()) {
-                result.put("message", "Utilisateur non trouvé");
-                result.put("action", "error");
-                return result;
-            }
-
-            // Vérifier si déjà anonymisé
-            if (isUserAnonymized(id)) {
-                result.put("message", "Cet utilisateur est déjà anonymisé");
-                result.put("action", "already_anonymized");
-                return result;
-            }
-
-            // Anonymiser selon le type d'utilisateur
-            User user = optionalUser.get();
-            if (user instanceof Coach) {
-                rgpdService.anonymizeEntity(Coach.class, id);
-            } else if (user instanceof Owner) {
-                rgpdService.anonymizeEntity(Owner.class, id);
-            } else {
-                rgpdService.anonymizeEntity(User.class, id);
-            }
-
-            result.put("message", "Données personnelles de l'utilisateur anonymisées avec succès (conformité RGPD)");
-            result.put("action", "gdpr_anonymized");
-            result.put("userId", id.toString());
-            result.put("anonymizedBy", anonymizedBy);
-
-            return result;
-
-        } catch (Exception e) {
-            result.put("message", "Erreur lors de l'anonymisation RGPD");
-            result.put("action", "error");
-            result.put("details", e.getMessage());
-            return result;
+        if (rgpdService.isAnonymized(User.class, id)) {
+            throw new RgpdAlreadyAnonymizedException("User", id);
         }
+        if (user instanceof Coach) {
+            rgpdService.anonymizeEntity(Coach.class, id);
+            logger.info("Coach ID {} anonymisé avec succès par {}", id, anonymizedBy);
+        } else {
+            rgpdService.anonymizeEntity(User.class, id);
+            logger.info("Utilisateur ID {} anonymisé avec succès par {}", id, anonymizedBy);
+        }
+
     }
 
     @Override
