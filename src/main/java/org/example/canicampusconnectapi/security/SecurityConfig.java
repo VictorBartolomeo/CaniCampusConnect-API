@@ -52,11 +52,16 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(s ->
+                        s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/owner/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/breed/*/image").permitAll() // ✅ Cette ligne sera prioritaire
+                        .requestMatchers("/login",
+                                "/owner/register",
+                                "/validate-email",
+                                "/send-validation-email",
+                                "resend-validation-email").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/breed/*/image").permitAll()
                         .requestMatchers("/user/*/avatar").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/change-password").authenticated()
                         .anyRequest()
