@@ -2,6 +2,7 @@ package org.example.canicampusconnectapi.service.rgpd;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
 import org.example.canicampusconnectapi.model.users.Owner;
@@ -16,6 +17,7 @@ import java.lang.reflect.Field;
  * Service principal d'orchestration pour les opérations RGPD
  */
 @Service
+@RequiredArgsConstructor
 public class RgpdService {
 
     private static final Logger logger = LoggerFactory.getLogger(RgpdService.class);
@@ -23,14 +25,6 @@ public class RgpdService {
     private final FieldAnonymizationService fieldAnonymizationService;
     private final RgpdAuditService auditService;
     private final EntityManager entityManager;
-
-    public RgpdService(FieldAnonymizationService fieldAnonymizationService,
-                       RgpdAuditService auditService,
-                       EntityManager entityManager) {
-        this.fieldAnonymizationService = fieldAnonymizationService;
-        this.auditService = auditService;
-        this.entityManager = entityManager;
-    }
 
     /**
      * Anonymise une entité et ses relations selon les règles RGPD
@@ -42,19 +36,14 @@ public class RgpdService {
         validateRgpdEntity(entityClass);
         T entity = findEntityOrThrow(entityClass, id);
 
-        // 1. Anonymiser les champs de données personnelles
         fieldAnonymizationService.anonymizeAllFields(entity, entityClass, id);
 
-        // 2. Marquer comme inactif si applicable
         auditService.setInactiveIfExists(entity);
 
-        // 3. Définir les champs d'audit RGPD
         auditService.setGdprAuditFields(entity, id);
 
-        // 4. Anonymiser les entités liées
         anonymizeRelatedEntities(entity);
 
-        // 5. Persister les changements
         entityManager.merge(entity);
 
         logger.info("Anonymisation RGPD terminée avec succès pour {} ID {}", entityClass.getSimpleName(), id);
