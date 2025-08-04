@@ -10,7 +10,6 @@ import java.lang.annotation.Target;
 public @interface PersonalData {
     /**
      * Spécifie la valeur de remplacement pour le champ lors de l'anonymisation.
-     * Si non défini, le champ sera mis à null.
      */
-    String anonymizeWith() default "ANONYMIZED"; // Valeur par défaut
+    String anonymizeWith() default "ANONYMIZED";
 }
