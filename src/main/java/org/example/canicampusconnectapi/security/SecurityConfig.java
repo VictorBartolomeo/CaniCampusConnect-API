@@ -60,7 +60,7 @@ public class SecurityConfig {
                                 "/owner/register",
                                 "/validate-email",
                                 "/send-validation-email",
-                                "resend-validation-email").permitAll()
+                                "/resend-validation-email").permitAll()
                         .requestMatchers(HttpMethod.GET, "/breed/*/image").permitAll()
                         .requestMatchers("/user/*/avatar").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/change-password").authenticated()
