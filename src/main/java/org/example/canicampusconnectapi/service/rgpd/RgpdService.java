@@ -118,10 +118,8 @@ public class RgpdService {
             if (entity instanceof Owner owner) {
                 anonymizeOwnerRelatedEntities(owner);
             }
-            // Ajouter d'autres types d'entités si nécessaire
         } catch (Exception e) {
             logger.error("Erreur lors de l'anonymisation des entités liées", e);
-            // Ne pas faire échouer l'anonymisation principale
         }
     }
 
