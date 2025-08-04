@@ -53,7 +53,6 @@ public class CoachController {
 
     //J'ai mis le POST dans le AuthController avec les register Owner ca me parait plus pertinent
 
-
     @DeleteMapping("coach/{id}")
     public ResponseEntity<Coach> deleteCoach(@PathVariable Long id) {
 
@@ -84,7 +83,7 @@ public class CoachController {
         coach.setEmailValidatedAt(existingCoach.getEmailValidatedAt());
 
         Coach updatedCoach = coachDao.save(coach);
-        updatedCoach.setPassword(null); // Masquer dans la réponse
+        updatedCoach.setPassword(null);
 
         return new ResponseEntity<>(updatedCoach, HttpStatus.OK);
     }
