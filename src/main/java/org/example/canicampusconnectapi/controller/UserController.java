@@ -1,11 +1,15 @@
 package org.example.canicampusconnectapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.RequiredArgsConstructor;
+import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
+import org.example.canicampusconnectapi.common.exception.RgpdAlreadyAnonymizedException;
 import org.example.canicampusconnectapi.dao.UserDao;
 import org.example.canicampusconnectapi.model.users.User;
 import org.example.canicampusconnectapi.security.AppUserDetails;
 import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
+import org.example.canicampusconnectapi.security.annotation.role.IsOwnerSelfOrAdmin;
 import org.example.canicampusconnectapi.service.user.UserService;
 import org.example.canicampusconnectapi.view.admin.AdminViewCoach;
 import org.springframework.core.io.Resource;
@@ -31,23 +35,19 @@ import java.util.Optional;
 @CrossOrigin
 @RestController
 @IsClubOwner
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final UserDao userDao;
     private final String avatarDir = "./uploads/users/";
 
-    public UserController(UserService userService, UserDao userDao) {
-        this.userService = userService;
-        this.userDao = userDao;
-    }
-
     /**
      * Récupère tous les utilisateurs non anonymisés sans pagination
      */
     @GetMapping("/users")
     @JsonView(AdminViewCoach.class)
-    public ResponseEntity<?> getAllUsersNoPagination() {
+    public ResponseEntity<?> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsersNotAnonymized());
     }
 
@@ -132,22 +132,40 @@ public class UserController {
     }
 
 
+
     /**
      * Anonymise un utilisateur (conforme RGPD) - Ne supprime pas mais rend anonyme
      */
+    @IsOwnerSelfOrAdmin
     @DeleteMapping("/user/{id}")
     public ResponseEntity<Map<String, String>> anonymizeUser(
             @PathVariable Long id,
             @AuthenticationPrincipal AppUserDetails userDetails) {
 
-        Map<String, String> result = userService.anonymizeUser(id, userDetails.getUsername());
+        try {
+            userService.anonymizeUser(id, userDetails.getUsername());
 
-        return switch (result.get("action")) {
-            case "error" -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-            case "already_anonymized" -> ResponseEntity.badRequest().body(result);
-            case "gdpr_anonymized" -> ResponseEntity.ok(result);
-            default -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        };
+            return ResponseEntity.ok(Map.of(
+                    "message", "Utilisateur anonymisé avec succès (conformité RGPD)",
+                    "userId", id.toString(),
+                    "anonymizedBy", userDetails.getUsername()
+            ));
+
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+
+        } catch (RgpdAlreadyAnonymizedException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "already_anonymized",
+                    "message", e.getMessage()
+            ));
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of(
+                    "error", "anonymization_failed",
+                    "message", "Erreur lors de l'anonymisation: " + e.getMessage()
+            ));
+        }
     }
 
     /**
