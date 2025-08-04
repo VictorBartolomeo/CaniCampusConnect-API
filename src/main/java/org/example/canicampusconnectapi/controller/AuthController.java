@@ -145,7 +145,6 @@ public class AuthController {
         }
     }
 
-    // ⭐ NOUVEAU : Envoyer un email de validation
     @PostMapping("/send-validation-email")
     public ResponseEntity<?> sendValidationEmail(
             @RequestBody @Validated EmailValidationRequest request) {
