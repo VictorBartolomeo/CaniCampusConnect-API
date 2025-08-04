@@ -5,7 +5,7 @@ VALUES ('Victor', 'Monteragioni', 'victor.monteragioni@ccc.fr', '$2a$10$xDl57qh0
        ('Stéphane', 'Scheeres', 'stephane.scheeres@ccc.fr', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
         '0622222222', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM',false),
        ('Tetiana', 'Lombardi', 'tetiana.lombardi@ccc.fr', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
-        '0633333333', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM',false),
+        '+33 633333333', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM',false),
        ('Axel', 'MOMPER', 'axel.momper@ccc.fr',
         '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq', '0677777777', true, NOW(), NOW(), 'SYSTEM',
         'SYSTEM',false),
