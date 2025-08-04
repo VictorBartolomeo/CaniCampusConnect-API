@@ -34,7 +34,7 @@ public class GlobalInterceptorException {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT) // Code de retour
-    @ResponseBody // Assure que la réponse est envoyée au format JSON (dans le corp de la réponse)
+    @ResponseBody // Assure que la réponse est envoyée au format JSON (dans le corps de la réponse)
     public Map<String, Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         ConstraintViolationException cause = (ConstraintViolationException) ex.getCause();
         if (cause.getKind() == ConstraintViolationException.ConstraintKind.UNIQUE) {
