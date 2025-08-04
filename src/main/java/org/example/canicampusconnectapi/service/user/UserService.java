@@ -9,9 +9,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface UserService {
-    void deleteUser(Long id);
     boolean isUserAnonymized(Long id);
+
     Optional<User> updateAvatarUrl(Long userId, String avatarUrl);
+
     boolean verifyCurrentPassword(Long userId, String password);
     /**
      * Vérifie si un utilisateur existe avec cet email
@@ -66,7 +67,7 @@ public interface UserService {
     /**
      * Anonymise un utilisateur (conforme RGPD)
      */
-    Map<String, String> anonymizeUser(Long id, String anonymizedBy);
+    void anonymizeUser(Long id, String anonymizedBy);
 
     /**
      * Récupère tous les utilisateurs avec leurs rôles détectés automatiquement
