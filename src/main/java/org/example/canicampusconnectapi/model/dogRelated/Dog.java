@@ -66,7 +66,7 @@ public class Dog {
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class,WeightView.class})
     protected Gender gender;
 
-    @PersonalData(anonymizeWith = "000-000-000")
+    @PersonalData()
     @Column(unique = true, length = 50, nullable = true)
     @JsonView({OwnerViewDog.class, OwnerView.class, OwnerViewCourse.class, CoachView.class, CoachViewRegistrations.class, AdminViewDog.class,WeightView.class})
     protected String chipNumber;
@@ -83,7 +83,7 @@ public class Dog {
             joinColumns = @JoinColumn(name = "dog_id"),
             inverseJoinColumns = @JoinColumn(name = "breed_id")
     )
-    @OrderColumn(name = "breed_order") // ✅ Préserve l'ordre en base
+    @OrderColumn(name = "breed_order")
     @JsonSerialize(using = BreedOrderSerializer.class)
     @NotNull(groups = {CreateFromOwner.class, updateFromOwner.class, CoachView.class})
     @JsonView({OwnerViewDog.class})
