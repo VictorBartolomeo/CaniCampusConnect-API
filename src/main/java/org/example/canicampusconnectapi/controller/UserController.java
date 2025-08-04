@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -137,6 +138,7 @@ public class UserController {
      * Anonymise un utilisateur (conforme RGPD) - Ne supprime pas mais rend anonyme
      */
     @IsOwnerSelfOrAdmin
+    @Transactional
     @DeleteMapping("/user/{id}")
     public ResponseEntity<Map<String, String>> anonymizeUser(
             @PathVariable Long id,
