@@ -1,7 +1,11 @@
 INSERT INTO user (firstname, lastname, email, password, phone, email_validated, created_date, last_modified_date,
                   created_by, last_modified_by, is_anonymized)
-VALUES ('Victor', 'Monteragioni', 'victor.monteragioni@ccc.fr', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
-        '0611111111', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM',false),
+VALUES ('Victor', 'Monteragioni',
+        'victor.monteragioni@ccc.fr',
+        '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
+        '0611111111',
+        true, NOW(), NOW(), 'SYSTEM', 'SYSTEM',false),
+
        ('Stéphane', 'Scheeres', 'stephane.scheeres@ccc.fr', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
         '0622222222', true, NOW(), NOW(), 'SYSTEM', 'SYSTEM',false),
        ('Tetiana', 'Lombardi', 'tetiana.lombardi@ccc.fr', '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
@@ -35,7 +39,7 @@ INSERT INTO age_range (min_age, max_age, name)
 VALUES (0, 12, 'Chiot'),  -- 0-12 mois (chiots)
        (13, 36, 'Jeune chien'), -- 13-36 mois (jeune chien)
        (37, 84, 'Adulte'), -- 37-84 mois (adulte)
-       (85, 999, 'Senior'); -- 85+ mois (senior)
+       (85, 999, 'Senior');
 
 INSERT INTO course_type (name, description, age_range_id)
 VALUES ('Socialisation des Chiots', 'Socialisation de base et introduction à l''éducation pour chiots', 1),
@@ -54,10 +58,14 @@ VALUES ('Socialisation des Chiots', 'Socialisation de base et introduction à l'
 INSERT INTO course (title, description, start_datetime, end_datetime, max_capacity, coach_id, club_id, course_type_id,
                     created_date, last_modified_date, created_by, last_modified_by)
 VALUES
-    -- Age Range 1 (Puppies) - 5 courses before May 22, 2025
     ('Chiots - Éveil et Socialisation',
      'On va apprendre à votre chiot les bases de l''éducation et le faire jouer avec d''autres pour une bonne socialisation',
-     '2025-05-15 10:00:00', '2025-05-15 11:30:00', 8, 2, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+     '2025-05-15 10:00:00',
+     '2025-05-15 11:30:00',
+     8,
+     2, 1,
+     1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
+
     ('Chiots - Premiers pas',
      'Cours d''introduction pour les tout jeunes chiots, axé sur la socialisation de base et la découverte de l''environnement',
      '2025-04-25 09:00:00', '2025-04-25 10:30:00', 8, 3, 1, 1, NOW(), NOW(), 'SYSTEM', 'SYSTEM'),
