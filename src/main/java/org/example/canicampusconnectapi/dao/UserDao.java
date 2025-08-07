@@ -1,8 +1,6 @@
 package org.example.canicampusconnectapi.dao;
 
 import org.example.canicampusconnectapi.model.users.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,32 +14,14 @@ import java.util.Optional;
 public interface UserDao extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
-    Optional<User> findByEmailAndPassword(String email, String password);
 
     /**
-     * ⭐ NOUVEAU - Supprime les comptes non validés pour les emails donnés
+     * Supprime les comptes non validés pour les emails donnés
      */
     @Modifying
     @Query("DELETE FROM User u WHERE u.email IN :emails AND u.emailValidated = false")
     int deleteUnvalidatedUsers(@Param("emails") List<String> emails);
 
-    /**
-     * ✅ NOUVEAU - Compte les utilisateurs par statut de validation email
-     */
-    long countByEmailValidated(boolean emailValidated);
-
-    /**
-     * Recherche par email, prénom ou nom
-     */
-    List<User> findByEmailContainingIgnoreCaseOrFirstnameContainingIgnoreCaseOrLastnameContainingIgnoreCase(
-            String email, String firstname, String lastname
-    );
-
-    /**
-     * Trouve tous les utilisateurs non anonymisés (pagination)
-     */
-    @Query("SELECT u FROM User u WHERE u.isAnonymized = false")
-    Page<User> findAllNotAnonymized(Pageable pageable);
 
     /**
      * Trouve tous les utilisateurs non anonymisés (liste complète)

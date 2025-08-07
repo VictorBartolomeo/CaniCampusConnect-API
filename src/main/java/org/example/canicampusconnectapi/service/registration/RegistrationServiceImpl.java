@@ -55,17 +55,16 @@ public class RegistrationServiceImpl implements RegistrationService {
         });
     }
 
-    /**
-     * Méthode respectant OCP : ouverte à l'extension, fermée à la modification.
-     * La logique de validation peut être étendue sans modifier cette méthode.
-     */
     @Override
     @Transactional
     public Optional<Registration> updateStatus(Long id, RegistrationStatus newStatus) {
+        //Vérifie que le status n'est pas null (normalement impossible car mit directement dans le back a PENDING)
         validateStatusNotNull(newStatus);
 
-        return registrationDao.findById(id)
-                .map(existingRegistration -> updateRegistrationStatus(existingRegistration, newStatus));
+        return registrationDao.findById(id) // Recherche en BDD par son id
+                .map(existingRegistration ->
+                        updateRegistrationStatus(existingRegistration, newStatus));
+        //Vérifie l'ancien et le nouveau status, si différents et que le nouveau est CONFIRMED ou REFUSED, le met à jour
     }
 
     private void validateStatusNotNull(RegistrationStatus status) {
@@ -78,6 +77,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (isConfirmationRequest(registration.getStatus(), newStatus)) {
             registrationValidator.validateCourseCapacity(registration.getCourse().getId());
         }
+        //Si jamais c'est REFUSED, la vérification n'a pas lieu et ca set le newStatus directement
 
         registration.setStatus(newStatus);
         return registrationDao.save(registration);

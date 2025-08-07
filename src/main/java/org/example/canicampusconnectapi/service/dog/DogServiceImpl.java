@@ -1,6 +1,7 @@
 package org.example.canicampusconnectapi.service.dog;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
 import org.example.canicampusconnectapi.common.exception.UnauthorizedAccessException;
 import org.example.canicampusconnectapi.dao.BreedDao;
@@ -20,20 +21,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class DogServiceImpl implements DogService {
 
     private final DogDao dogDao;
     private final OwnerDao ownerDao;
     private final BreedDao breedDao;
     private final RgpdService rgpdService;
-
-    @Autowired
-    public DogServiceImpl(DogDao dogDao, OwnerDao ownerDao, BreedDao breedDao, RgpdService rgpdService) {
-        this.dogDao = dogDao;
-        this.ownerDao = ownerDao;
-        this.breedDao = breedDao;
-        this.rgpdService = rgpdService;
-    }
 
     @Override
     public Optional<Dog> getDogById(Long id) {
@@ -61,11 +55,9 @@ public class DogServiceImpl implements DogService {
 
         Owner owner = ownerDao.findById(dog.getOwner().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Owner not found with id: " + dog.getOwner().getId()));
-
         dog.setOwner(owner);
         dog.setId(null);
 
-        // ✅ Valider et traiter les races si nécessaire
         if (dog.getBreeds() != null && !dog.getBreeds().isEmpty()) {
             List<Breed> validatedBreeds = new ArrayList<>();
 
@@ -76,7 +68,6 @@ public class DogServiceImpl implements DogService {
                     validatedBreeds.add(existingBreed);
                 }
             }
-
             dog.setBreeds(validatedBreeds);
         }
 
@@ -105,6 +96,8 @@ public class DogServiceImpl implements DogService {
         existingDog.setGender(dogDetails.getGender());
         existingDog.setChipNumber(dogDetails.getChipNumber());
 
+        //Le mieux ici serait un DTO ou un groupe de validations qui permet
+        // de ne pas avoir à faire ce check et ne pas renvoyer l'Owner pour rien...
         if (dogDetails.getOwner() != null && dogDetails.getOwner().getId() != null) {
             Owner owner = ownerDao.findById(dogDetails.getOwner().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Propriétaire non trouvé avec l'ID: " + dogDetails.getOwner().getId()));
@@ -156,14 +149,12 @@ public class DogServiceImpl implements DogService {
 
     @Override
     public Optional<Dog> getDogByIdAndOwnerId(Long dogId, Long ownerId) {
-        // Vérifier d'abord si le chien existe
         Optional<Dog> dogExists = dogDao.findByIdAndNotAnonymized(dogId);
 
         if (dogExists.isEmpty()) {
             throw new ResourceNotFoundException("Chien non trouvé avec l'ID: " + dogId);
         }
 
-        // Ensuite vérifier la propriété
         Optional<Dog> result = dogDao.findByIdAndOwnerId(dogId, ownerId);
 
         if (result.isEmpty()) {
@@ -173,7 +164,6 @@ public class DogServiceImpl implements DogService {
         return result;
     }
 
-    // GARDEZ cette méthode corrigée :
     @Override
     public Dog getDogByOwnerIdAndDogId(Long ownerId, Long dogId) {
         return dogDao.findByIdAndOwnerId(dogId, ownerId)

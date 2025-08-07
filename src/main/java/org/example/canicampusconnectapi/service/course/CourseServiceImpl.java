@@ -1,19 +1,15 @@
 package org.example.canicampusconnectapi.service.course;
 
+import lombok.RequiredArgsConstructor;
 import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
-import org.example.canicampusconnectapi.dao.AgeRangeDao;
-import org.example.canicampusconnectapi.dao.ClubDao;
-import org.example.canicampusconnectapi.dao.CoachDao;
-import org.example.canicampusconnectapi.dao.CourseDao;
-import org.example.canicampusconnectapi.dao.CourseTypeDao;
-import org.example.canicampusconnectapi.model.courseRelated.Registration;
-import org.example.canicampusconnectapi.model.users.Club;
+import org.example.canicampusconnectapi.dao.*;
 import org.example.canicampusconnectapi.model.courseRelated.AgeRange;
 import org.example.canicampusconnectapi.model.courseRelated.Course;
 import org.example.canicampusconnectapi.model.courseRelated.CourseType;
+import org.example.canicampusconnectapi.model.courseRelated.Registration;
+import org.example.canicampusconnectapi.model.users.Club;
 import org.example.canicampusconnectapi.model.users.Coach;
 import org.example.canicampusconnectapi.service.registration.RegistrationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +19,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
 
     protected CourseDao courseDao;
@@ -32,18 +29,6 @@ public class CourseServiceImpl implements CourseService {
     protected AgeRangeDao ageRangeDao;
     protected RegistrationService registrationService;
 
-    @Autowired
-    public CourseServiceImpl(CourseDao courseDao, CoachDao coachDao, ClubDao clubDao,
-                             CourseTypeDao courseTypeDao, AgeRangeDao ageRangeDao,
-                             RegistrationService registrationService) {
-        this.courseDao = courseDao;
-        this.coachDao = coachDao;
-        this.clubDao = clubDao;
-        this.courseTypeDao = courseTypeDao;
-        this.ageRangeDao = ageRangeDao;
-        this.registrationService = registrationService;
-    }
-
     @Override
     public Optional<Course> getCourseById(Long id) {
         return courseDao.findById(id);
@@ -51,8 +36,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> getAllCourses() {
-        // Get the default club (ID 1)
-        Club defaultClub = getDefaultClub();
+        Club defaultClub = getDefaultClub(); //Will always be 1 atm
         return courseDao.findByClub(defaultClub);
     }
 
@@ -128,12 +112,10 @@ public class CourseServiceImpl implements CourseService {
         CourseType courseType = courseTypeDao.findById(course.getCourseType().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Course type not found with id: " + course.getCourseType().getId()));
 
-        // Set the full objects before saving
         course.setCoach(coach);
         course.setClub(defaultClub);
         course.setCourseType(courseType);
 
-        // Clear ID to ensure creation, not update
         course.setId(null);
 
         return courseDao.save(course);
@@ -145,25 +127,21 @@ public class CourseServiceImpl implements CourseService {
         Course existingCourse = courseDao.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + id));
 
-        // Update basic fields
         existingCourse.setTitle(courseDetails.getTitle());
         existingCourse.setDescription(courseDetails.getDescription());
         existingCourse.setStartDatetime(courseDetails.getStartDatetime());
         existingCourse.setEndDatetime(courseDetails.getEndDatetime());
         existingCourse.setMaxCapacity(courseDetails.getMaxCapacity());
 
-        // Handle coach update only if provided in the request
         if (courseDetails.getCoach() != null && courseDetails.getCoach().getId() != null) {
             Coach coach = coachDao.findById(courseDetails.getCoach().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Coach not found with id: " + courseDetails.getCoach().getId()));
             existingCourse.setCoach(coach);
         }
 
-        // Always use the default club
         Club defaultClub = getDefaultClub();
         existingCourse.setClub(defaultClub);
 
-        // Handle course type update only if provided in the request
         if (courseDetails.getCourseType() != null && courseDetails.getCourseType().getId() != null) {
             CourseType courseType = courseTypeDao.findById(courseDetails.getCourseType().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Course type not found with id: " + courseDetails.getCourseType().getId()));
@@ -207,10 +185,8 @@ public class CourseServiceImpl implements CourseService {
         Course course = courseDao.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + id));
 
-        // ✅ Supprimer toutes les registrations liées à ce cours
         registrationService.deleteAllByCourseId(id);
 
-        // ✅ Ensuite supprimer le cours
         courseDao.deleteById(id);
     }
 }

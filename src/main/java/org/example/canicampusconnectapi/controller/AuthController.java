@@ -15,6 +15,7 @@ import org.example.canicampusconnectapi.model.users.User;
 import org.example.canicampusconnectapi.security.AppUserDetails;
 import org.example.canicampusconnectapi.security.SecurityUtils;
 import org.example.canicampusconnectapi.security.annotation.role.IsClubOwner;
+import org.example.canicampusconnectapi.security.annotation.role.IsCoach;
 import org.example.canicampusconnectapi.security.annotation.role.IsOwner;
 import org.example.canicampusconnectapi.service.EmailService;
 import org.example.canicampusconnectapi.service.TokenService; // ⭐ VOTRE TokenService, pas celui de Spring
@@ -114,9 +115,7 @@ public class AuthController {
     }
 
     @IsOwner
-    @PutMapping(value = "/change-password",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/change-password")
     public ResponseEntity<?> changePassword(
             @RequestBody @Validated(User.OnUpdatePassword.class) ChangePasswordDTO request,
             @AuthenticationPrincipal AppUserDetails userDetails) {
@@ -185,7 +184,6 @@ public class AuthController {
             @RequestParam @Email(message = "Format d'email invalide") String email) {
 
         try {
-            // Valider le token
             boolean isValidToken = tokenService.validateToken(token, email);
 
             if (!isValidToken) {

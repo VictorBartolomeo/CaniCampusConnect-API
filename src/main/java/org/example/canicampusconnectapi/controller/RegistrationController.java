@@ -246,7 +246,6 @@ public class RegistrationController {
         }
     }
 
-    // Update only the status of a registration
     @IsCoach
     @PatchMapping("/registration/{id}/status")
     @JsonView(CoachView.class)

@@ -34,12 +34,10 @@ public class EmailValidationToken {
     @Column
     private LocalDateTime usedAt;
 
-    // ⭐ SÉCURITÉ : Token valide ?
     public boolean isValid() {
         return !used && LocalDateTime.now().isBefore(expiresAt);
     }
 
-    // ⭐ SÉCURITÉ : Marquer comme utilisé
     public void markAsUsed() {
         this.used = true;
         this.usedAt = LocalDateTime.now();

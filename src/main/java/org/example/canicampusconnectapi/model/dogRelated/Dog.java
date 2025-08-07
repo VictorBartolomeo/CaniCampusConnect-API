@@ -1,7 +1,6 @@
 package org.example.canicampusconnectapi.model.dogRelated;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -15,7 +14,6 @@ import org.example.canicampusconnectapi.model.healthRecord.VeterinaryVisit;
 import org.example.canicampusconnectapi.model.users.Owner;
 import org.example.canicampusconnectapi.security.annotation.rgpd.PersonalData;
 import org.example.canicampusconnectapi.security.annotation.rgpd.RgpdEntity;
-import org.example.canicampusconnectapi.serializer.BreedOrderSerializer;
 import org.example.canicampusconnectapi.view.admin.AdminViewDog;
 import org.example.canicampusconnectapi.view.coach.CoachView;
 import org.example.canicampusconnectapi.view.coach.CoachViewRegistrations;
@@ -30,7 +28,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -84,7 +84,6 @@ public class Dog {
             inverseJoinColumns = @JoinColumn(name = "breed_id")
     )
     @OrderColumn(name = "breed_order")
-    @JsonSerialize(using = BreedOrderSerializer.class)
     @NotNull(groups = {CreateFromOwner.class, updateFromOwner.class, CoachView.class})
     @JsonView({OwnerViewDog.class})
     private List<Breed> breeds = new ArrayList<>();
