@@ -204,11 +204,10 @@ public class RegistrationServiceImpl implements RegistrationService {
     public void expirePastPendingRegistrations() {
         Instant now = Instant.now();
 
-        // Trouver toutes les registrations PENDING pour des cours passés
         List<Registration> expiredRegistrations = registrationDao
                 .findByStatusAndCourseStartDatetimeBefore(RegistrationStatus.PENDING, now);
 
-        // Les marquer comme REFUSED (utilisation d'un Stream pour être plus moderne)
+        // Les marquer comme REFUSED
         expiredRegistrations.forEach(registration -> {
             registration.setStatus(RegistrationStatus.REFUSED);
             registrationDao.save(registration);
