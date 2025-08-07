@@ -1076,3 +1076,45 @@ VALUES
 #          LEFT JOIN course_type ct ON c.course_type_id = ct.course_type_id
 #          LEFT JOIN coach ON c.user_id = coach.user_id
 #          LEFT JOIN user coach_user ON coach.user_id = coach_user.user_id;
+
+# CREATE DATABASE IF NOT EXISTS CaniCampusConnect_Test
+# CHARACTER SET utf8mb4
+# COLLATE utf8mb4_bin;
+# USE CaniCampusConnect_Test;
+# CREATE TABLE IF NOT EXISTS user (
+#                                     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+#                                     firstname VARCHAR(255) NOT NULL,
+#                                     lastname VARCHAR(255) NOT NULL,
+#                                     email VARCHAR(255) UNIQUE NOT NULL,
+#                                     password VARCHAR(255) NOT NULL,
+#                                     phone VARCHAR(20),
+#                                     email_validated BOOLEAN DEFAULT FALSE,
+#                                     is_anonymized BOOLEAN DEFAULT FALSE,
+#                                     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+#                                     last_modified_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+#                                     created_by VARCHAR(255),
+#                                     last_modified_by VARCHAR(255)
+# );
+# INSERT INTO user (firstname, lastname, email, password, phone, email_validated, created_by, last_modified_by, is_anonymized)
+# VALUES
+#     ('Victor', 'Monteragioni', 'victor.monteragioni@ccc.fr',
+#      '$2a$10$xDl57qh0D9i6MhS3B76UE.zExRDwKcXcr8TbW3MgSgwXVJKy9uxmq',
+#      '0611111111', true,  'SYSTEM', 'SYSTEM', false);
+#
+#
+# CREATE TABLE IF NOT EXISTS owner (
+#                                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
+#                                      user_id BIGINT NOT NULL,
+#                                      is_active BOOLEAN DEFAULT TRUE,
+#                                      registration_date DATE,
+#                                      created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+#                                      last_modified_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+#                                      created_by VARCHAR(255),
+#                                      last_modified_by VARCHAR(255),
+#                                      FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+# );
+#
+# INSERT INTO owner (user_id, is_active, registration_date, created_by, last_modified_by)
+# VALUES
+#     (1, false, '2025-07-21',  'SYSTEM', 'SYSTEM');
+
