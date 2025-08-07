@@ -35,7 +35,6 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
-@IsClubOwner
 @RequiredArgsConstructor
 public class UserController {
 
