@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Map;
 
 @Service
@@ -24,6 +25,8 @@ public class SecurityUtils implements ISecurityUtils {
     public String generateToken(AppUserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
+                .setIssuedAt( new Date(System.currentTimeMillis()))
+                .setExpiration( new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 .claim("userId", userDetails.getUserId())
                 .addClaims(Map.of("role", getRole(userDetails)))
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)

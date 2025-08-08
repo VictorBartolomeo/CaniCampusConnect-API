@@ -5,7 +5,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx-proxy-dev.conf:/etc/nginx/nginx.conf
+      - ./nginx-proxy.conf:/etc/nginx/nginx.conf
       - ./certs:/etc/nginx/certs
     depends_on:
       - front
@@ -21,9 +21,8 @@ services:
     networks:
       - proxy-network
 
-
   back:
-    image : victorbartolomeo/canicampusconnect-api:0.0.1
+    image : victorbartolomeo/canicampusconnect-api:0.0.9
     expose:
       - "8080"
     depends_on:
@@ -38,13 +37,12 @@ services:
 
   db:
     image: mysql:8.0.43
-    ports:
-      - "3306:3306"
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: 'root'
     expose:
       - "3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE : ${DB_NAME}
     volumes:
       - data:/var/lib/mysql
     networks:
