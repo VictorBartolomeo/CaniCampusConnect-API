@@ -26,10 +26,7 @@
         <profile>
             <id>prod</id>
             <properties>
-
             <woutUnitTests>true</woutUnitTests>
-            <secret-jwt>qzdqzd</secret-jwt>
-            <db-name>qzd</db-name>
             </properties>
         </profile>
     </profiles>
