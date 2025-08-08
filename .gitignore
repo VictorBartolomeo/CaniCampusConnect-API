@@ -38,5 +38,4 @@ certs/*.pfx
 .vscode/
 
 .local.env
-/certs/generate_cert.sh
 /.env.production
