@@ -15,22 +15,22 @@ services:
       - proxy-network
 
   front:
-    image: victorbartolomeo/canicampusconnect-view:0.0.1  # Remplacez par le nom de votre image Angular sur Docker Hub
+    image: victorbartolomeo/canicampusconnect-view:0.0.9
     expose:
       - "80"
     networks:
       - proxy-network
 
   back:
-    image : victorbartolomeo/canicampusconnect-api:0.0.9
+    image: victorbartolomeo/canicampusconnect-api:0.0.9
     expose:
       - "8080"
     depends_on:
       - db
     volumes:
       - ${PRIVATE_UPLOAD_FOLDER}:/uploads
-    environment:
-      - PRIVATE_UPLOAD_VOLUME=${PRIVATE_UPLOAD_FOLDER}
+    env_file:
+      - .env.production
     networks:
       - proxy-network
       - backend-network
@@ -42,7 +42,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE : ${DB_NAME}
+      MYSQL_DATABASE: ${DB_NAME}
     volumes:
       - data:/var/lib/mysql
     networks:
