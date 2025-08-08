@@ -28,8 +28,15 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+certs/*.crt
+certs/*.key
+certs/*.pem
+certs/*.pfx
+
 
 ### VS Code ###
 .vscode/
 
 .local.env
+/certs/generate_cert.sh
+/.env.production
