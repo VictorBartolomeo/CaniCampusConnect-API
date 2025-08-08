@@ -1,6 +1,7 @@
 #!/bin/bash
 # Créer le répertoire pour les certificats
 mkdir -p /certs
+
 # Générer le certificat auto-signé
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
  -keyout /certs/privkey.crt \
