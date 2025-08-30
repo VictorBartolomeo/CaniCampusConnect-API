@@ -24,6 +24,6 @@ public class EmailAnonymizationStrategy implements AnonymizationStrategy {
 
     @Override
     public int getPriority() {
-        return 1; // Haute priorité
+        return 1;
     }
 }

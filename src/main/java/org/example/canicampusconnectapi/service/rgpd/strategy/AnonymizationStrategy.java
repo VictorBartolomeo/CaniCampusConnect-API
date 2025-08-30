@@ -18,9 +18,6 @@ public interface AnonymizationStrategy {
      */
     Object anonymize(Field field, Object entity, Long entityId);
 
-    /**
-     * Priorité de la stratégie (plus le nombre est petit, plus la priorité est élevée)
-     */
     default int getPriority() {
         return 100;
     }
