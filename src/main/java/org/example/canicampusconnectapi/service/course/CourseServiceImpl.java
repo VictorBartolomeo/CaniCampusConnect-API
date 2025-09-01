@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
 
-    protected CourseDao courseDao;
-    protected CoachDao coachDao;
-    protected ClubDao clubDao;
-    protected CourseTypeDao courseTypeDao;
-    protected AgeRangeDao ageRangeDao;
-    protected RegistrationService registrationService;
+    private final CourseDao courseDao;
+    private final CoachDao coachDao;
+    private final ClubDao clubDao;
+    private final CourseTypeDao courseTypeDao;
+    private final AgeRangeDao ageRangeDao;
+    private final RegistrationService registrationService;
 
     @Override
     public Optional<Course> getCourseById(Long id) {
