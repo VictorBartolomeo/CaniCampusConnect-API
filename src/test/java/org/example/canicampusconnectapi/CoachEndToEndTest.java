@@ -59,7 +59,7 @@ class CoachEndToEndTest {
                     assert status == 200 || status == 404 || status == 400;
 
                     if (status == 400) {
-                        System.out.println("⚠️ Validation failed (expected): " +
+                        System.out.println("Validation failed (expected): " +
                                 result.getResponse().getContentAsString());
                     }
                 });

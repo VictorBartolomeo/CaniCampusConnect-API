@@ -10,7 +10,7 @@ import java.time.Instant;
 public class RegistrationFactory {
 
     /**
-     * Encapsule la création d'objets complexes.
+     * Encapsulate object creation
      */
     public Registration prepareNewRegistration(Registration registration) {
         Registration newRegistration = new Registration();
