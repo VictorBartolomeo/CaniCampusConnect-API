@@ -72,9 +72,9 @@ public class AuthController {
 
             try {
                 emailService.sendEmailValidationToken(owner.getEmail());
-                System.out.println("✅ Email de validation envoyé à: " + owner.getEmail());
+                System.out.println("Email de validation envoyé à: " + owner.getEmail());
             } catch (Exception emailError) {
-                System.err.println("❌ Erreur envoi email: " + emailError.getMessage());
+                System.err.println("Erreur envoi email: " + emailError.getMessage());
             }
 
             owner.setPassword(null);

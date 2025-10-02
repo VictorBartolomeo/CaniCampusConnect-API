@@ -45,4 +45,6 @@ public interface RegistrationDao extends JpaRepository<Registration, Long> {
             Long coachId, RegistrationStatus status, Instant dateTime);
 
     List<Registration> findByStatusAndCourseStartDatetimeBefore(RegistrationStatus status, Instant dateTime);
+
+    List<Registration> findByStatusAndCourseEndDatetimeBefore(RegistrationStatus status, Instant dateTime);
 }
