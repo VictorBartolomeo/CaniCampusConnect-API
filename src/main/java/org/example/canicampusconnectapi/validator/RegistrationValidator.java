@@ -1,5 +1,6 @@
 package org.example.canicampusconnectapi.validator;
 
+import lombok.RequiredArgsConstructor;
 import org.example.canicampusconnectapi.common.exception.BusinessException;
 import org.example.canicampusconnectapi.common.exception.ResourceNotFoundException;
 import org.example.canicampusconnectapi.dao.CourseDao;
@@ -10,15 +11,12 @@ import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class RegistrationValidator {
 
     private final RegistrationDao registrationDao;
     private final CourseDao courseDao;
 
-    public RegistrationValidator(RegistrationDao registrationDao, CourseDao courseDao) {
-        this.registrationDao = registrationDao;
-        this.courseDao = courseDao;
-    }
     /**
      * Valide qu'une inscription est possible pour un chien et un cours donnés.
      */

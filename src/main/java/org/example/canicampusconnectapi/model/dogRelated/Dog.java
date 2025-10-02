@@ -88,7 +88,6 @@ public class Dog {
     @JsonView({OwnerViewDog.class})
     private List<Breed> breeds = new ArrayList<>();
 
-
     @OneToMany(mappedBy = "dog")
     @JsonView({OwnerViewDog.class})
     private List<Registration> registrations;

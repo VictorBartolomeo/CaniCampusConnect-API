@@ -88,7 +88,6 @@ public class RegistrationServiceImpl implements RegistrationService {
                 currentStatus != RegistrationStatus.CONFIRMED;
     }
 
-    // ========== TOUTES VOS MÉTHODES ORIGINALES CONSERVÉES ==========
 
     @Override
     public Optional<Registration> findById(Long id) {

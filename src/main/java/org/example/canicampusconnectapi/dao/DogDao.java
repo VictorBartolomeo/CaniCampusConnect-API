@@ -1,6 +1,7 @@
 package org.example.canicampusconnectapi.dao;
 
 import org.example.canicampusconnectapi.model.dogRelated.Dog;
+import org.example.canicampusconnectapi.model.enumeration.RegistrationStatus;
 import org.example.canicampusconnectapi.model.users.Owner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
